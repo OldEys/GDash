@@ -1,4 +1,11 @@
-# Nu primesc notă pentru că nu am pus titlu și descriere
+# GDash
+
+### Descriere
+
+Un remake al popularului joc de pe telefon si pc,Geometry Dash,
+un platformer de tip side-scrolling bazat pe sincronizarea cu muzica,
+în care ești un pătrat care încearcă să se ferească de țepi și să treacă
+la următorul nivel.
 
 ### Important!
 Aveți voie cu cod generat de modele de limbaj la care nu ați contribuit semnificativ doar în folder-ul `generated`.
