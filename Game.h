@@ -2,8 +2,6 @@
 #ifndef GAME_H
 #define GAME_H
 #include "SFML/Graphics.hpp"
-#include <chrono>
-#include<thread>
 
 #include "Ground.h"
 #include "Obstacle.h"
@@ -33,7 +31,7 @@ public:
     void pollEvents();
     void render();
     void update();
-    float getDeltaTime();
+    double getDeltaTime();
     // void updateGround(float velocity,float deltaTime);
     // void updateObstacles();
 };

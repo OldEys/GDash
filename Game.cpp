@@ -72,7 +72,7 @@ void Game :: update() {
     //update functions
 }
 
-float Game::getDeltaTime() {
+double Game::getDeltaTime() {
     return 1./60;
 }
 
