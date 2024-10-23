@@ -22,7 +22,7 @@ class Game {
     // sf::RectangleShape groundBody;
     Ground ground;
     // std::vector<Obstacle> obstacles;
-    bool isAlive;
+    // bool isAlive;
 public:
 
     Game();

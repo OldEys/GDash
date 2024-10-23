@@ -5,7 +5,9 @@
 #include <iostream>
 #include "env_fixes.h"
 
-Game::Game() :  window(nullptr) , isAlive(true)  {
+Game::Game() :  window(nullptr)
+// ,isAlive(true)
+{
     this->initWindow();
     ground=Ground(*this->window);
     ground.initGround();
@@ -46,6 +48,7 @@ void Game::initWindow()  {
 
 void Game::pollEvents() {
     bool shouldExit = false;
+    init_threads();
     while(this->window->pollEvent(this->event)) {
         if(this->event.type == sf::Event::Closed) {
             shouldExit = true;
