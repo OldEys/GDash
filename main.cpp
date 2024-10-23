@@ -18,11 +18,9 @@ int main() {
     /// NOTE: this function call is needed for environment-specific fixes //
 
     /// NOTE: mandatory use one of vsync or FPS limit (not both)
-
     Game game;
-    // game.window->setFramerateLimit(60);constructor
-
     while(game.isRunning()) {
+
         game.update();
         game.render();
     }

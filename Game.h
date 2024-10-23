@@ -5,6 +5,8 @@
 #include <chrono>
 #include<thread>
 
+#include "Ground.h"
+#include "Obstacle.h"
 #include "Player.h"
 
 class Game {
@@ -14,21 +16,26 @@ class Game {
     sf::Texture background;
     sf::Sprite backgroundSprite;
     Player player;
-    sf::Texture ground;
-    sf::Sprite groundSprite;
-    sf::RectangleShape groundBody;
 
+    // sf::Clock clock;
+    // sf::Texture groundTexture;
+    // sf::RectangleShape groundBody;
+    Ground ground;
+    // std::vector<Obstacle> obstacles;
+    bool isAlive;
 public:
 
     Game();
-    ~Game()=default;
-
+    ~Game();
     bool isRunning() const;
 
     void initWindow();
     void pollEvents();
     void render();
     void update();
+    float getDeltaTime();
+    // void updateGround(float velocity,float deltaTime);
+    // void updateObstacles();
 };
 
 

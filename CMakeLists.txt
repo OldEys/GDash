@@ -60,6 +60,8 @@ add_executable(${PROJECT_NAME}
         Game.h
         Obstacle.cpp
         Obstacle.h
+        Ground.cpp
+        Ground.h
 )
 
 include(cmake/CompilerFlags.cmake)
