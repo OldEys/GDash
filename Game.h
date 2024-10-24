@@ -1,7 +1,7 @@
 
 #ifndef GAME_H
 #define GAME_H
-#include "SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
 
 #include "Ground.h"
 #include "Obstacle.h"

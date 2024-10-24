@@ -1,7 +1,7 @@
 #ifndef GROUND_H
 #define GROUND_H
 
-#include "SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
 #include <iostream>
 
 class Ground {
@@ -14,6 +14,7 @@ public:
     Ground()=default;
     Ground(const Ground &other) ;
     Ground& operator=(const Ground &other);
+    ~Ground();
     void updateGround(float velocity, float deltaTime);
     void renderGround(sf::RenderWindow &window);
     void initGround();

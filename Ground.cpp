@@ -1,6 +1,6 @@
 #include "Ground.h"
 
-Ground::Ground(sf::RenderWindow &window) : groundTexture(*new sf::Texture()) {
+Ground::Ground(sf::RenderWindow &window) : groundTexture() {
     if (!groundTexture.loadFromFile("../images/ground-long.png")) {
         std::cerr << "Failed to load ground texture!" << std::endl;
     }
@@ -31,15 +31,19 @@ Ground & Ground::operator=(const Ground &other) {
 
 }
 
+Ground::~Ground() {
+    std::cout <<"Destroyed ground\n";
+}
+
 void Ground::updateGround(float velocity, float deltaTime) {
 
     groundBody1.move(velocity * deltaTime, 0.0f);
     groundBody2.move(velocity * deltaTime, 0.0f);
 
-    if (groundBody1.getPosition().x + groundBody1.getSize().x < 0) {
+    if (groundBody1.getPosition().x + groundBody1.getGlobalBounds().width < 0) {
         groundBody1.setPosition(groundBody2.getPosition().x + groundBody2.getGlobalBounds().width, groundBody1.getPosition().y);
     }
-    if (groundBody2.getPosition().x + groundBody2.getSize().x < 0) {
+    if (groundBody2.getPosition().x + groundBody2.getGlobalBounds().width < 0) {
         groundBody2.setPosition(groundBody1.getPosition().x + groundBody1.getGlobalBounds().width, groundBody2.getPosition().y);
     }
 }

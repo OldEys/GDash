@@ -7,7 +7,7 @@
 #include <iostream>
 
 #include "Ground.h"
-#include "SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
 
 
 class Player {
