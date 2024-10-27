@@ -17,6 +17,9 @@ Player::Player(float position)
     body.setPosition(sf::Vector2f(350.0f, position-body.getSize().y));
 }
 
+Player::Player(): isJumping(false) , jumpSpeed(0.0f) , jumpHeight(250.0f) {
+    std::cout<<"constructor fara parametri\n";
+}
 
 
 Player::~Player() {
@@ -68,6 +71,7 @@ void Player::renderPlayer(sf::RenderWindow &window) {
 void Player::checkCollisionGround(const Ground &ground) {
     if(this->body.getGlobalBounds().intersects(ground.getBounds1())
         || this->body.getGlobalBounds().intersects(ground.getBounds2())) {
+        this->body.setPosition(this->body.getPosition().x,ground.getBounds1().top-this->body.getGlobalBounds().height);
         isJumping=false;
         jumpSpeed=0;
         }

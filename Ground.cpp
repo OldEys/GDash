@@ -38,7 +38,7 @@ Ground::~Ground() {
     std::cout <<"Destroyed ground\n";
 }
 
-void Ground::updateGround(float velocity, float deltaTime) {
+void Ground::updateGround(float velocity, double deltaTime) {
 
     groundBody1.move(velocity * deltaTime, 0.0f);
     groundBody2.move(velocity * deltaTime, 0.0f);

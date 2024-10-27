@@ -4,14 +4,14 @@
 
 #ifndef OBSTACLE_H
 #define OBSTACLE_H
-#include "SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
 
 enum class ObstacleType {
     SPIKE,
     BLOCK,
     SPIKE_SHORT,
     PLATFORM,
-    END
+    // END
 };
 class Obstacle {
     sf::RectangleShape body;
@@ -23,7 +23,7 @@ class Obstacle {
 public:
     Obstacle(ObstacleType type,sf::Vector2f position);
     ~Obstacle()=default;
-    Obstacle()=default;
+    Obstacle();
     Obstacle(const Obstacle& obstacle);
     Obstacle& operator=(const Obstacle& obstacle);
     void updateObstacle(float velocity,float deltaTime);

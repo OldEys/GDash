@@ -15,7 +15,7 @@ public:
     Ground(const Ground &other) ;
     Ground& operator=(const Ground &other);
     ~Ground();
-    void updateGround(float velocity, float deltaTime);
+    void updateGround(float velocity, double deltaTime);
     void renderGround(sf::RenderWindow &window);
     void initGround();
     float getGroundPos();

@@ -21,7 +21,7 @@ class Player {
 
     public:
     explicit Player(float position);
-    Player()=default;
+    Player();
     ~Player();
 
     Player(const Player &other);

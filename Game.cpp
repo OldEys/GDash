@@ -79,7 +79,7 @@ void Game :: update() {
     this->totalDistanceTraveled += 10.0f*this->velocity*this->deltaTime;
     this->ground.updateGround(-this->velocity,this->deltaTime);
     this->updateObstacles();
-    for(auto& obstacle : this->obstacles) {
+    for(const auto& obstacle : this->obstacles) {
         this->player.checkCollisionObstacle(this->deltaTime,this->velocity,obstacle);
     }
     this->updateView();
@@ -113,6 +113,8 @@ void Game::loadChunks() {
                 type=ObstacleType::SPIKE_SHORT;
             else if(objtype=="platform")
                 type=ObstacleType::PLATFORM;
+            else
+                continue;
             currentChunk.addObstacle(Obstacle(type,sf::Vector2f(x,y)));
             std::cout << "Chunk startX: " << currentChunk.getStartX()
                      << ", endX: " << currentChunk.getEndX() << std::endl;
@@ -132,6 +134,8 @@ void Game::loadChunks() {
                     type=ObstacleType::SPIKE_SHORT;
                 else if(objtype=="platform")
                     type=ObstacleType::PLATFORM;
+                else
+                    continue;
                 currentChunk.addObstacle(Obstacle(type,sf::Vector2f(x,y)));
             }
         }

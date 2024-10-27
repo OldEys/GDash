@@ -87,12 +87,17 @@ ObstacleType Obstacle::getType() const {
     return type;
 }
 
-Obstacle::Obstacle(const Obstacle& other) {
-    type = other.type;
-    body = other.body;
-    hitbox = other.hitbox;
-    texture = other.texture;
-    body.setTexture(&texture);
+Obstacle::Obstacle() : type{ObstacleType::BLOCK} {
+}
+
+Obstacle::Obstacle(const Obstacle& other) :
+body{other.body},
+hitbox{other.hitbox},
+texture {other.texture},
+type{other.type}
+{
+body.setTexture(&texture);
+   std::cout<<"copy constructor obstacle\n";
 }
 
 Obstacle& Obstacle:: operator=(const Obstacle& other) {
