@@ -26,9 +26,12 @@ Ground & Ground::operator=(const Ground &other) {
     groundTexture=other.groundTexture;
     groundBody1=other.groundBody1;
     groundBody2=other.groundBody2;
+    groundBody1.setTexture(&groundTexture);
+    groundBody2.setTexture(&groundTexture);
+    groundBody1.setFillColor(sf::Color(100, 100, 255));
+    groundBody2.setFillColor(sf::Color(100, 100, 255));
     std::cout<<"Operator= de atribuire"<<std::endl;
     return *this;
-
 }
 
 Ground::~Ground() {
@@ -53,13 +56,6 @@ void Ground::renderGround(sf::RenderWindow &window) {
     window.draw(groundBody2);
 }
 
-void Ground::initGround() {
-    groundTexture.loadFromFile("../images/ground-long.png");
-    groundBody1.setTexture(&groundTexture);
-    groundBody2.setTexture(&groundTexture);
-    groundBody1.setFillColor(sf::Color(100,100,255));
-    groundBody2.setFillColor(sf::Color(100,100,255));
-}
 
 float Ground::getGroundPos() {
     return groundBody1.getPosition().y;

@@ -9,6 +9,8 @@
 #include "Ground.h"
 #include <SFML/Graphics.hpp>
 
+#include "Obstacle.h"
+
 
 class Player {
     sf::RectangleShape body;
@@ -18,37 +20,20 @@ class Player {
     float jumpHeight;
 
     public:
-    Player();
+    explicit Player(float position);
+    Player()=default;
     ~Player();
 
-    Player(const Player &other)
-        : body(other.body),
-          texture(other.texture),
-          isJumping(other.isJumping),
-          jumpSpeed(other.jumpSpeed),
-          jumpHeight(other.jumpHeight) {
-        std::cout<<"copy constructor"<<std::endl;
-    }
+    Player(const Player &other);
 
-    Player & operator=(const Player &other) {
-        if (this == &other)
-            return *this;
-        body = other.body;
-        texture = other.texture;
-        isJumping = other.isJumping;
-        jumpSpeed = other.jumpSpeed;
-        jumpHeight = other.jumpHeight;
-        return *this;
-    }
+    Player & operator=(const Player &other);
 
-    void setPosition(float position);
-    void updatePlayer(float deltaTime,const Ground &ground);
+    sf::Vector2f getPosition() const ;
+    void updatePlayer(double deltaTime,const Ground &ground);
     void renderPlayer(sf::RenderWindow &window);
     void checkCollisionGround(const Ground &ground);
-
-
+    void checkCollisionObstacle(float deltaTime,float& velocity,const Obstacle &obstacle);
+    sf::FloatRect getBounds() const;
 };
-
-
 
 #endif //PLAYER_H

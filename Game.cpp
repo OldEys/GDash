@@ -1,16 +1,30 @@
-
-
 #include "Game.h"
-
+#include <fstream>
 #include <iostream>
 #include "env_fixes.h"
 
+// block 1500 790
+// block 1800 690
+// block 1900 690
+// block 2000 690
+// block 2100 590
+// block 2400 490
+// block 2800 390
+// block 3100 290
+// block 3200 290
+// block 3300 290
+// block 3400 290
+// block 3500 290
+// block 3600 290
+// block 3700 290
 Game::Game() :  window(nullptr)
 // ,isAlive(true)
+, totalDistanceTraveled(0.0f)
 {
     this->initWindow();
     ground=Ground(*this->window);
-    ground.initGround();
+    // ground.initGround();
+    player=Player(ground.getGroundPos());
     this->background.loadFromFile("../images/background1-3.png");
     this->backgroundSprite.setTexture(this->background);
     this->backgroundSprite.setPosition(0.0f, 0.0f);
@@ -19,19 +33,13 @@ Game::Game() :  window(nullptr)
         static_cast<float>(this->window->getSize().y) / this->background.getSize().y
     );
     this->backgroundSprite.setColor(sf::Color::Blue);
-
-    // obstacles.emplace_back(Obstacle(ObstacleType::BLOCK,200.0f));
-    // obstacles.push_back(Obstacle(ObstacleType::BLOCK,300.0f));
-    // obstacles.push_back(Obstacle(ObstacleType::BLOCK,400.0f));
-    //     this->groundTexture.loadFromFile("../images/ground-long.png");
-    //     this->groundBody.setTexture(&this->groundTexture);
-    //     float scaleX =static_cast<float>(this->window->getSize().x)/this->groundTexture.getSize().x;
-    //     float scaleY =scaleX;
-    //     this->groundBody.setSize(sf::Vector2f(static_cast<float>(this->groundTexture.getSize().x),static_cast<float>(this->groundTexture.getSize().y)));
-    //     this->groundBody.setScale(scaleX,scaleY);
-    //     this->groundBody.setPosition(0.0f,this->window->getSize().y-scaleY*this->groundBody.getSize().y);
-    //     this->groundBody.setFillColor((sf::Color(75,75,255)));
-    this->player.setPosition(ground.getGroundPos());
+    this->buffer.loadFromFile("../sound/level_soundtrack.ogg");
+    this->music.setBuffer(this->buffer);
+    music.play();
+    this->view.setCenter(player.getPosition().x+620.0f,player.getPosition().y-250.0f);
+    this->view.setSize(1920.0f, 1080.0f);
+    this->window->setView(this->view);
+    this->loadChunks();
 }
 bool Game::isRunning() const {
     return this->window->isOpen();
@@ -42,7 +50,7 @@ void Game::initWindow()  {
     this->videoMode.height=1080;
     this->window = new sf::RenderWindow(this->videoMode,"GDash",sf::Style::Default);
     this->window->setPosition(sf::Vector2i(0,0));
-    this->window->setFramerateLimit(144);
+    this->window->setFramerateLimit(60);
     this->window->setPosition(sf::Vector2i(0,0));
 }
 
@@ -66,42 +74,113 @@ void Game::pollEvents() {
 }
 void Game :: update() {
     this->pollEvents();
-    this->player.updatePlayer(this->getDeltaTime(),ground);
-    // this->updateGround(-300.0f, this->getDeltaTime());
-    this->ground.updateGround(-300.0f,this->getDeltaTime());
-    //update functions
+    this->deltaTime=std::min(getDeltaTime(),1./60.f);
+    this->player.updatePlayer(this->deltaTime,ground);
+    this->totalDistanceTraveled += 10.0f*this->velocity*this->deltaTime;
+    this->ground.updateGround(-this->velocity,this->deltaTime);
+    this->updateObstacles();
+    for(auto& obstacle : this->obstacles) {
+        this->player.checkCollisionObstacle(this->deltaTime,this->velocity,obstacle);
+    }
+    this->updateView();
+    std::cout<<deltaTime<<"\n";
 }
 
 double Game::getDeltaTime() {
-    return 1./60;
+    // return 1./60;
+    return this->clock.restart().asSeconds();
 }
 
-// void Game::updateObstacles() {
-//     if(!isAlive) return ;
-//
-//     for(auto& obstacle : this->obstacles) {
-//         obstacle.updateObstacle(-300.0f,getDeltaTime());
+void Game::loadChunks() {
+    std::ifstream fin("../obstacole.in");
+    if(!fin.is_open()) {
+    std::cout<<"File cant open"<<std::endl;
+        return;
+    }
+    // Chunk currentChunk(0.0f,chunkSize);
+    Chunk currentChunk=Chunk(0.0f,chunkSize);
+    std::string objtype;
+    float x,y;
+    while(fin>>objtype>>x>>y) {
+        if(x>=currentChunk.getStartX()&&x<currentChunk.getEndX()) {
+        // ObstacleType type=(objtype=="block")?ObstacleType::BLOCK :ObstacleType::SPIKE;
+            ObstacleType type;
+            if(objtype=="block")
+                type=ObstacleType::BLOCK;
+            else if(objtype=="spike")
+                type=ObstacleType::SPIKE;
+            else if(objtype=="short")
+                type=ObstacleType::SPIKE_SHORT;
+            else if(objtype=="platform")
+                type=ObstacleType::PLATFORM;
+            currentChunk.addObstacle(Obstacle(type,sf::Vector2f(x,y)));
+            std::cout << "Chunk startX: " << currentChunk.getStartX()
+                     << ", endX: " << currentChunk.getEndX() << std::endl;
+            std::cout << "Obstacle position x: " << x << ", y: " << y << std::endl;
+        }
+        else {
+            chunks.push_back(currentChunk);
+            currentChunk=Chunk(currentChunk.getEndX(),chunkSize);
+
+            if(x>=currentChunk.getStartX()&&x<currentChunk.getEndX()) {
+                ObstacleType type;
+                if(objtype=="block")
+                    type=ObstacleType::BLOCK;
+                else if(objtype=="spike")
+                    type=ObstacleType::SPIKE;
+                else if(objtype=="short")
+                    type=ObstacleType::SPIKE_SHORT;
+                else if(objtype=="platform")
+                    type=ObstacleType::PLATFORM;
+                currentChunk.addObstacle(Obstacle(type,sf::Vector2f(x,y)));
+            }
+        }
+    }
+    chunks.push_back(currentChunk);
+    std::cout << "Chunk startX: " << currentChunk.getStartX()
+                 << ", endX: " << currentChunk.getEndX() << std::endl;
+}
+
+// void Game::updateView() {
+//     if(player.getPosition().y<300.0f) {
+//         view.setCenter(player.getPosition());
 //     }
 // }
+void Game::updateView() {
+    float targetY = player.getPosition().y < 300.0f ? player.getPosition().y : 520.0f;
+    sf::Vector2f currentCenter = view.getCenter();
+    float lerpFactor = 0.02f;
+    float newCenterY = currentCenter.y + lerpFactor * (targetY - currentCenter.y);
+    view.setCenter(currentCenter.x, newCenterY);
+    window->setView(view);
+}
+void Game::updateObstacles() {
+    while(currentChunkIndex < chunks.size() &&
+          chunks[currentChunkIndex].getStartX() - totalDistanceTraveled < window->getSize().x) {
+        const auto& newObstacles = chunks[currentChunkIndex].getObstacles();
+        obstacles.insert(obstacles.end(), newObstacles.begin(), newObstacles.end());
+        currentChunkIndex++;
+          }
+
+    if(!obstacles.empty()&&obstacles.begin()->getPosition().x<0) {
+        obstacles.erase(obstacles.begin());
+    }
+    // this->checkCollision();
+    for (auto& obstacle : obstacles) {
+        obstacle.updateObstacle(-velocity, deltaTime);
+    }
+}
 Game::~Game() {
-    delete this->window;
-    std::cout<<"Game destructor"<<std::endl;
+    std::cout<<"destroyed game\n";
 }
 void Game :: render() {
     this->window->clear();
     this->window->draw(this->backgroundSprite);
     // this->window->draw(this->groundBody);
     this->ground.renderGround(*this->window);
-    // for(auto& obstacle:obstacles) {
-    //     obstacle.renderObstacle(*this->window);
-    // }
+    for(auto& obstacle:obstacles) {
+        obstacle.renderObstacle(*this->window);
+    }
     this->player.renderPlayer(*this->window);
     this->window->display();
 }
-// void Game::updateGround(float velocity,float deltaTime) {
-//     this->groundBody.move(velocity*deltaTime,0.0f);
-//     if(this->groundBody.getPosition().x +this->groundBody.getSize().x< 0) {
-//         this->groundBody.setPosition(1920.0f,this->groundBody.getPosition().y);
-//         std::cout<<"Ground body updated"<<std::endl;
-//     }
-// }
