@@ -1,16 +1,17 @@
 #include "Ground.h"
+#include <iostream>
 
-Ground::Ground(sf::RenderWindow &window) : groundTexture() {
+Ground::Ground(const sf::RenderWindow &window) : groundTexture() {
     if (!groundTexture.loadFromFile("../images/ground-long.png")) {
         std::cerr << "Failed to load ground texture!" << std::endl;
     }
-
+    
     groundBody1.setTexture(&groundTexture);
-    float scaleX = static_cast<float>(window.getSize().x) / groundTexture.getSize().x;
+    float scaleX = static_cast<float>(window.getSize().x) / static_cast<float>(groundTexture.getSize().x);
     float scaleY = scaleX;
     groundBody1.setSize(sf::Vector2f(static_cast<float>(groundTexture.getSize().x), static_cast<float>(groundTexture.getSize().y)));
     groundBody1.setScale(scaleX, scaleY);
-    groundBody1.setPosition(0.0f, window.getSize().y - scaleY * groundBody1.getSize().y);
+    groundBody1.setPosition(0.0f, static_cast<float>(window.getSize().y) - scaleY * groundBody1.getSize().y);
 
 
     groundBody2 = groundBody1;
@@ -40,8 +41,8 @@ Ground::~Ground() {
 
 void Ground::updateGround(float velocity, double deltaTime) {
 
-    groundBody1.move(velocity * deltaTime, 0.0f);
-    groundBody2.move(velocity * deltaTime, 0.0f);
+    groundBody1.move(static_cast<float>(velocity * deltaTime), 0.0f);
+    groundBody2.move(static_cast<float>(velocity * deltaTime), 0.0f);
 
     if (groundBody1.getPosition().x + groundBody1.getGlobalBounds().width < 0) {
         groundBody1.setPosition(groundBody2.getPosition().x + groundBody2.getGlobalBounds().width, groundBody1.getPosition().y);
@@ -61,10 +62,10 @@ float Ground::getGroundPos() {
     return groundBody1.getPosition().y;
 }
 
-const sf::FloatRect Ground::getBounds1() const {
+sf::FloatRect Ground::getBounds1() const {
     return groundBody1.getGlobalBounds();
 }
 
-const sf::FloatRect Ground::getBounds2() const {
+sf::FloatRect Ground::getBounds2() const {
     return groundBody2.getGlobalBounds();
 }

@@ -14,18 +14,27 @@ Chunk::~Chunk() {
     std::cout<<"Destroyed chunk\n";
 }
 
-void Chunk::addObstacle(Obstacle obstacle) {
+void Chunk::addObstacle(const Obstacle& obstacle) {
     obstacles.push_back(obstacle);
 }
 
-float Chunk::getStartX() {
+[[nodiscard]] float Chunk::getStartX() const {
     return this->startX;
 }
 
-const std::vector<Obstacle> & Chunk::getObstacles() const {
+[[nodiscard]] const std::vector<Obstacle> & Chunk::getObstacles() const {
     return this->obstacles;
 }
 
-float Chunk::getEndX() {
+[[nodiscard]] float Chunk::getEndX() const {
     return this->endX;
+}
+std::ostream & operator<<(std::ostream &os, const Chunk &chunk) {
+    os<<"Start X: "<<chunk.getStartX()<<"\n";
+    os<<"End X: "<<chunk.getEndX()<<"\n";
+    os<<"Obstacles:\n";
+    for(auto& obstacle : chunk.obstacles) {
+        os<<obstacle<<"\n";
+    }
+    return os;
 }

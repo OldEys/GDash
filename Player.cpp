@@ -1,11 +1,8 @@
 #include "Player.h"
-
 #include <iostream>
-#include <math.h>
-
+#include <cmath>
 #include "Ground.h"
 
-//
 Player::Player(float position)
 : isJumping(false) , jumpSpeed(0.0f) , jumpHeight(250.0f)
 {
@@ -61,7 +58,7 @@ void Player::updatePlayer(const double deltaTime,const Ground& ground) {
     }
     if(isJumping)
         jumpSpeed+=7500.0f*deltaTime;
-    body.move(0.0f,jumpSpeed*deltaTime);
+    body.move(0.0f,static_cast<float>(jumpSpeed*deltaTime));
     checkCollisionGround(ground);
 }
 void Player::renderPlayer(sf::RenderWindow &window) {
@@ -95,7 +92,7 @@ void Player::checkCollisionGround(const Ground &ground) {
 //         }
 //     }
 // }
-void Player::checkCollisionObstacle(float deltaTime, float &velocity, const Obstacle &obstacle) {
+void Player::checkCollisionObstacle(bool& endGame,double deltaTime, float &velocity, const Obstacle &obstacle) {
     if (this->getBounds().intersects(obstacle.getBounds())) {
         if (obstacle.getType() == ObstacleType::BLOCK || obstacle.getType() == ObstacleType::PLATFORM) {
             if (this->getBounds().top + this->getBounds().height - jumpSpeed * deltaTime <= obstacle.getBounds().top) {
@@ -116,6 +113,7 @@ void Player::checkCollisionObstacle(float deltaTime, float &velocity, const Obst
                         } else {
                             //se afla in stanga lui
                             this->body.setPosition(obstacle.getBounds().left - this->getBounds().width, this->body.getPosition().y);
+                            endGame=true;
                             velocity = 0.0f;
                         }
                     }
@@ -123,9 +121,14 @@ void Player::checkCollisionObstacle(float deltaTime, float &velocity, const Obst
             }
         }
         if (obstacle.getType() == ObstacleType::SPIKE || obstacle.getType() == ObstacleType::SPIKE_SHORT) {
+            endGame=true;
             velocity = 0.0f;
             jumpSpeed = 0.0f;
             isJumping = false;
+        }
+        if(obstacle.getType()==ObstacleType::END) {
+            endGame = true;
+            std::cout<<"Level completed ! Well done!\n";
         }
     }
 }
@@ -134,3 +137,4 @@ void Player::checkCollisionObstacle(float deltaTime, float &velocity, const Obst
 sf::FloatRect Player::getBounds() const {
     return body.getGlobalBounds();
 }
+

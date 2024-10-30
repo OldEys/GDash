@@ -28,7 +28,7 @@ Obstacle::Obstacle(ObstacleType type,sf::Vector2f position) {
     }
     if(this->type== ObstacleType::PLATFORM) {
         if(!this->texture.loadFromFile("../images/ground_block.png")) {
-            std::cout<<"Error loading ground block texture\n";
+            std::cout<<"Error loading platform  texture\n";
         }
         else
             std::cout<<"platform texture loaded successfully\n";
@@ -45,7 +45,7 @@ Obstacle::Obstacle(ObstacleType type,sf::Vector2f position) {
     }
     if(this->type== ObstacleType::SPIKE) {
         if(!this->texture.loadFromFile("../images/spike.png")) {
-            std::cout<<"Error loading ground block texture\n";
+            std::cout<<"Error loading spike texture\n";
         }
         else
             std::cout<<"spike texture loaded successfully\n";
@@ -56,7 +56,7 @@ Obstacle::Obstacle(ObstacleType type,sf::Vector2f position) {
     }
     if(this->type== ObstacleType::SPIKE_SHORT) {
         if(!this->texture.loadFromFile("../images/spike.png")) {
-            std::cout<<"Error loading ground block texture\n";
+            std::cout<<"Error loading short spike texture\n";
         }
         else
             std::cout<<"short texture loaded successfully\n";
@@ -66,10 +66,21 @@ Obstacle::Obstacle(ObstacleType type,sf::Vector2f position) {
         body.setPosition(body.getPosition().x, this->body.getPosition().y+body.getGlobalBounds().height);
         this->hitbox.setPosition(this->body.getPosition().x+40.0f,this->body.getPosition().y+40.0f);
     }
+    if(this->type== ObstacleType::END) {
+        if(!this->texture.loadFromFile("../images/end.png")) {
+            std::cout<<"Error loading end texture\n";
+        }
+        else
+            std::cout<<"end texture loaded successfully\n";
+        body.setSize(sf::Vector2f(200.0f,400.0f));
+        body.setTexture(&this->texture);
+        this->hitbox.setSize(sf::Vector2f(200.0f,400.0f));
+        this->hitbox.setPosition(this->body.getPosition().x,this->body.getPosition().y);
+    }
 }
-void Obstacle::updateObstacle(float velocity,float deltaTime) {
-    body.move(velocity*deltaTime,0.0f);
-    hitbox.move(velocity*deltaTime,0.0f);
+void Obstacle::updateObstacle(float velocity,double deltaTime) {
+    body.move(static_cast<float>(velocity*deltaTime),0.0f);
+    hitbox.move(static_cast<float>(velocity*deltaTime),0.0f);
 }
 void Obstacle::renderObstacle(sf::RenderWindow &window) {
     window.draw(this->body);
@@ -79,7 +90,7 @@ sf::Vector2f Obstacle::getPosition() const {
     return hitbox.getPosition();
 }
 
-const sf::FloatRect Obstacle::getBounds() const {
+sf::FloatRect Obstacle::getBounds() const {
     return hitbox.getGlobalBounds();
 }
 
@@ -111,3 +122,9 @@ Obstacle& Obstacle:: operator=(const Obstacle& other) {
     return *this;
 }
 
+std::ostream & operator<<(std::ostream &os, const Obstacle &obstacle) {
+    os<<"position x: "<<obstacle.getPosition().x<<" y : "<<obstacle.getPosition().y<<"\n";
+    os<<"size x: "<<obstacle.body.getSize().x<<" y: "<<obstacle.body.getSize().y<<"\n";
+    os<<"hitbox size x: "<<obstacle.hitbox.getSize().x<<" y: "<<obstacle.hitbox.getSize().y<<"\n";
+    return os;
+}

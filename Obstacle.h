@@ -11,7 +11,7 @@ enum class ObstacleType {
     BLOCK,
     SPIKE_SHORT,
     PLATFORM,
-    // END
+    END
 };
 class Obstacle {
     sf::RectangleShape body;
@@ -26,10 +26,11 @@ public:
     Obstacle();
     Obstacle(const Obstacle& obstacle);
     Obstacle& operator=(const Obstacle& obstacle);
-    void updateObstacle(float velocity,float deltaTime);
+    friend std::ostream& operator<<(std::ostream& os, const Obstacle& obstacle);
+    void updateObstacle(float velocity,double deltaTime);
     void renderObstacle(sf::RenderWindow &window);
     sf::Vector2f getPosition() const ;
-    const sf::FloatRect getBounds() const;
+    sf::FloatRect getBounds() const;
     ObstacleType getType() const;
 };
 
