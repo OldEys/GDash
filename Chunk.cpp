@@ -33,7 +33,7 @@ std::ostream & operator<<(std::ostream &os, const Chunk &chunk) {
     os<<"Start X: "<<chunk.getStartX()<<"\n";
     os<<"End X: "<<chunk.getEndX()<<"\n";
     os<<"Obstacles:\n";
-    for(auto& obstacle : chunk.obstacles) {
+    for(const auto& obstacle : chunk.obstacles) {
         os<<obstacle<<"\n";
     }
     return os;

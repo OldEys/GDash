@@ -191,7 +191,7 @@ void Game :: render() {
 
 std::ostream & operator<<(std::ostream &os, const Game &game) {
     os<<"Game Objects number: "<<game.obstacles.size()<<"\n";
-    for(auto& obstacle:game.obstacles) {
+    for(const auto& obstacle:game.obstacles) {
         os<<"obstacle : "<<obstacle<<"\n";
     }
     os<<"total distance travelled"<<game.totalDistanceTraveled<<"\n";
