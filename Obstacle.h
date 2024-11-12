@@ -21,7 +21,8 @@ class Obstacle {
     ObstacleType type;
 
 public:
-    Obstacle(ObstacleType type,sf::Vector2f position);
+    Obstacle(sf::Vector2f position, ObstacleType type);
+
     ~Obstacle()=default;
     Obstacle();
     Obstacle(const Obstacle& obstacle);
@@ -31,6 +32,10 @@ public:
     void renderObstacle(sf::RenderWindow &window);
     sf::Vector2f getPosition() const ;
     sf::FloatRect getBounds() const;
+
+    void initializeObstacle(const std::string &texturePath, sf::Vector2f bodySize
+                            , sf::Vector2f hitboxSize, sf::Color fillColor, float outlineThickness);
+
     ObstacleType getType() const;
 };
 

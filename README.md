@@ -2,10 +2,10 @@
 
 ### Descriere
 
-Un remake al popularului joc de pe telefon si pc,Geometry Dash,
+Un remake al popularului joc de pe telefon si pc,[Geometry Dash](https://www.geometrydash.com/),
 un platformer de tip side-scrolling bazat pe sincronizarea cu muzica,
-în care ești un pătrat care încearcă să se ferească de țepi și să treacă
-la următorul nivel. 
+în care ești un pătrat care încearcă să se ferească de țepi . Ai nevoie doar de tasta space și reflexe ascuțite
+în încercarea ta de a finaliza nivelul și a nu da rage.
 
 ### Important!
 Aveți voie cu cod generat de modele de limbaj la care nu ați contribuit semnificativ doar în folder-ul `generated`.

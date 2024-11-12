@@ -8,6 +8,7 @@ int main() {
         game.update();
         game.render();
     }
-    operator<<(std::cout,game);
+    // operator<<(std::cout,game);
+    std::cout << game;
     return 0;
 }

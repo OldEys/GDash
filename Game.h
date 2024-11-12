@@ -25,7 +25,7 @@ class Game {
     std::vector<Obstacle> obstacles; //list of active obstacles
     float chunkSize=2000.0f;
     long long unsigned int currentChunkIndex=0;
-    bool endGame=false;
+    bool endGame;
     float velocity=850.0f;
     double totalDistanceTraveled=0;
     double deltaTime=0.0f;

@@ -2,7 +2,7 @@
 #include <iostream>
 
 Ground::Ground(const sf::RenderWindow &window) : groundTexture() {
-    if (!groundTexture.loadFromFile("../images/ground-long.png")) {
+    if (!groundTexture.loadFromFile("images/ground-long.png")) {
         std::cerr << "Failed to load ground texture!" << std::endl;
     }
     
