@@ -44,7 +44,6 @@ public:
     void updateObstacles();
     void loadChunks();
     void updateView();
-    // void checkCollision();
 };
 
 #endif //GAME_H

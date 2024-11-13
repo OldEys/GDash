@@ -49,7 +49,6 @@ Obstacle::Obstacle(sf::Vector2f position, ObstacleType type)
         this->body.setOutlineThickness(4.0f);
     }
 }
-
 void Obstacle::initializeObstacle(const std::string &texturePath, sf::Vector2f bodySize, sf::Vector2f hitboxSize,
                                   sf::Color fillColor, float outlineThickness) {
     if (!this->texture.loadFromFile(texturePath)) {
@@ -83,9 +82,6 @@ sf::FloatRect Obstacle::getBounds() const {
 
 ObstacleType Obstacle::getType() const {
     return type;
-}
-
-Obstacle::Obstacle() : type{ObstacleType::BLOCK} {
 }
 
 Obstacle::Obstacle(const Obstacle& other) :

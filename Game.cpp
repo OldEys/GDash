@@ -3,6 +3,7 @@
 #include <iostream>
 #include "env_fixes.h"
 #define MIN_DELTA_TIME_FPS 60.0f
+#define ALIGN_VIEW_Y 520.0f
 
 Game::Game() : window(nullptr),
                event{},
@@ -92,6 +93,8 @@ double Game::getDeltaTime() {
 }
 
 void Game::loadChunks() {
+    //functie de a incarca toate obiectele din fisierul obstacole.in
+    //in chunkuri cu chunksize de 2000 de pixeli
     std::ifstream fin("obstacole.in");
     if (!fin.is_open()) {
         std::cout << "File cant open" << std::endl;
@@ -101,8 +104,10 @@ void Game::loadChunks() {
     std::string objtype;
     float x, y;
     while (fin >> objtype >> x >> y) {
+        //citim si in functie de ce string citim
+        //cream un obiect in chunkul curent
         if (x >= currentChunk.getStartX() && x < currentChunk.getEndX()) {
-            // ObstacleType type=(objtype=="block")?ObstacleType::BLOCK :ObstacleType::SPIKE;
+            //daca se afla in chunkul curent
             ObstacleType type;
             if (objtype == "block")
                 type = ObstacleType::BLOCK;
@@ -118,6 +123,7 @@ void Game::loadChunks() {
                 continue;
             currentChunk.addObstacle(Obstacle(sf::Vector2f(x, y), type));
         } else {
+            //daca nu se afla in chunkul curent adaugam unul nou
             chunks.push_back(currentChunk);
             currentChunk = Chunk(currentChunk.getEndX(), chunkSize);
             if (x >= currentChunk.getStartX() && x < currentChunk.getEndX()) {
@@ -138,36 +144,39 @@ void Game::loadChunks() {
             }
         }
     }
+    //la final cream ultimul chunk
     chunks.push_back(currentChunk);
     fin.close();
 }
 
-// void Game::updateView() {
-//     if(player.getPosition().y<300.0f) {
-//         view.setCenter(player.getPosition());
-//     }
-// }
 void Game::updateView() {
-    float targetY = player.getPosition().y < 300.0f ? player.getPosition().y : 520.0f;
+    //daca jucatorul este indeajuns de sus camera urmareste pozitia jucatorului altfel are
+    //o pozitie fixa
+    float targetY = player.getPosition().y < 300.0f ? player.getPosition().y : ALIGN_VIEW_Y;
     sf::Vector2f currentCenter = view.getCenter();
     float lerpFactor = 0.02f;
+    //reactualizam centrul si folosim lerpFactor pentru a atenua miscarea dintre
+    //centrul vechi si cel nou
     float newCenterY = currentCenter.y + lerpFactor * (targetY - currentCenter.y);
     view.setCenter(currentCenter.x, newCenterY);
     window->setView(view);
 }
-
 void Game::updateObstacles() {
+    //functie de actualizat obstacolele
     while (currentChunkIndex < chunks.size() &&
            chunks[currentChunkIndex].getStartX() - totalDistanceTraveled < window->getSize().x) {
+        //cat timp exista chunkuri si playerul a intrat in chunk
         const auto &newObstacles = chunks[currentChunkIndex].getObstacles();
         obstacles.insert(obstacles.end(), newObstacles.begin(), newObstacles.end());
         currentChunkIndex++;
-    }
-
+        //se extrag obstacolele din chunkul in care se afla playerul
+        //si se insereaza la vectorul de obstacole active
+        }
+    //daca un obstacol ajunge in stanga ecranului este sters din vectorul de obstacole active
     if (!obstacles.empty() && obstacles.begin()->getPosition().x < 0) {
         obstacles.erase(obstacles.begin());
     }
-    // this->checkCollision();
+    //se misca obstacolele spre stanga
     for (auto &obstacle: obstacles) {
         obstacle.updateObstacle(-velocity, deltaTime);
     }

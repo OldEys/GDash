@@ -40,7 +40,9 @@ Ground::~Ground() {
 }
 
 void Ground::updateGround(float velocity, double deltaTime) {
-
+    //pentru ground avem 2 texturi de ground de lungime window.size().x
+    //iar cand una ajunge cu latura din dreapta la x=0 se va pozitiona la capatul
+    //din dreapta al windowului
     groundBody1.move(static_cast<float>(velocity * deltaTime), 0.0f);
     groundBody2.move(static_cast<float>(velocity * deltaTime), 0.0f);
 

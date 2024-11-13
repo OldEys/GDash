@@ -83,51 +83,36 @@ void Player::handleCollisionGround(const Ground &ground) {
 }
 
 bool Player::checkCollisionGround(const Ground &ground) const {
-    return(this->body.getGlobalBounds().intersects(ground.getBounds1())
-        || this->body.getGlobalBounds().intersects(ground.getBounds2()));
+    return (this->body.getGlobalBounds().intersects(ground.getBounds1())
+            || this->body.getGlobalBounds().intersects(ground.getBounds2()));
 }
 
-void Player::handleCollisionObstacle(bool& endGame,double deltaTime, float &velocity, const Obstacle &obstacle) {
+void Player::handleCollisionObstacle(bool &endGame, double deltaTime, float &velocity, const Obstacle &obstacle) {
     if (checkCollisionObstacle(obstacle)) {
         if (obstacle.getType() == ObstacleType::BLOCK || obstacle.getType() == ObstacleType::PLATFORM) {
-            // if (this->getBounds().top + this->getBounds().height - jumpSpeed * deltaTime <= obstacle.getBounds().top) {
-            if(isAboveObstacle(deltaTime,obstacle))
-            {
+            if (isAboveObstacle(deltaTime, obstacle)) {
+                //daca intersecteaza obstacolul pe deasupra pozitionam playerul pe obstacol
                 this->body.setPosition(this->body.getPosition().x, obstacle.getBounds().top - this->getBounds().height);
                 isJumping = false;
             }
             else {
-                // // if (this->getBounds().left < obstacle.getBounds().left + obstacle.getBounds().width &&
-                //     this->getBounds().left + this->getBounds().width > obstacle.getBounds().left) {
-                    //daca jucatorul intersecteaza obiectul prin stanga
-                if(isCollidingFromLeft(obstacle)){
-                // if (this->getBounds().top < obstacle.getBounds().top + obstacle.getBounds().height &&
-                //         this->getBounds().top + this->getBounds().height > obstacle.getBounds().top) {
-                        //daca jucatorul intersecteaza obiectul de sus
-                if(isOnTopOfObstacle(obstacle)){
-                    if (this->body.getPosition().y < obstacle.getBounds().top) {
+                //daca jucatorul intersecteaza obiectul prin stanga
+                if (isCollidingFromLeft(obstacle)) {
+                    //daca jucatorul intersecteaza obiectul de sus
+                    if (isOnTopOfObstacle(obstacle)) {
+                        if (this->body.getPosition().y < obstacle.getBounds().top) {
                             //daca se afla pe obiect
-                            // this->body.setPosition(this->body.getPosition().x, obstacle.getBounds().top - this->getBounds().height);
-                            // isJumping = false;
-                        handleLandingOnObstacle(obstacle);
+                            handleLandingOnObstacle(obstacle);
                         } else {
                             //se afla in stanga lui
-
-                            // this->body.setPosition(obstacle.getBounds().left - this->getBounds().width, this->body.getPosition().y);
-                            // endGame=true;
-                            // velocity = 0.0f;
-                            handleLeftCollision(endGame,obstacle,velocity);
+                            handleLeftCollision(endGame, obstacle, velocity);
                         }
                     }
                 }
             }
         }
         if (obstacle.getType() == ObstacleType::SPIKE || obstacle.getType() == ObstacleType::SPIKE_SHORT) {
-            // endGame=true;
-            // velocity = 0.0f;
-            // jumpSpeed = 0.0f;
-            // isJumping = false;
-            handleSpikeCollision(endGame,velocity);
+            handleSpikeCollision(endGame, velocity);
         }
         if(obstacle.getType()==ObstacleType::END) {
             endGame = true;
@@ -135,23 +120,26 @@ void Player::handleCollisionObstacle(bool& endGame,double deltaTime, float &velo
         }
     }
 }
-
 bool Player::checkCollisionObstacle(const Obstacle &obstacle) const {
     return (this->body.getGlobalBounds().intersects(obstacle.getBounds()));
 }
 
 bool Player::isAboveObstacle(double deltaTime, const Obstacle &obstacle) const {
     return (this->getBounds().top + this->getBounds().height - jumpSpeed * deltaTime <= obstacle.getBounds().top);
+//verifica daca playerul urmeaza sa intersecteze un obiect pe deasupra
 }
 
 bool Player::isCollidingFromLeft(const Obstacle &obstacle) const {
-    return(this->getBounds().left < obstacle.getBounds().left + obstacle.getBounds().width &&
-                this->getBounds().left + this->getBounds().width > obstacle.getBounds().left);
+    return (this->getBounds().left < obstacle.getBounds().left + obstacle.getBounds().width &&
+            this->getBounds().left + this->getBounds().width > obstacle.getBounds().left);
+    //verifica daca intersecteaza un obiect prin laterala
 }
 
 bool Player::isOnTopOfObstacle(const Obstacle &obstacle) const {
     return (this->getBounds().top < obstacle.getBounds().top + obstacle.getBounds().height &&
-                this->getBounds().top + this->getBounds().height > obstacle.getBounds().top);
+            this->getBounds().top + this->getBounds().height > obstacle.getBounds().top);
+    //verifica daca intersecteaza un obiect pe verticala
+
 }
 
 void Player::handleLandingOnObstacle(const Obstacle &obstacle) {
@@ -159,14 +147,14 @@ void Player::handleLandingOnObstacle(const Obstacle &obstacle) {
     isJumping = false;
 }
 
-void Player::handleLeftCollision(bool& endGame, const Obstacle &obstacle, float& velocity) {
+void Player::handleLeftCollision(bool &endGame, const Obstacle &obstacle, float &velocity) {
     this->body.setPosition(obstacle.getBounds().left - this->getBounds().width, this->body.getPosition().y);
-    endGame=true;
+    endGame = true;
     velocity = 0.0f;
 }
 
-void Player::handleSpikeCollision(bool& endGame, float& velocity) {
-    endGame=true;
+void Player::handleSpikeCollision(bool &endGame, float &velocity) {
+    endGame = true;
     velocity = 0.0f;
     jumpSpeed = 0.0f;
     isJumping = false;
