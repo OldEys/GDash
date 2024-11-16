@@ -2,7 +2,8 @@
 #include <iostream>
 #include <cmath>
 #include "Ground.h"
-
+#define GRAVITY 7500.0f
+#define ON_GROUND 785.0f
 Player::Player(float position)
 : isJumping(false) , jumpSpeed(0.0f) , jumpHeight(250.0f)
 {
@@ -51,7 +52,7 @@ sf::Vector2f Player::getPosition() const {
 }
 
 
-void Player::updatePlayer(const double deltaTime,const Ground& ground) {
+void Player::updatePlayer(const double deltaTime) {
     //aceasta functie este folosita pentru a gestiona actiunea de saritura
     //a playerului la apasarea tastei space
 
@@ -61,14 +62,13 @@ void Player::updatePlayer(const double deltaTime,const Ground& ground) {
         isJumping=true;
         //7500-constanta a gravitatii ,mai mare pentru un gameplay mai apropiat de jocul
         //original
-        jumpSpeed=-sqrtf(2.0f*7500.0f*jumpHeight);
+        jumpSpeed=-sqrtf(2.0f*GRAVITY*jumpHeight);
     }
     //daca sare atunci se va aplica o gravitatie care este de 2 ori mai mica decat
     //saritura playerului
     if(isJumping)
-        jumpSpeed+=7500.0f*deltaTime;
+        jumpSpeed+=GRAVITY*deltaTime;
     body.move(0.0f,static_cast<float>(jumpSpeed*deltaTime));
-    handleCollisionGround(ground);
 }
 void Player::renderPlayer(sf::RenderWindow &window) {
     window.draw(body);
@@ -86,18 +86,18 @@ bool Player::checkCollisionGround(const Ground &ground) const {
     return (this->body.getGlobalBounds().intersects(ground.getBounds1())
             || this->body.getGlobalBounds().intersects(ground.getBounds2()));
 }
-
 void Player::handleCollisionObstacle(bool &endGame, double deltaTime, float &velocity, const Obstacle &obstacle) {
+
     if (checkCollisionObstacle(obstacle)) {
         if (obstacle.getType() == ObstacleType::BLOCK || obstacle.getType() == ObstacleType::PLATFORM) {
             if (isAboveObstacle(deltaTime, obstacle)) {
-                //daca intersecteaza obstacolul pe deasupra pozitionam playerul pe obstacol
+                //daca intersecteaza obstac    olul pe deasupra pozitionam playerul pe obstacol
                 this->body.setPosition(this->body.getPosition().x, obstacle.getBounds().top - this->getBounds().height);
                 isJumping = false;
             }
             else {
                 //daca jucatorul intersecteaza obiectul prin stanga
-                if (isCollidingFromLeft(obstacle)) {
+                if (isCollidingFromSides(obstacle)) {
                     //daca jucatorul intersecteaza obiectul de sus
                     if (isOnTopOfObstacle(obstacle)) {
                         if (this->body.getPosition().y < obstacle.getBounds().top) {
@@ -119,6 +119,23 @@ void Player::handleCollisionObstacle(bool &endGame, double deltaTime, float &vel
             std::cout<<"Level completed ! Well done!\n";
         }
     }
+    //else trateaza cazul in care player a cazut de pe bloc
+    //daca nu exista acest else player putea sa sara in timp ce cadea ,dupa ce fusese pe un bloc
+    else {
+        if(fallingFromBlock(obstacle)){
+            isJumping = true;
+            if(this->body.getPosition().y >=ON_GROUND) {
+            //daca dupa caderea de pe bloc a ajuns eventual pe sol resetam jump
+                isJumping = false;
+            }
+        }
+    }
+}
+bool Player::fallingFromBlock(const Obstacle& obstacle) const {
+    return ((obstacle.getType() == ObstacleType::BLOCK || obstacle.getType() == ObstacleType::PLATFORM)
+    && this->body.getGlobalBounds().left > obstacle.getBounds().left+
+    obstacle.getBounds().width&&this->body.getGlobalBounds().top+this->body.getGlobalBounds().height
+    >obstacle.getBounds().top);
 }
 bool Player::checkCollisionObstacle(const Obstacle &obstacle) const {
     return (this->body.getGlobalBounds().intersects(obstacle.getBounds()));
@@ -129,7 +146,7 @@ bool Player::isAboveObstacle(double deltaTime, const Obstacle &obstacle) const {
 //verifica daca playerul urmeaza sa intersecteze un obiect pe deasupra
 }
 
-bool Player::isCollidingFromLeft(const Obstacle &obstacle) const {
+bool Player::isCollidingFromSides(const Obstacle &obstacle) const {
     return (this->getBounds().left < obstacle.getBounds().left + obstacle.getBounds().width &&
             this->getBounds().left + this->getBounds().width > obstacle.getBounds().left);
     //verifica daca intersecteaza un obiect prin laterala
@@ -139,7 +156,6 @@ bool Player::isOnTopOfObstacle(const Obstacle &obstacle) const {
     return (this->getBounds().top < obstacle.getBounds().top + obstacle.getBounds().height &&
             this->getBounds().top + this->getBounds().height > obstacle.getBounds().top);
     //verifica daca intersecteaza un obiect pe verticala
-
 }
 
 void Player::handleLandingOnObstacle(const Obstacle &obstacle) {
@@ -160,7 +176,7 @@ void Player::handleSpikeCollision(bool &endGame, float &velocity) {
     isJumping = false;
 }
 
-//790, coord y pentru plasarea blocurilor pe podea
+//785, coord y pentru plasarea blocurilor pe podea
 sf::FloatRect Player::getBounds() const {
     return body.getGlobalBounds();
 }

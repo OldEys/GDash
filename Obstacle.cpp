@@ -46,7 +46,7 @@ Obstacle::Obstacle(sf::Vector2f position, ObstacleType type)
         body.setTexture(&this->texture);
         this->hitbox.setSize(sf::Vector2f(200.0f, 400.0f));
         this->hitbox.setPosition(this->body.getPosition().x, this->body.getPosition().y);
-        this->body.setOutlineThickness(4.0f);
+        this->body.setOutlineThickness(0.0f);
     }
 }
 void Obstacle::initializeObstacle(const std::string &texturePath, sf::Vector2f bodySize, sf::Vector2f hitboxSize,
@@ -83,6 +83,7 @@ sf::FloatRect Obstacle::getBounds() const {
 ObstacleType Obstacle::getType() const {
     return type;
 }
+
 
 Obstacle::Obstacle(const Obstacle& other) :
 body{other.body},

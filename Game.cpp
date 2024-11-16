@@ -1,6 +1,8 @@
 #include "Game.h"
 #include <fstream>
 #include <iostream>
+#include <thread>
+
 #include "env_fixes.h"
 #define MIN_DELTA_TIME_FPS 60.0f
 #define ALIGN_VIEW_Y 520.0f
@@ -30,8 +32,10 @@ Game::Game() : window(nullptr),
     this->view.setSize(1920.0f, 1080.0f);
     this->window->setView(this->view);
     std::cout << "Game constructor\n";
-    this->loadChunks();
+    std::thread loadingThread(&loadChunks, this);
+    loadingThread.detach();
 }
+
 
 bool Game::isRunning() const {
     return this->window->isOpen();
@@ -72,7 +76,8 @@ void Game::update() {
     this->pollEvents();
     this->deltaTime = std::min(getDeltaTime(), 1. / MIN_DELTA_TIME_FPS);
     // this->deltaTime=std::min(getDeltaTime(),1./144.f);
-    this->player.updatePlayer(this->deltaTime, ground);
+    this->player.updatePlayer(this->deltaTime);
+    this->player.handleCollisionGround(this->ground);
     this->totalDistanceTraveled += 10.0f * this->velocity * this->deltaTime;
     //distanta totala parcursa de player,folosita pentru a spawna la momentul potrivit
     //chunkurile jocului
@@ -83,7 +88,7 @@ void Game::update() {
     }
     this->updateView();
     if (endGame) {
-        // loadChunks();
+         sf::sleep(sf::microseconds(100));
         window->close();
     }
 }
@@ -95,6 +100,9 @@ double Game::getDeltaTime() {
 void Game::loadChunks() {
     //functie de a incarca toate obiectele din fisierul obstacole.in
     //in chunkuri cu chunksize de 2000 de pixeli
+    //in obstacole.in obiectele trebuie sa fie asezate crescator
+    //in functie de coordonata x din cauza modului in care
+    //este gestionat vectorul de obiecte active
     std::ifstream fin("obstacole.in");
     if (!fin.is_open()) {
         std::cout << "File cant open" << std::endl;
@@ -171,10 +179,10 @@ void Game::updateObstacles() {
         currentChunkIndex++;
         //se extrag obstacolele din chunkul in care se afla playerul
         //si se insereaza la vectorul de obstacole active
-        }
+    }
     //daca un obstacol ajunge in stanga ecranului este sters din vectorul de obstacole active
-    if (!obstacles.empty() && obstacles.begin()->getPosition().x < 0) {
-        obstacles.erase(obstacles.begin());
+    if (!obstacles.empty() && obstacles.begin()->getPosition().x < -100.0f) {
+        obstacles.pop_front();
     }
     //se misca obstacolele spre stanga
     for (auto &obstacle: obstacles) {

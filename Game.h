@@ -1,6 +1,7 @@
 
 #ifndef GAME_H
 #define GAME_H
+#include <deque>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
@@ -22,7 +23,7 @@ class Game {
     sf::Clock clock;
     Ground ground;
     std::vector<Chunk> chunks;
-    std::vector<Obstacle> obstacles; //list of active obstacles
+    std::deque<Obstacle> obstacles; //list of active obstacles
     float chunkSize=2000.0f;
     long long unsigned int currentChunkIndex=0;
     bool endGame;

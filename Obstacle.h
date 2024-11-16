@@ -24,6 +24,8 @@ public:
     Obstacle(sf::Vector2f position, ObstacleType type);
 
     ~Obstacle()=default;
+
+
     Obstacle(const Obstacle& obstacle);
     Obstacle& operator=(const Obstacle& obstacle);
     friend std::ostream& operator<<(std::ostream& os, const Obstacle& obstacle);
@@ -33,7 +35,7 @@ public:
     sf::FloatRect getBounds() const;
 
     void initializeObstacle(const std::string &texturePath, sf::Vector2f bodySize
-    , sf::Vector2f hitboxSize, sf::Color fillColor, float outlineThickness);
+                            , sf::Vector2f hitboxSize, sf::Color fillColor, float outlineThickness);
 
     ObstacleType getType() const;
 };

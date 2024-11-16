@@ -33,7 +33,7 @@ class Player {
         return os;
     }
 
-    void updatePlayer(double deltaTime,const Ground &ground);
+    void updatePlayer(double deltaTime);
     void renderPlayer(sf::RenderWindow &window);
 
     void handleCollisionGround(const Ground &ground);
@@ -46,7 +46,7 @@ class Player {
 
     bool isAboveObstacle(double deltaTime, const Obstacle &obstacle) const;
 
-    bool isCollidingFromLeft(const Obstacle &obstacle) const;
+    bool isCollidingFromSides(const Obstacle &obstacle) const;
 
     bool isOnTopOfObstacle(const Obstacle &obstacle) const;
 
@@ -55,6 +55,8 @@ class Player {
     void handleLeftCollision(bool &endGame, const Obstacle &obstacle, float &velocity);
 
     void handleSpikeCollision(bool &endGame, float &velocity);
+
+    bool fallingFromBlock(const Obstacle &obstacle) const ;
 
     sf::FloatRect getBounds() const;
 };
