@@ -4,6 +4,7 @@
 #include "Ground.h"
 #define GRAVITY 7500.0f
 #define ON_GROUND 785.0f
+
 Player::Player(float position)
 : isJumping(false) , jumpSpeed(0.0f) , jumpHeight(250.0f)
 {
@@ -62,12 +63,12 @@ void Player::updatePlayer(const double deltaTime) {
         isJumping=true;
         //7500-constanta a gravitatii ,mai mare pentru un gameplay mai apropiat de jocul
         //original
-        jumpSpeed=-sqrtf(2.0f*GRAVITY*jumpHeight);
+        jumpSpeed = -sqrtf(2.0f * GRAVITY * jumpHeight);
     }
     //daca sare atunci se va aplica o gravitatie care este de 2 ori mai mica decat
     //saritura playerului
     if(isJumping)
-        jumpSpeed+=GRAVITY*deltaTime;
+        jumpSpeed += GRAVITY * deltaTime;
     body.move(0.0f,static_cast<float>(jumpSpeed*deltaTime));
 }
 void Player::renderPlayer(sf::RenderWindow &window) {
@@ -122,20 +123,21 @@ void Player::handleCollisionObstacle(bool &endGame, double deltaTime, float &vel
     //else trateaza cazul in care player a cazut de pe bloc
     //daca nu exista acest else player putea sa sara in timp ce cadea ,dupa ce fusese pe un bloc
     else {
-        if(fallingFromBlock(obstacle)){
+        if (fallingFromBlock(obstacle)) {
             isJumping = true;
-            if(this->body.getPosition().y >=ON_GROUND) {
-            //daca dupa caderea de pe bloc a ajuns eventual pe sol resetam jump
+            if (this->body.getPosition().y >= ON_GROUND) {
+                //daca dupa caderea de pe bloc a ajuns eventual pe sol resetam jump
                 isJumping = false;
             }
         }
     }
 }
-bool Player::fallingFromBlock(const Obstacle& obstacle) const {
+
+bool Player::fallingFromBlock(const Obstacle &obstacle) const {
     return ((obstacle.getType() == ObstacleType::BLOCK || obstacle.getType() == ObstacleType::PLATFORM)
-    && this->body.getGlobalBounds().left > obstacle.getBounds().left+
-    obstacle.getBounds().width&&this->body.getGlobalBounds().top+this->body.getGlobalBounds().height
-    >obstacle.getBounds().top);
+            && this->body.getGlobalBounds().left > obstacle.getBounds().left +
+            obstacle.getBounds().width && this->body.getGlobalBounds().top + this->body.getGlobalBounds().height
+            > obstacle.getBounds().top);
 }
 bool Player::checkCollisionObstacle(const Obstacle &obstacle) const {
     return (this->body.getGlobalBounds().intersects(obstacle.getBounds()));

@@ -34,6 +34,7 @@ class Player {
     }
 
     void updatePlayer(double deltaTime);
+
     void renderPlayer(sf::RenderWindow &window);
 
     void handleCollisionGround(const Ground &ground);
@@ -56,7 +57,7 @@ class Player {
 
     void handleSpikeCollision(bool &endGame, float &velocity);
 
-    bool fallingFromBlock(const Obstacle &obstacle) const ;
+    bool fallingFromBlock(const Obstacle &obstacle) const;
 
     sf::FloatRect getBounds() const;
 };

@@ -32,7 +32,7 @@ Game::Game() : window(nullptr),
     this->view.setSize(1920.0f, 1080.0f);
     this->window->setView(this->view);
     std::cout << "Game constructor\n";
-    std::thread loadingThread(&loadChunks, this);
+    std::thread loadingThread(&Game::loadChunks, this);
     loadingThread.detach();
 }
 
@@ -88,7 +88,7 @@ void Game::update() {
     }
     this->updateView();
     if (endGame) {
-         sf::sleep(sf::microseconds(100));
+        sf::sleep(sf::microseconds(100));
         window->close();
     }
 }
