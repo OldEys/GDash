@@ -29,19 +29,18 @@ block 7800 790
 block 7900 790
 
 block 8000 790
-block 8100 790
-block 8200 790
-block 8300 790
-block 8400 790
-block 8500 790
-block 8600 790
-
 block 8000 690
+block 8100 790
 block 8100 690
+block 8200 790
 block 8200 690
+block 8300 790
 block 8300 690
+block 8400 790
 block 8400 690
+block 8500 790
 block 8500 690
+block 8600 790
 block 8600 690
 
 spike 8700 790
