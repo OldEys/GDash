@@ -21,15 +21,18 @@ class Game {
     sf::SoundBuffer buffer;
     sf::Sound music;
     sf::Clock clock;
+    sf::Clock chunkLoadClock;
+    float chunkLoadInterval=1.0f;
     Ground ground;
     std::vector<Chunk> chunks;
-    std::deque<Obstacle> obstacles; //list of active obstacles
+    std::deque<Obstacle> obstacles; //lista obstacolelor active
     float chunkSize=2000.0f;
     long long unsigned int currentChunkIndex=0;
     bool endGame;
     float velocity=850.0f;
-    double totalDistanceTraveled=0;
+    // double totalDistanceTraveled=0;
     double deltaTime=0.0f;
+    bool firstChunk;
 
 public:
 

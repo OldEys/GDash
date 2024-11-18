@@ -1,4 +1,4 @@
-block 1600 785
+spike 1600 790
 short 2600 790
 spike 2700 790
 spike 3600 790
@@ -25,13 +25,7 @@ block 7500 790
 spike 7500 690
 block 7600 790
 block 7700 790
-block 7800 790
-block 7900 790
 
-block 8000 790
-block 8000 690
-block 8100 790
-block 8100 690
 block 8200 790
 block 8200 690
 block 8300 790
@@ -42,6 +36,7 @@ block 8500 790
 block 8500 690
 block 8600 790
 block 8600 690
+
 
 spike 8700 790
 spike 8800 790
@@ -57,11 +52,11 @@ spike 9700 790
 platform 9800 390
 spike 9800 790
 spike 9900 790
-platform 10000 290
+platform 10200 290
 spike 10100 790
 spike 10200 790
 spike 10300 790
-platform 10400 190
+platform 10600 190
 spike 10500 790
 spike 10600 790
 spike 10700 790

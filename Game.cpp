@@ -9,12 +9,11 @@
 
 Game::Game() : window(nullptr),
                event{},
-               endGame{false}
-               // ,isAlive(true)
-               , totalDistanceTraveled(0.0f) {
+               endGame(false),
+                firstChunk(true)
+               {
     this->initWindow();
     ground = Ground(*this->window);
-    // ground.initGround();
     player = Player(ground.getGroundPos());
     this->background.loadFromFile("images/background1-3.png");
     this->backgroundSprite.setTexture(this->background);
@@ -34,6 +33,7 @@ Game::Game() : window(nullptr),
     std::cout << "Game constructor\n";
     std::thread loadingThread(&Game::loadChunks, this);
     loadingThread.detach();
+    chunkLoadClock.restart();
 }
 
 
@@ -78,7 +78,7 @@ void Game::update() {
     // this->deltaTime=std::min(getDeltaTime(),1./144.f);
     this->player.updatePlayer(this->deltaTime);
     this->player.handleCollisionGround(this->ground);
-    this->totalDistanceTraveled += 10.0f * this->velocity * this->deltaTime;
+    // this->totalDistanceTraveled +=10.0f*this->velocity * this->deltaTime;
     //distanta totala parcursa de player,folosita pentru a spawna la momentul potrivit
     //chunkurile jocului
     this->ground.updateGround(-this->velocity, this->deltaTime);
@@ -170,15 +170,27 @@ void Game::updateView() {
     window->setView(view);
 }
 void Game::updateObstacles() {
+    if(currentChunkIndex < chunks.size()&&firstChunk) {
+        firstChunk=false;
+        const auto &newObstacles = chunks[currentChunkIndex].getObstacles();
+        obstacles.insert(obstacles.end(), newObstacles.begin(), newObstacles.end());
+        currentChunkIndex++;
+    }
+    else
+        {
+    if(chunkLoadClock.getElapsedTime().asSeconds()>=chunkLoadInterval) {
+    chunkLoadClock.restart();
     //functie de actualizat obstacolele
-    while (currentChunkIndex < chunks.size() &&
-           chunks[currentChunkIndex].getStartX() - totalDistanceTraveled < window->getSize().x) {
+    while (currentChunkIndex < chunks.size()){
+           // chunks[currentChunkIndex].getStartX() <= totalDistanceTraveled + 5*window->getSize().x) ){
         //cat timp exista chunkuri si playerul a intrat in chunk
         const auto &newObstacles = chunks[currentChunkIndex].getObstacles();
         obstacles.insert(obstacles.end(), newObstacles.begin(), newObstacles.end());
         currentChunkIndex++;
+        }
         //se extrag obstacolele din chunkul in care se afla playerul
         //si se insereaza la vectorul de obstacole active
+    }
     }
     //daca un obstacol ajunge in stanga ecranului este sters din vectorul de obstacole active
     if (!obstacles.empty() && obstacles.begin()->getPosition().x < -100.0f) {
@@ -211,7 +223,6 @@ std::ostream &operator<<(std::ostream &os, const Game &game) {
     for (const auto &obstacle: game.obstacles) {
         os << "obstacle : " << obstacle << "\n";
     }
-    os << "total distance travelled" << game.totalDistanceTraveled << "\n";
     os << "velocity: " << game.velocity << "\n";
     os << "deltaTime: " << game.deltaTime << "\n";
     os << "Player: \n" << game.player;
