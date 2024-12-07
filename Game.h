@@ -4,7 +4,7 @@
 #include <deque>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-
+#include <fstream>
 #include "Chunk.h"
 #include "Ground.h"
 #include "Obstacle.h"
@@ -22,7 +22,7 @@ class Game {
     sf::Sound music;
     sf::Clock clock;
     sf::Clock chunkLoadClock;
-    float chunkLoadInterval=1.0f;
+    float chunkLoadInterval = 1.0f;
     Ground ground;
     std::vector<Chunk> chunks;
     std::deque<Obstacle> obstacles; //lista obstacolelor active
@@ -30,6 +30,7 @@ class Game {
     long long unsigned int currentChunkIndex=0;
     bool endGame;
     float velocity=850.0f;
+
     // double totalDistanceTraveled=0;
     double deltaTime=0.0f;
     bool firstChunk;
@@ -47,7 +48,9 @@ public:
     double getDeltaTime();
     void updateObstacles();
     void loadChunks();
+    void loadNextChunk();
     void updateView();
+
 };
 
 #endif //GAME_H

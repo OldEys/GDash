@@ -64,6 +64,8 @@ add_executable(${PROJECT_NAME}
         Ground.h
         Chunk.cpp
         Chunk.h
+        TextureManager.cpp
+        TextureManager.h
 )
 
 include(cmake/CompilerFlags.cmake)

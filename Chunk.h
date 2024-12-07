@@ -7,20 +7,21 @@
 
 
 class Chunk {
+    static int id_max;
+    int id;
     std::vector<Obstacle> obstacles;
     float startX;
     float endX;
-    public:
+public:
     Chunk(float startX, float chunkSize);
-    ~Chunk();
+    // ~Chunk();
     friend std::ostream& operator<<(std::ostream& os, const Chunk& chunk);
-    void addObstacle(const Obstacle& obstacle);
+    void addObstacle(Obstacle& obstacle);
     [[nodiscard]] float getStartX() const ;
     [[nodiscard]] const std::vector<Obstacle>& getObstacles()const;
     [[nodiscard]] float getEndX() const;
 
 };
-
 
 
 #endif //CHUNK_H

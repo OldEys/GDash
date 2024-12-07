@@ -24,14 +24,16 @@ Ground::Ground(const Ground &other) : groundTexture(other.groundTexture), ground
 
 
 Ground & Ground::operator=(const Ground &other) {
-    groundTexture=other.groundTexture;
-    groundBody1=other.groundBody1;
-    groundBody2=other.groundBody2;
-    groundBody1.setTexture(&groundTexture);
-    groundBody2.setTexture(&groundTexture);
-    groundBody1.setFillColor(sf::Color(100, 100, 255));
-    groundBody2.setFillColor(sf::Color(100, 100, 255));
-    std::cout<<"Operator= de atribuire"<<std::endl;
+    if(this!=&other) {
+        groundTexture=other.groundTexture;
+        groundBody1=other.groundBody1;
+        groundBody2=other.groundBody2;
+        groundBody1.setTexture(&groundTexture);
+        groundBody2.setTexture(&groundTexture);
+        groundBody1.setFillColor(sf::Color(100, 100, 255));
+        groundBody2.setFillColor(sf::Color(100, 100, 255));
+        std::cout<<"Operator= de atribuire ground"<<std::endl;
+    }
     return *this;
 }
 
