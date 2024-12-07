@@ -36,7 +36,7 @@ public:
     sf::Vector2f getPosition() const ;
     sf::FloatRect getBounds() const;
 
-    void initializeObstacle(const std::string &texturePath,TextureManager& texture_manager, sf::Vector2f bodySize
+    void initializeObstacle(const std::string &texturePath, sf::Vector2f bodySize
                             , sf::Vector2f hitboxSize, sf::Color fillColor, float outlineThickness);
 
     ObstacleType getType() const;

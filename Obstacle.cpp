@@ -1,7 +1,3 @@
-//
-// Created by Babii Victor on 10/20/2024.
-//
-
 #include "Obstacle.h"
 
 #include <iostream>
@@ -14,28 +10,28 @@ Obstacle::Obstacle(sf::Vector2f position, ObstacleType type)
     this->body.setPosition(position);
     switch (type) {
         case ObstacleType::BLOCK:
-            this->initializeObstacle("images/ground_block.png", texture_manager, sf::Vector2f(100.0f, 100.0f)
+            this->initializeObstacle("images/ground_block.png", sf::Vector2f(100.0f, 100.0f)
                                      , sf::Vector2f(100.0f, 100.0f), sf::Color(0, 0, 50), 5.0f);
             this->hitbox.setPosition(this->body.getPosition());
             break;
         case ObstacleType::SPIKE:
-            this->initializeObstacle("images/spike.png", texture_manager, sf::Vector2f(100.0f, 100.0f)
+            this->initializeObstacle("images/spike.png", sf::Vector2f(100.0f, 100.0f)
                                      , sf::Vector2f(30.0f, 30.0f), sf::Color::White, .0f);
             this->hitbox.setPosition(this->body.getPosition().x + 35.0f, this->body.getPosition().y + 35.0f);
             break;
         case ObstacleType::PLATFORM:
-            this->initializeObstacle("images/ground_block.png", texture_manager, sf::Vector2f(100.0f, 40.0f)
+            this->initializeObstacle("images/ground_block.png", sf::Vector2f(100.0f, 40.0f)
                                      , sf::Vector2f(100.0f, 40.0f), sf::Color(0, 0, 50), 5.0f);
             this->hitbox.setPosition((this->body.getPosition()));
             break;
         case ObstacleType::SPIKE_SHORT:
-            this->initializeObstacle("images/spike.png", texture_manager, sf::Vector2f(100.0f, 50.0f)
+            this->initializeObstacle("images/spike.png", sf::Vector2f(100.0f, 50.0f)
                                      , sf::Vector2f(30.0f, 15.0f), sf::Color::White, .0f);
             body.setPosition(body.getPosition().x, this->body.getPosition().y + body.getGlobalBounds().height);
             this->hitbox.setPosition(this->body.getPosition().x + 35.0f, this->body.getPosition().y + 25.0f);
             break;
         case ObstacleType::END:
-            this->initializeObstacle("images/end.png", texture_manager, sf::Vector2f(200.0f, 400.0f)
+            this->initializeObstacle("images/end.png", sf::Vector2f(200.0f, 400.0f)
                                      , sf::Vector2f(200.0f, 400.0f), sf::Color::White, 4.0f);
             this->hitbox.setPosition(this->body.getPosition());
             break;
@@ -44,7 +40,7 @@ Obstacle::Obstacle(sf::Vector2f position, ObstacleType type)
     }
 }
 
-void Obstacle::initializeObstacle(const std::string &texturePath, TextureManager &texture_manager,
+void Obstacle::initializeObstacle(const std::string &texturePath,
                                   sf::Vector2f bodySize, sf::Vector2f hitboxSize,
                                   sf::Color fillColor, float outlineThickness) {
     this->texture = texture_manager.getTexture(texturePath);
