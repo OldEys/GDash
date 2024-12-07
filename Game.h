@@ -48,7 +48,9 @@ public:
     double getDeltaTime();
     void updateObstacles();
     void loadChunks();
+
     void loadNextChunk();
+
     void updateView();
 
 };

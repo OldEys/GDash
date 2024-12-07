@@ -3,13 +3,13 @@
 #include<SFML/Graphics.hpp>
 #include<unordered_map>
 #include<string>
+
 class TextureManager {
     std::unordered_map<std::string, sf::Texture> textures;
 
 public:
-    sf::Texture& getTexture(const std::string& name);
+    sf::Texture &getTexture(const std::string &name);
 };
-
 
 
 #endif //TEXTUREMANAGER_H

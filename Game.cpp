@@ -36,9 +36,9 @@ Game::Game() : window(nullptr),
     // std::thread loadingThread(&Game::loadChunks, this);
     // loadingThread.detach();
     // loadingThread.join();
-    std::cout<<"incepe de incarcat\n";
+    std::cout << "incepe de incarcat\n";
     loadChunks();
-    std::cout<<"gata de incarcat\n";
+    std::cout << "gata de incarcat\n";
     chunkLoadClock.restart();
 }
 bool Game::isRunning() const {
@@ -86,8 +86,8 @@ void Game::update() {
     //chunkurile jocului
     this->ground.updateGround(-this->velocity, this->deltaTime);
     this->updateObstacles();
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
-            velocity=0.0f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
+        velocity = 0.0f;
     }
     for (const auto &obstacle: this->obstacles) {
         this->player.handleCollisionObstacle(endGame, this->deltaTime, this->velocity, obstacle);
@@ -137,11 +137,11 @@ void Game::loadChunks() {
                 continue;
             Obstacle obs1(sf::Vector2f(x, y), type);
             // currentChunk.addObstacle(&Obstacle(sf::Vector2f(x, y), type));
-            std::cout<<"add in loadChunks cand e in int chunkului\n";
+            std::cout << "add in loadChunks cand e in int chunkului\n";
             currentChunk.addObstacle(obs1);
-            std::cout<<"gata in loadChunks cand e in int chunkului\n";
-        } else if(x>=currentChunk.getEndX()){
-            std::cout<<"depaseste chunkul curent,se creeaza altul nou\n";
+            std::cout << "gata in loadChunks cand e in int chunkului\n";
+        } else if (x >= currentChunk.getEndX()) {
+            std::cout << "depaseste chunkul curent,se creeaza altul nou\n";
             //daca nu se afla in chunkul curent adaugam unul nou
             chunks.push_back(std::move(currentChunk));
             currentChunk = Chunk(currentChunk.getEndX(), chunkSize);
@@ -159,7 +159,7 @@ void Game::loadChunks() {
                     type = ObstacleType::END;
                 else
                     continue;
-                std::cout<<"se add obstacolele cand e dupa chunk\n";
+                std::cout << "se add obstacolele cand e dupa chunk\n";
                 Obstacle obs1(sf::Vector2f(x, y), type);
                 // currentChunk.addObstacle(&Obstacle(sf::Vector2f(x, y), type));
                 currentChunk.addObstacle(obs1);
@@ -189,20 +189,20 @@ void Game::updateObstacles() {
     //ce ce determina sa se miste atunci cand sunt create
     //daca nu sunt puse cand trebuie o sa se miste atunci cand sunt create
     //si o sa fie nesincronizate
-    if (!chunks.empty()&&chunkLoadClock.getElapsedTime().asSeconds() >= chunkLoadInterval) {
+    if (!chunks.empty() && chunkLoadClock.getElapsedTime().asSeconds() >= chunkLoadInterval) {
         chunkLoadClock.restart();
         //functie de actualizat obstacolele
         while (currentChunkIndex < chunks.size()) {
             // chunks[currentChunkIndex].getStartX() <= totalDistanceTraveled + 5*window->getSize().x) ){
             //cat timp exista chunkuri si playerul a intrat in chunk
             const auto &newObstacles = chunks[currentChunkIndex].getObstacles();
-            std::cout<<"se vor adauga la obj active \n";
+            std::cout << "se vor adauga la obj active \n";
             // obstacles.insert(obstacles.end(), newObstacles.begin(), newObstacles.end());
-            obstacles.insert(obstacles.end(),std::make_move_iterator(newObstacles.begin()),
-            std::make_move_iterator(newObstacles.end()));
+            obstacles.insert(obstacles.end(), std::make_move_iterator(newObstacles.begin()),
+                             std::make_move_iterator(newObstacles.end()));
             chunks.erase(chunks.begin() + static_cast<long long int>(currentChunkIndex));
             // currentChunkIndex++;
-            std::cout<<"s-au adaugat la obj active\n";
+            std::cout << "s-au adaugat la obj active\n";
             // chunks.erase(chunks.begin() + currentChunkIndex);
         }
         //se extrag obstacolele din chunkul in care se afla playerul
