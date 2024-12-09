@@ -241,7 +241,7 @@ in vectorul de obst active
 // }
 void Game::updateObstacles() {
     if (currentChunkIndex < chunks.size() && totalDistanceTravelled >= chunks[currentChunkIndex].getStartX()) {
-        auto &chunk = chunks[currentChunkIndex];
+        const auto &chunk = chunks[currentChunkIndex];
         auto newObstacles = chunk.getObstacles();
 
         for (auto &obstacle: newObstacles) {
