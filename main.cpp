@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "Game.h"
+#include "headers/Game.h"
 int main() {
     Game game;
     while(game.isRunning()) {

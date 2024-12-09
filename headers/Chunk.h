@@ -14,9 +14,10 @@ class Chunk {
     float endX;
 public:
     Chunk(float startX, float chunkSize);
-    // ~Chunk();
     friend std::ostream& operator<<(std::ostream& os, const Chunk& chunk);
-    void addObstacle(Obstacle& obstacle);
+
+    void addObstacle(Obstacle &&obstacle);
+
     [[nodiscard]] float getStartX() const ;
     [[nodiscard]] const std::vector<Obstacle>& getObstacles()const;
     [[nodiscard]] float getEndX() const;

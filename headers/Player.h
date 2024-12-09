@@ -15,7 +15,8 @@ class Player {
     bool isJumping;
     double jumpSpeed;
     float jumpHeight;
-    public:
+    double rotationAngle=0.0f;
+public:
     explicit Player(float position);
     Player();
     ~Player();
@@ -60,6 +61,8 @@ class Player {
     bool fallingFromBlock(const Obstacle &obstacle) const;
 
     sf::FloatRect getBounds() const;
+
+    double calculateFallingSide(double angle );
 };
 
 #endif //PLAYER_H

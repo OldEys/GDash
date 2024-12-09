@@ -1,8 +1,4 @@
-//
-// Created by Babii Victor on 10/25/2024.
-//
-
-#include "Chunk.h"
+#include "../headers/Chunk.h"
 
 #include <iostream>
 int Chunk::id_max = 0;
@@ -16,7 +12,7 @@ Chunk::Chunk(float startX, float chunkSize) : id(id_max), startX(startX), endX(s
 //     std::cout<<"Destroyed chunk"<<id<<"\n";
 // }
 
-void Chunk::addObstacle(Obstacle& obstacle) {
+void Chunk::addObstacle(Obstacle &&obstacle) {
     // obstacles.push_back(obstacle);
     obstacles.emplace_back(std::move(obstacle));
 }

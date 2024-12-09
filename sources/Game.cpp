@@ -1,12 +1,9 @@
-#include "Game.h"
+#include "../headers/Game.h"
 #include <fstream>
 #include <iostream>
 #include <thread>
 
-#include "env_fixes.h"
-#include <mutex>
-std::mutex chunkMutex;
-
+#include "../env_fixes.h"
 #define MIN_DELTA_TIME_FPS 60.0f
 #define ALIGN_VIEW_Y 520.0f
 Game::Game() : window(nullptr),
@@ -73,6 +70,7 @@ void Game::pollEvents() {
         this->window->close();
     }
 }
+bool isPaused = false;
 
 void Game::update() {
     //functie de update,apelata in main in loopul principal al jocului
@@ -81,13 +79,19 @@ void Game::update() {
     // this->deltaTime=std::min(getDeltaTime(),1./144.f);
     this->player.updatePlayer(this->deltaTime);
     this->player.handleCollisionGround(this->ground);
-    // this->totalDistanceTraveled +=10.0f*this->velocity * this->deltaTime;
+    this->totalDistanceTravelled += this->velocity * this->deltaTime;
     //distanta totala parcursa de player,folosita pentru a spawna la momentul potrivit
     //chunkurile jocului
     this->ground.updateGround(-this->velocity, this->deltaTime);
     this->updateObstacles();
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
-        velocity = 0.0f;
+        if (isPaused) {
+            isPaused = false;
+            velocity = 850.0f;
+        } else {
+            isPaused = true;
+            velocity = 0.0f;
+    }
     }
     for (const auto &obstacle: this->obstacles) {
         this->player.handleCollisionObstacle(endGame, this->deltaTime, this->velocity, obstacle);
@@ -108,7 +112,6 @@ void Game::loadChunks() {
     //in obstacole.in obiectele trebuie sa fie asezate crescator
     //in functie de coordonata x din cauza modului in care
     //este gestionat vectorul de obiecte active
-    // std::lock_guard<std::mutex> lock(chunkMutex);
     std::ifstream fin("obstacole.in");
     if (!fin.is_open()) {
         std::cout << "File cant open" << std::endl;
@@ -136,10 +139,7 @@ void Game::loadChunks() {
             else
                 continue;
             Obstacle obs1(sf::Vector2f(x, y), type);
-            // currentChunk.addObstacle(&Obstacle(sf::Vector2f(x, y), type));
-            std::cout << "add in loadChunks cand e in int chunkului\n";
-            currentChunk.addObstacle(obs1);
-            std::cout << "gata in loadChunks cand e in int chunkului\n";
+            currentChunk.addObstacle(std::move(obs1));
         } else if (x >= currentChunk.getEndX()) {
             std::cout << "depaseste chunkul curent,se creeaza altul nou\n";
             //daca nu se afla in chunkul curent adaugam unul nou
@@ -162,7 +162,7 @@ void Game::loadChunks() {
                 std::cout << "se add obstacolele cand e dupa chunk\n";
                 Obstacle obs1(sf::Vector2f(x, y), type);
                 // currentChunk.addObstacle(&Obstacle(sf::Vector2f(x, y), type));
-                currentChunk.addObstacle(obs1);
+                currentChunk.addObstacle(std::move(obs1));
             }
         }
     }
@@ -183,38 +183,80 @@ void Game::updateView() {
     view.setCenter(currentCenter.x, newCenterY);
     window->setView(view);
 }
+
+//problema : obstacolele se misca doar
+// atunci cand sunt in vectorul de obstacole active adica si daca am introduce
+// la timp un obiect indepartat din nivel tot ar fi problema deoarece el va fi
+// spawnat la pozitia
+// indicata de citire ,apoi se va misca la stanga insa asta este foarte intarziat pentru
+//chunkul anterior ,ceea ce inseamna ca nu s ar alinia nici daca am
+//citi dupa inceputul nivelului
+
+//idee
+/*misca startul la chunkuri si cand ajung la un anumit punct iei obiectele din el si
+ le bagi in vectorul de obstacole active
+
+sau
+
+atunci cand scoatem newObstacles din chunkul nou scadem totaldistance travelled apoi le introducem
+in vectorul de obst active
+*/
+// void Game::updateObstacles() {
+//     //motiv problema nesincronizare chunkuri
+//     //chunkurile nu se spawneaza la momentul potrivit ci mai tarziu
+//     //ce ce determina sa se miste atunci cand sunt create
+//     //daca nu sunt puse cand trebuie o sa se miste atunci cand sunt create
+//     //si o sa fie nesincronizate
+//     std::cout<<"upd obs\n";
+//     // if (!chunks.empty() && chunkLoadClock.getElapsedTime().asSeconds() >= chunkLoadInterval) {
+//         std::cout<<"upd obs2\n";
+//         // chunkLoadClock.restart();
+//         //functie de actualizat obstacolele
+//         if(currentChunkIndex < chunks.size() && totalDistanceTravelled >= chunks[currentChunkIndex].getStartX() ) {
+//              std::cout<<"upd obs3\n";
+//             // chunks[currentChunkIndex].getStartX() <= totalDistanceTraveled + 5*window->getSize().x) ){
+//             //cat timp exista chunkuri si playerul a intrat in chunk
+//             const auto &newObstacles = chunks[currentChunkIndex].getObstacles();
+//             std::cout << "se vor adauga la obj active \n";
+//             // obstacles.insert(obstacles.end(), newObstacles.begin(), newObstacles.end());
+//             obstacles.insert(obstacles.end(), std::make_move_iterator(newObstacles.begin()),
+//                              std::make_move_iterator(newObstacles.end()));
+//             chunks.erase(chunks.begin() + static_cast<long long int>(currentChunkIndex));
+//             // currentChunkIndex++;
+//             std::cout << "s-au adaugat la obj active\n";
+//             // chunks.erase(chunks.begin() + currentChunkIndex);
+//         }
+//         //se extrag obstacolele din chunkul in care se afla playerul
+//         //si se insereaza la vectorul de obstacole active
+//     // }
+//     // }
+//     //daca un obstacol ajunge in stanga ecranului este sters din vectorul de obstacole active
+//     if (!obstacles.empty() && obstacles.begin()->getPosition().x < -100.0f) {
+//         obstacles.pop_front();
+//     }
+//     //se misca obstacolele spre stanga
+//     for (auto &obstacle: obstacles) {
+//         obstacle.updateObstacle(-velocity, deltaTime);
+//     }
+// }
 void Game::updateObstacles() {
-    //motiv problema nesincronizare chunkuri
-    //chunkurile nu se spawneaza la momentul potrivit ci mai tarziu
-    //ce ce determina sa se miste atunci cand sunt create
-    //daca nu sunt puse cand trebuie o sa se miste atunci cand sunt create
-    //si o sa fie nesincronizate
-    if (!chunks.empty() && chunkLoadClock.getElapsedTime().asSeconds() >= chunkLoadInterval) {
-        chunkLoadClock.restart();
-        //functie de actualizat obstacolele
-        while (currentChunkIndex < chunks.size()) {
-            // chunks[currentChunkIndex].getStartX() <= totalDistanceTraveled + 5*window->getSize().x) ){
-            //cat timp exista chunkuri si playerul a intrat in chunk
-            const auto &newObstacles = chunks[currentChunkIndex].getObstacles();
-            std::cout << "se vor adauga la obj active \n";
-            // obstacles.insert(obstacles.end(), newObstacles.begin(), newObstacles.end());
-            obstacles.insert(obstacles.end(), std::make_move_iterator(newObstacles.begin()),
-                             std::make_move_iterator(newObstacles.end()));
-            chunks.erase(chunks.begin() + static_cast<long long int>(currentChunkIndex));
-            // currentChunkIndex++;
-            std::cout << "s-au adaugat la obj active\n";
-            // chunks.erase(chunks.begin() + currentChunkIndex);
+    if (currentChunkIndex < chunks.size() && totalDistanceTravelled >= chunks[currentChunkIndex].getStartX()) {
+        auto &chunk = chunks[currentChunkIndex];
+        auto newObstacles = chunk.getObstacles();
+
+        for (auto &obstacle: newObstacles) {
+            obstacle.adjustPositionX(-chunk.getStartX() + 1920.0f);
         }
-        //se extrag obstacolele din chunkul in care se afla playerul
-        //si se insereaza la vectorul de obstacole active
+        obstacles.insert(obstacles.end(), std::make_move_iterator(newObstacles.begin()),
+                         std::make_move_iterator(newObstacles.end()));
+
+        chunks.erase(chunks.begin() + static_cast<float>(currentChunkIndex));
     }
-    // }
-    //daca un obstacol ajunge in stanga ecranului este sters din vectorul de obstacole active
-    if (!obstacles.empty() && obstacles.begin()->getPosition().x < -100.0f) {
+    if (!obstacles.empty() && obstacles.front().getPosition().x < -100.0f) {
         obstacles.pop_front();
     }
-    //se misca obstacolele spre stanga
-    for (auto &obstacle: obstacles) {
+
+    for (auto &obstacle : obstacles) {
         obstacle.updateObstacle(-velocity, deltaTime);
     }
 }

@@ -54,18 +54,20 @@ add_executable(${PROJECT_NAME}
     main.cpp
     generated/src/Helper.cpp
     env_fixes.h
-        Player.cpp
-        Player.h
-        Game.cpp
-        Game.h
-        Obstacle.cpp
-        Obstacle.h
-        Ground.cpp
-        Ground.h
-        Chunk.cpp
-        Chunk.h
-        TextureManager.cpp
-        TextureManager.h
+        sources/Player.cpp
+        headers/Player.h
+        sources/Game.cpp
+        headers/Game.h
+        sources/Obstacle.cpp
+        headers/Obstacle.h
+        sources/Ground.cpp
+        headers/Ground.h
+        sources/Chunk.cpp
+        headers/Chunk.h
+        sources/TextureManager.cpp
+        headers/TextureManager.h
+        headers/Block.h
+        sources/Block.cpp
 )
 
 include(cmake/CompilerFlags.cmake)

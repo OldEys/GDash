@@ -1,7 +1,7 @@
-#include "Player.h"
+#include "../headers/Player.h"
 #include <iostream>
 #include <cmath>
-#include "Ground.h"
+#include "../headers/Ground.h"
 #define GRAVITY 7500.0f
 #define ON_GROUND 785.0f
 
@@ -13,7 +13,8 @@ Player::Player(float position)
         std::cerr << "Failed to load texture" << std::endl;
     }
     this->body.setTexture(&texture);
-    body.setPosition(sf::Vector2f(350.0f, position-body.getSize().y));
+    body.setPosition(sf::Vector2f(350.0f, position-body.getSize().y/2.0f));
+    body.setOrigin(body.getSize().x / 2.0f, body.getSize().y / 2.0f);
 }
 
 Player::Player(): isJumping(false) , jumpSpeed(0.0f) , jumpHeight(250.0f) {
@@ -67,9 +68,17 @@ void Player::updatePlayer(const double deltaTime) {
     }
     //daca sare atunci se va aplica o gravitatie care este de 2 ori mai mica decat
     //saritura playerului
-    if(isJumping)
+    if(isJumping) {
         jumpSpeed += GRAVITY * deltaTime;
+        rotationAngle += 375.0f * deltaTime;
+        // rotationAngle=400.0f;
+    }
     body.move(0.0f,static_cast<float>(jumpSpeed*deltaTime));
+    // Normalizează unghiul pentru a rămâne între 0 și 360
+    if (rotationAngle >= 360.0f) rotationAngle -= 360.0f;
+
+    // Aplică rotația
+    body.setRotation(static_cast<float>(rotationAngle));
 }
 void Player::renderPlayer(sf::RenderWindow &window) {
     window.draw(body);
@@ -77,10 +86,12 @@ void Player::renderPlayer(sf::RenderWindow &window) {
 
 void Player::handleCollisionGround(const Ground &ground) {
     if (checkCollisionGround(ground)) {
-        this->body.setPosition(this->body.getPosition().x,ground.getBounds1().top-this->body.getGlobalBounds().height);
+        // this->body.setPosition(this->body.getPosition().x,ground.getBounds1().top-this->getBounds().height/2.0f);
+        this->body.setPosition(this->body.getPosition().x,ground.getBounds1().top-50.0f);
         isJumping=false;
-        jumpSpeed=0;
-        }
+        jumpSpeed=0.0f;
+        rotationAngle=calculateFallingSide(rotationAngle);
+    }
 }
 
 bool Player::checkCollisionGround(const Ground &ground) const {
@@ -88,13 +99,14 @@ bool Player::checkCollisionGround(const Ground &ground) const {
             || this->body.getGlobalBounds().intersects(ground.getBounds2()));
 }
 void Player::handleCollisionObstacle(bool &endGame, double deltaTime, float &velocity, const Obstacle &obstacle) {
-
     if (checkCollisionObstacle(obstacle)) {
         if (obstacle.getType() == ObstacleType::BLOCK || obstacle.getType() == ObstacleType::PLATFORM) {
             if (isAboveObstacle(deltaTime, obstacle)) {
                 //daca intersecteaza obstac    olul pe deasupra pozitionam playerul pe obstacol
-                this->body.setPosition(this->body.getPosition().x, obstacle.getBounds().top - this->getBounds().height);
+                this->body.setPosition(this->body.getPosition().x, obstacle.getBounds().top - this->getBounds().height/2.0f);
                 isJumping = false;
+                // body.setRotation(0.0f);
+                rotationAngle=calculateFallingSide(rotationAngle);
             }
             else {
                 //daca jucatorul intersecteaza obiectul prin stanga
@@ -161,12 +173,12 @@ bool Player::isOnTopOfObstacle(const Obstacle &obstacle) const {
 }
 
 void Player::handleLandingOnObstacle(const Obstacle &obstacle) {
-    this->body.setPosition(this->body.getPosition().x, obstacle.getBounds().top - this->getBounds().height);
+    this->body.setPosition(this->body.getPosition().x, obstacle.getBounds().top - this->getBounds().height/2.0f);
     isJumping = false;
 }
 
 void Player::handleLeftCollision(bool &endGame, const Obstacle &obstacle, float &velocity) {
-    this->body.setPosition(obstacle.getBounds().left - this->getBounds().width, this->body.getPosition().y);
+    this->body.setPosition(obstacle.getBounds().left - this->getBounds().width, this->body.getPosition().y/2.0f);
     endGame = true;
     velocity = 0.0f;
 }
@@ -181,5 +193,10 @@ void Player::handleSpikeCollision(bool &endGame, float &velocity) {
 //785, coord y pentru plasarea blocurilor pe podea
 sf::FloatRect Player::getBounds() const {
     return body.getGlobalBounds();
+}
+
+double Player::calculateFallingSide(double angle) {
+    int side=static_cast<int>((angle+45.0f)/90)%4;
+    return side*90;
 }
 

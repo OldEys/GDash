@@ -1,4 +1,4 @@
-#include "Ground.h"
+#include "../headers/Ground.h"
 #include <iostream>
 
 Ground::Ground(const sf::RenderWindow &window) : groundTexture() {
@@ -32,7 +32,7 @@ Ground & Ground::operator=(const Ground &other) {
         groundBody2.setTexture(&groundTexture);
         groundBody1.setFillColor(sf::Color(100, 100, 255));
         groundBody2.setFillColor(sf::Color(100, 100, 255));
-        std::cout << "Operator= de atribuire ground" << std::endl;
+        std::                                                                         cout << "Operator= de atribuire ground" << std::endl;
     }
     return *this;
 }
