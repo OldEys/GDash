@@ -8,7 +8,8 @@ TextureManager Obstacle::texture_manager;
 Obstacle::Obstacle(sf::Vector2f position, ObstacleType type)
     : type(type) {
     this->body.setPosition(position);
-    std::cout<<"Obstacle created at position :"<<this->body.getPosition().x<<" "<<this->body.getPosition().y<<std::endl;
+    std::cout << "Obstacle created at position :" << this->body.getPosition().x << " " << this->body.getPosition().y <<
+            std::endl;
     switch (type) {
         case ObstacleType::BLOCK:
             this->initializeObstacle("images/ground_block.png", sf::Vector2f(100.0f, 100.0f)
@@ -49,7 +50,8 @@ void Obstacle::initializeObstacle(const std::string &texturePath,
     this->hitbox.setSize(sf::Vector2f(hitboxSize));
     this->hitbox.setOrigin(this->hitbox.getSize().x / 2.0f, this->hitbox.getSize().y / 2.0f);
     this->hitbox.setPosition(this->body.getPosition().x
-                +this->body.getGlobalBounds().width/2.0f, this->body.getPosition().y+this->body.getGlobalBounds().height /2.0f);
+                             + this->body.getGlobalBounds().width / 2.0f,
+                             this->body.getPosition().y + this->body.getGlobalBounds().height / 2.0f);
 }
 void Obstacle::updateObstacle(float velocity,double deltaTime) {
     body.move(static_cast<float>(velocity*deltaTime),0.0f);
@@ -60,13 +62,13 @@ void Obstacle::renderObstacle(sf::RenderWindow &window) {
 }
 
 void Obstacle::adjustPositionX(float offset) {
-    sf::Vector2f currentPosition= this->body.getPosition();
+    sf::Vector2f currentPosition = this->body.getPosition();
     currentPosition.x += offset;
     this->body.setPosition(currentPosition);
     // this->hitbox.setPosition(currentPosition);
     this->hitbox.setPosition(this->body.getPosition().x
-            +this->body.getGlobalBounds().width/2.0f,
-             this->body.getPosition().y+this->body.getGlobalBounds().height /2.0f);
+                             + this->body.getGlobalBounds().width / 2.0f,
+                             this->body.getPosition().y + this->body.getGlobalBounds().height / 2.0f);
 }
 
 sf::Vector2f Obstacle::getPosition() const {

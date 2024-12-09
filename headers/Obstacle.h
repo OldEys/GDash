@@ -32,7 +32,9 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Obstacle& obstacle);
     void updateObstacle(float velocity,double deltaTime);
     void renderObstacle(sf::RenderWindow &window);
+
     void adjustPositionX(float offset);
+
     sf::Vector2f getPosition() const ;
     sf::FloatRect getBounds() const;
 

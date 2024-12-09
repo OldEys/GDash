@@ -31,7 +31,7 @@ class Game {
     bool endGame;
     float velocity=850.0f;
 
-    double totalDistanceTravelled=0;
+    double totalDistanceTravelled = 0;
     double deltaTime=0.0f;
     bool firstChunk;
 
