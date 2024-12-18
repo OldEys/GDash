@@ -229,10 +229,10 @@ void Game::updateObstacles() {
         for (auto &obstacle: newObstacles) {
             obstacle->adjustPositionX(-chunk.getStartX() + 1920.0f);
         }
-        std::cout<< "se iau obst si se insereaza in vect de obs active\n";
+        std::cout << "se iau obst si se insereaza in vect de obs active\n";
         obstacles.insert(obstacles.end(), std::make_move_iterator(newObstacles.begin()),
                          std::make_move_iterator(newObstacles.end()));
-        std::cout<< "gata de inserat in vect de obs active\n";
+        std::cout << "gata de inserat in vect de obs active\n";
         chunks.erase(chunks.begin() + static_cast<long long>(currentChunkIndex));
     }
     if (!obstacles.empty() && obstacles.front()->getPosition().x < -100.0f) {
