@@ -1,12 +1,13 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <array>
 #include <ostream>
 
 #include "Ground.h"
 #include <SFML/Graphics.hpp>
 
-#include "Obstacle.h"
+#include "SFML/Audio.hpp"
 
 
 class Player {
@@ -16,10 +17,13 @@ class Player {
     double jumpSpeed;
     float jumpHeight;
     double rotationAngle=0.0f;
+
 public:
     explicit Player(float position);
     Player();
     ~Player();
+
+    void setPosition(float x, float x1);
 
     Player(const Player &other);
 
@@ -42,27 +46,18 @@ public:
 
     bool checkCollisionGround(const Ground &ground) const;
 
-    void handleCollisionObstacle(bool &endGame, double deltaTime, float &velocity, const Obstacle &obstacle);
+    void handleLandingOnObstacle(float positionY);
 
-    bool checkCollisionObstacle(const Obstacle &obstacle) const;
-
-    bool isAboveObstacle(double deltaTime, const Obstacle &obstacle) const;
-
-    bool isCollidingFromSides(const Obstacle &obstacle) const;
-
-    bool isOnTopOfObstacle(const Obstacle &obstacle) const;
-
-    void handleLandingOnObstacle(const Obstacle &obstacle);
-
-    void handleLeftCollision(bool &endGame, const Obstacle &obstacle, float &velocity);
-
-    void handleSpikeCollision(bool &endGame, float &velocity);
-
-    bool fallingFromBlock(const Obstacle &obstacle) const;
+    void handleLeftCollision(bool &endGame, float &velocity);
 
     sf::FloatRect getBounds() const;
 
-    double calculateFallingSide(double angle );
-};
+    double calculateFallingSide(double angle);
 
+    void fellFromBlock(const bool& jumpState) ;
+
+    std::array<sf::Vector2f, 4> getOrientedBoundingBox();
+    void projectOntoAxis(const std::array<sf::Vector2f, 4>& points, const sf::Vector2f& axis, float& min, float& max);
+    bool boundingBoxTest(const sf::Vector2f& obstaclePosition, const sf::Vector2f& obstacleSize, float obstacleRotation);
+};
 #endif //PLAYER_H

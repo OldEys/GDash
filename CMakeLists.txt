@@ -68,6 +68,16 @@ add_executable(${PROJECT_NAME}
         headers/TextureManager.h
         headers/Block.h
         sources/Block.cpp
+        headers/Spike.h
+        sources/Spike.cpp
+        sources/Platform.cpp
+        headers/Platform.h
+        sources/Short_Spike.cpp
+        headers/Short_Spike.h
+        sources/final.cpp
+        headers/Final.h
+        headers/FontManager.h
+        sources/FontManager.cpp
 )
 
 include(cmake/CompilerFlags.cmake)

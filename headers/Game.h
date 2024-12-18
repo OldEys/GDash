@@ -6,26 +6,26 @@
 #include <SFML/Audio.hpp>
 #include <fstream>
 #include "Chunk.h"
+#include "FontManager.h"
 #include "Ground.h"
 #include "Obstacle.h"
 #include "Player.h"
 
 class Game {
     sf::RenderWindow *window;
-    sf::VideoMode videoMode;
-    sf::Event event;
     sf::Texture background;
     sf::Sprite backgroundSprite;
     Player player;
     sf::View view;
     sf::SoundBuffer buffer;
     sf::Sound music;
+    sf::SoundBuffer death_buffer;
+    sf::Sound death_sound;
     sf::Clock clock;
-    sf::Clock chunkLoadClock;
-    float chunkLoadInterval = 1.0f;
     Ground ground;
+    GameFont attempts;
     std::vector<Chunk> chunks;
-    std::deque<Obstacle> obstacles; //lista obstacolelor active
+    std::deque<std::shared_ptr<Obstacle>> obstacles; //lista obstacolelor active
     float chunkSize=2000.0f;
     long long unsigned int currentChunkIndex=0;
     bool endGame;
@@ -33,7 +33,6 @@ class Game {
 
     double totalDistanceTravelled = 0;
     double deltaTime=0.0f;
-    bool firstChunk;
 
 public:
 
@@ -49,10 +48,8 @@ public:
     void updateObstacles();
     void loadChunks();
 
-    void loadNextChunk();
-
     void updateView();
-
+    void resetLevel();
 };
 
 #endif //GAME_H

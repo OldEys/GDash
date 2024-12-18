@@ -1,19 +1,26 @@
 #include "../headers/Game.h"
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <thread>
 
 #include "../env_fixes.h"
+#include "../headers/Obstacle.h"
+#include "../headers/Block.h"
+#include "../headers/Platform.h"
+#include "../headers/Short_Spike.h"
+#include "../headers/Spike.h"
+#include "../headers/Final.h"
 #define MIN_DELTA_TIME_FPS 60.0f
 #define ALIGN_VIEW_Y 520.0f
 Game::Game() : window(nullptr),
-               event{},
-               endGame(false),
-               firstChunk(true)
-{
+               endGame(false) {
     this->initWindow();
+    this->loadChunks();
     ground = Ground(*this->window);
     player = Player(ground.getGroundPos());
+    // attempts = GameFont(sf::Vector2f(player.getPosition().x+400.0f,player.getPosition().y-200.0f));
+    // attempts = GameFont(sf::Vector2f(400.0f,400.0f));
     this->background.loadFromFile("images/background1-3.png");
     this->backgroundSprite.setTexture(this->background);
     this->backgroundSprite.setPosition(0.0f, 0.0f);
@@ -26,41 +33,36 @@ Game::Game() : window(nullptr),
     this->buffer.loadFromFile("sound/Level_soundtrack.ogg");
     this->music.setBuffer(this->buffer);
     music.play();
+
+    this->death_buffer.loadFromFile("sound/death_sound.ogg");
+    this->death_sound.setBuffer(this->death_buffer);
     this->view.setCenter(player.getPosition().x + 620.0f, player.getPosition().y - 250.0f);
     this->view.setSize(1920.0f, 1080.0f);
     this->window->setView(this->view);
     std::cout << "Game constructor\n";
-    // std::thread loadingThread(&Game::loadChunks, this);
-    // loadingThread.detach();
-    // loadingThread.join();
-    std::cout << "incepe de incarcat\n";
-    loadChunks();
-    std::cout << "gata de incarcat\n";
-    chunkLoadClock.restart();
 }
 bool Game::isRunning() const {
     return this->window->isOpen();
 }
 void Game::initWindow() {
-    this->videoMode.width = 1920;
-    this->videoMode.height = 1080;
+    sf::VideoMode videoMode(1920, 1080);
     //rezolutie de 1920/1080px
-    this->window = new sf::RenderWindow(this->videoMode, "GDash", sf::Style::Default);
+    this->window = new sf::RenderWindow(videoMode, "GDash", sf::Style::Default);
     this->window->setPosition(sf::Vector2i(0, 0));
     this->window->setFramerateLimit(MIN_DELTA_TIME_FPS);
-    // this->window->setFramerateLimit(144);
     this->window->setPosition(sf::Vector2i(0, 0));
 }
 
 void Game::pollEvents() {
     bool shouldExit = false;
     init_threads();
-    while (this->window->pollEvent(this->event)) {
-        if (this->event.type == sf::Event::Closed) {
+    sf::Event event;
+    while (this->window->pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
             shouldExit = true;
         }
-        if (this->event.type == sf::Event::KeyPressed) {
-            if (this->event.key.code == sf::Keyboard::Escape) {
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Escape) {
                 shouldExit = true;
             }
             break;
@@ -84,6 +86,7 @@ void Game::update() {
     //chunkurile jocului
     this->ground.updateGround(-this->velocity, this->deltaTime);
     this->updateObstacles();
+    this->attempts.update_position(-this->velocity, this->deltaTime);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
         if (isPaused) {
             isPaused = false;
@@ -94,12 +97,16 @@ void Game::update() {
     }
     }
     for (const auto &obstacle: this->obstacles) {
-        this->player.handleCollisionObstacle(endGame, this->deltaTime, this->velocity, obstacle);
+        obstacle->nviOnCollision(player, endGame, this->velocity);
+        // this->player.handleCollisionObstacle(endGame,velocity,obstacle);
     }
     this->updateView();
     if (endGame) {
+        death_sound.play();
         sf::sleep(sf::microseconds(100));
-        window->close();
+        // window->close();
+        this->resetLevel();
+        updateObstacles();
     }
 }
 
@@ -114,61 +121,49 @@ void Game::loadChunks() {
     //este gestionat vectorul de obiecte active
     std::ifstream fin("obstacole.in");
     if (!fin.is_open()) {
-        std::cout << "File cant open" << std::endl;
-        return;
+        std::cout << "File can't open\n";
     }
-    Chunk currentChunk = Chunk(0.0f, chunkSize);
-    std::string objtype;
+    std::map<std::string, std::function<std::shared_ptr<Obstacle>(sf::Vector2f)> > obstacleFactory =
+    {
+        {std::string("block"), [](sf::Vector2f pos) { return Block(pos, "images/ground_block.png").clone(); }},
+        {std::string("spike"), [](sf::Vector2f pos) { return Spike(pos, "images/spike.png").clone(); }},
+        {std::string("platform"), [](sf::Vector2f pos) { return Platform(pos, "images/ground_block.png").clone(); }},
+        {std::string("short"), [](sf::Vector2f pos) { return Short_Spike(pos, "images/spike.png").clone(); }},
+        {std::string("final"), [](sf::Vector2f pos) { return Final(pos, "images/final.png").clone(); }}
+    };
+    // std::map<std::string, std::function<std::shared_ptr<Obstacle>(sf::Vector2f)>> obstacleFactory = {
+    //     {std::string("block"), [](sf::Vector2f pos) { return std::make_shared<Block>(pos, "images/ground_block.png"); }},
+    //     {std::string("spike"), [](sf::Vector2f pos) { return std::make_shared<Spike>(pos, "images/spike.png"); }},
+    //     {std::string("platform"), [](sf::Vector2f pos) { return std::make_shared<Platform>(pos, "images/ground_block.png"); }},
+    //     {std::string("short"), [](sf::Vector2f pos) { return std::make_shared<Short_Spike>(pos, "images/spike.png"); }},
+    //     {std::string("final"), [](sf::Vector2f pos) { return std::make_shared<Final>(pos, "images/final.png"); }}
+    // };
+    Chunk currentChunk(0.0f, chunkSize);
+    std::string objType;
     float x, y;
-    while (fin >> objtype >> x >> y) {
-        //citim si in functie de ce string citim
-        //cream un obiect in chunkul curent
+
+    while (fin >> objType >> x >> y) {
+        sf::Vector2f pos(x, y);
         if (x >= currentChunk.getStartX() && x < currentChunk.getEndX()) {
-            //daca se afla in chunkul curent
-            ObstacleType type;
-            if (objtype == "block")
-                type = ObstacleType::BLOCK;
-            else if (objtype == "spike")
-                type = ObstacleType::SPIKE;
-            else if (objtype == "short")
-                type = ObstacleType::SPIKE_SHORT;
-            else if (objtype == "platform")
-                type = ObstacleType::PLATFORM;
-            else if (objtype == "end")
-                type = ObstacleType::END;
-            else
-                continue;
-            Obstacle obs1(sf::Vector2f(x, y), type);
-            currentChunk.addObstacle(std::move(obs1));
+            if (obstacleFactory.find(objType) != obstacleFactory.end()) {
+                std::cout << "se add obst in current chunk\n";
+                currentChunk.addObstacle(obstacleFactory[objType](pos));
+            } else {
+                std::cerr << "Cant recognize object!\n";
+            }
         } else if (x >= currentChunk.getEndX()) {
-            std::cout << "depaseste chunkul curent,se creeaza altul nou\n";
-            //daca nu se afla in chunkul curent adaugam unul nou
-            chunks.push_back(std::move(currentChunk));
-            currentChunk = Chunk(currentChunk.getEndX(), chunkSize);
-            if (x >= currentChunk.getStartX() && x < currentChunk.getEndX()) {
-                ObstacleType type;
-                if (objtype == "block")
-                    type = ObstacleType::BLOCK;
-                else if (objtype == "spike")
-                    type = ObstacleType::SPIKE;
-                else if (objtype == "short")
-                    type = ObstacleType::SPIKE_SHORT;
-                else if (objtype == "platform")
-                    type = ObstacleType::PLATFORM;
-                else if (objtype == "end")
-                    type = ObstacleType::END;
-                else
-                    continue;
-                std::cout << "se add obstacolele cand e dupa chunk\n";
-                Obstacle obs1(sf::Vector2f(x, y), type);
-                // currentChunk.addObstacle(&Obstacle(sf::Vector2f(x, y), type));
-                currentChunk.addObstacle(std::move(obs1));
+            chunks.emplace_back(std::move(currentChunk));
+            Chunk nChunk(currentChunk.getEndX(), chunkSize);
+            currentChunk = nChunk;
+            if (obstacleFactory.find(objType) != obstacleFactory.end()) {
+                std::cout << "se add obst in chunkul nou\n";
+                currentChunk.addObstacle(obstacleFactory[objType](pos));
+            } else {
+                std::cerr << "Cant recognize object!\n";
             }
         }
     }
-
-    //la final cream ultimul chunk
-    chunks.push_back(std::move(currentChunk));
+    chunks.emplace_back(std::move(currentChunk));
     fin.close();
 }
 void Game::updateView() {
@@ -182,6 +177,24 @@ void Game::updateView() {
     float newCenterY = currentCenter.y + lerpFactor * (targetY - currentCenter.y);
     view.setCenter(currentCenter.x, newCenterY);
     window->setView(view);
+}
+
+void Game::resetLevel() {
+    this->totalDistanceTravelled = 0.0f;
+    velocity = 850.0f;
+    this->chunks.clear();
+    this->loadChunks();
+    player.fellFromBlock(true);
+    this->endGame = false;
+
+    attempts.update_attempts_number();
+    attempts.resetPosition(sf::Vector2f(500.0f, 300.0f));
+
+    this->obstacles.clear();
+    currentChunkIndex = 0;
+    music.stop();
+    sf::sleep(sf::milliseconds(1000));
+        music.play();
 }
 
 //problema : obstacolele se misca doar
@@ -200,64 +213,34 @@ sau
 
 atunci cand scoatem newObstacles din chunkul nou scadem totaldistance travelled apoi le introducem
 in vectorul de obst active
+
+alta idee
+in chunk nu memora un obiect pe care sa l copiezi ci doar
+ce e nevoie sa cunoastem despre el(poz,tipul) deoarece
+obiectele din chunkuri nu sunt folosite pana nu sunt
+bagate in vectorul de obst active
+
 */
-// void Game::updateObstacles() {
-//     //motiv problema nesincronizare chunkuri
-//     //chunkurile nu se spawneaza la momentul potrivit ci mai tarziu
-//     //ce ce determina sa se miste atunci cand sunt create
-//     //daca nu sunt puse cand trebuie o sa se miste atunci cand sunt create
-//     //si o sa fie nesincronizate
-//     std::cout<<"upd obs\n";
-//     // if (!chunks.empty() && chunkLoadClock.getElapsedTime().asSeconds() >= chunkLoadInterval) {
-//         std::cout<<"upd obs2\n";
-//         // chunkLoadClock.restart();
-//         //functie de actualizat obstacolele
-//         if(currentChunkIndex < chunks.size() && totalDistanceTravelled >= chunks[currentChunkIndex].getStartX() ) {
-//              std::cout<<"upd obs3\n";
-//             // chunks[currentChunkIndex].getStartX() <= totalDistanceTraveled + 5*window->getSize().x) ){
-//             //cat timp exista chunkuri si playerul a intrat in chunk
-//             const auto &newObstacles = chunks[currentChunkIndex].getObstacles();
-//             std::cout << "se vor adauga la obj active \n";
-//             // obstacles.insert(obstacles.end(), newObstacles.begin(), newObstacles.end());
-//             obstacles.insert(obstacles.end(), std::make_move_iterator(newObstacles.begin()),
-//                              std::make_move_iterator(newObstacles.end()));
-//             chunks.erase(chunks.begin() + static_cast<long long int>(currentChunkIndex));
-//             // currentChunkIndex++;
-//             std::cout << "s-au adaugat la obj active\n";
-//             // chunks.erase(chunks.begin() + currentChunkIndex);
-//         }
-//         //se extrag obstacolele din chunkul in care se afla playerul
-//         //si se insereaza la vectorul de obstacole active
-//     // }
-//     // }
-//     //daca un obstacol ajunge in stanga ecranului este sters din vectorul de obstacole active
-//     if (!obstacles.empty() && obstacles.begin()->getPosition().x < -100.0f) {
-//         obstacles.pop_front();
-//     }
-//     //se misca obstacolele spre stanga
-//     for (auto &obstacle: obstacles) {
-//         obstacle.updateObstacle(-velocity, deltaTime);
-//     }
-// }
 void Game::updateObstacles() {
     if (currentChunkIndex < chunks.size() && totalDistanceTravelled >= chunks[currentChunkIndex].getStartX()) {
         const auto &chunk = chunks[currentChunkIndex];
         auto newObstacles = chunk.getObstacles();
 
         for (auto &obstacle: newObstacles) {
-            obstacle.adjustPositionX(-chunk.getStartX() + 1920.0f);
+            obstacle->adjustPositionX(-chunk.getStartX() +1920.0f );
         }
+        std::cout<<"se iau obst si se insereaza in vect de obs active\n";
         obstacles.insert(obstacles.end(), std::make_move_iterator(newObstacles.begin()),
                          std::make_move_iterator(newObstacles.end()));
-
-        chunks.erase(chunks.begin() + static_cast<float>(currentChunkIndex));
+        std::cout<<"gata de inserat in vect de obs active\n";
+        chunks.erase(chunks.begin() + static_cast<long long>(currentChunkIndex));
     }
-    if (!obstacles.empty() && obstacles.front().getPosition().x < -100.0f) {
+    if (!obstacles.empty() && obstacles.front()->getPosition().x < -100.0f) {
         obstacles.pop_front();
     }
 
     for (auto &obstacle : obstacles) {
-        obstacle.updateObstacle(-velocity, deltaTime);
+        obstacle->updateObstacle(-velocity, deltaTime);
     }
 }
 Game::~Game() {
@@ -270,9 +253,10 @@ void Game::render() {
     // this->window->draw(this->groundBody);
     this->ground.renderGround(*this->window);
     for (auto &obstacle: obstacles) {
-        obstacle.renderObstacle(*this->window);
+        obstacle->renderObstacle(*this->window);
     }
     this->player.renderPlayer(*this->window);
+    this->attempts.render(*this->window);
     this->window->display();
 }
 

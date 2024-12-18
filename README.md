@@ -7,6 +7,9 @@ un platformer de tip side-scrolling bazat pe sincronizarea cu muzica,
 în care ești un pătrat care încearcă să se ferească de țepi . Ai nevoie doar de tasta space și reflexe ascuțite
 în încercarea ta de a finaliza nivelul și a nu da rage.
 
+Verificarea coliziunilor obiectelor care se rotesc și funcția boundingBoxTest din Player.h
+a fost preluată din implementarea SFML a unei funcții îmbunătățite de verificare a coliziunilor ,
+[aici](https://github.com/SFML/SFML/wiki/Source%3A-Simple-Collision-Detection-for-SFML-2) .
 ### Important!
 Aveți voie cu cod generat de modele de limbaj la care nu ați contribuit semnificativ doar în folder-ul `generated`.
 Codul generat pus "ca să fie"/pe care nu îl înțelegeți se punctează doar pentru puncte bonus, doar în contextul
@@ -132,6 +135,8 @@ Vezi și [`scripts/cmake.sh`](scripts/cmake.sh).
 
 ## Resurse
 
+- [death sound](https://www.youtube.com/watch?v=XuPeF_YCsfE)
+- [font](https://www.fontsquirrel.com/fonts/pusab)-pusab
 - [SFML](https://github.com/SFML/SFML/tree/2.6.1) (Zlib)
   - [OpenAL](https://openal-soft.org/) (LGPL): din cauza licenței, trebuie distribuită ca shared library
 - adăugați trimiteri către resursele externe care v-au ajutat sau pe care le-ați folosit

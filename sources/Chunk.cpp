@@ -1,27 +1,38 @@
 #include "../headers/Chunk.h"
 
 #include <iostream>
-int Chunk::id_max = 0;
+// int Chunk::id_max = 0;
 
-Chunk::Chunk(float startX, float chunkSize) : id(id_max), startX(startX), endX(startX + chunkSize)  {
-    std::cout<<"Created chunk"<<id<<"\n";
-    ++id_max;
+Chunk::Chunk(float startX, float chunkSize) : /*id(id_max),*/ startX(startX), endX(startX + chunkSize)  {
+    // std::cout<<"Created chunk"<<id<<"\n";
+    std::cout<<"Created chunk"<<"\n";
+    // ++id_max;
 }
 
-// Chunk::~Chunk() {
-//     std::cout<<"Destroyed chunk"<<id<<"\n";
-// }
+Chunk::Chunk(const Chunk &other) : startX(other.startX), endX(other.endX) {
+    for(const auto &obstacle : other.obstacles) {
+        obstacles.emplace_back(obstacle->clone());
+    }
+}
 
-void Chunk::addObstacle(Obstacle &&obstacle) {
+Chunk & Chunk::operator=(Chunk other) {
+    swap(*this,other);
+    return *this;
+}
+// Chunk & Chunk::operator=(Chunk&& other) noexcept {
+//     Chunk temp(std::move(other));
+//     swap(*this,temp);
+//     return *this;
+// }
+void Chunk::addObstacle(std::shared_ptr<Obstacle> obstacle) {
     // obstacles.push_back(obstacle);
     obstacles.emplace_back(std::move(obstacle));
 }
-
 [[nodiscard]] float Chunk::getStartX() const {
     return this->startX;
 }
 
-[[nodiscard]] const std::vector<Obstacle> & Chunk::getObstacles() const {
+[[nodiscard]] const std::vector<std::shared_ptr<Obstacle>> & Chunk::getObstacles() const {
     return this->obstacles;
 }
 
@@ -33,7 +44,15 @@ std::ostream & operator<<(std::ostream &os, const Chunk &chunk) {
     os<<"End X: "<<chunk.getEndX()<<"\n";
     os<<"Obstacles:\n";
     for(const auto& obstacle : chunk.obstacles) {
-        os<<obstacle<<"\n";
+        os<<*obstacle<<"\n";
     }
+    os<<"\n";
     return os;
+}
+
+void swap(Chunk &a, Chunk &b) noexcept{
+    std::swap(a.startX, b.startX);
+    std::swap(a.endX, b.endX);
+    std::swap(a.obstacles, b.obstacles);
+
 }
