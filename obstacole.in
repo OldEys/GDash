@@ -1,8 +1,6 @@
-
 short 100 790
-block 700 680
 block 1000 785
-spike 1000 690
+spike 1100 790
 spike 1900 790
 spike 2000 790
 short 2600 790

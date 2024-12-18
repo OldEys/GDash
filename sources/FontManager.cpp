@@ -33,6 +33,3 @@ void GameFont::resetPosition(sf::Vector2f newPosition) {
     this->attempts_text.setPosition(newPosition);
 }
 
-sf::Text GameFont::getAttempts_text() {
-    return attempts_text;
-}
