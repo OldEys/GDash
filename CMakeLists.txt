@@ -74,7 +74,7 @@ add_executable(${PROJECT_NAME}
         headers/Platform.h
         sources/Short_Spike.cpp
         headers/Short_Spike.h
-        sources/final.cpp
+        sources/Final.cpp
         headers/Final.h
         headers/FontManager.h
         sources/FontManager.cpp
