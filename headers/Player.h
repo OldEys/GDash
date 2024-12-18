@@ -54,10 +54,13 @@ public:
 
     double calculateFallingSide(double angle);
 
-    void fellFromBlock(const bool& jumpState) ;
+    void fellFromBlock(const bool &jumpState);
 
     std::array<sf::Vector2f, 4> getOrientedBoundingBox();
-    void projectOntoAxis(const std::array<sf::Vector2f, 4>& points, const sf::Vector2f& axis, float& min, float& max);
-    bool boundingBoxTest(const sf::Vector2f& obstaclePosition, const sf::Vector2f& obstacleSize, float obstacleRotation);
+
+    void projectOntoAxis(const std::array<sf::Vector2f, 4> &points, const sf::Vector2f &axis, float &min, float &max);
+
+    bool boundingBoxTest(const sf::Vector2f &obstaclePosition, const sf::Vector2f &obstacleSize,
+                         float obstacleRotation);
 };
 #endif //PLAYER_H

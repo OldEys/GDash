@@ -103,7 +103,7 @@ bool Player::checkCollisionGround(const Ground &ground) const {
 }
 void Player::handleLandingOnObstacle(float positionY) {
     this->body.setPosition(this->body.getPosition().x, positionY);
-    rotationAngle=calculateFallingSide(rotationAngle);
+    rotationAngle = calculateFallingSide(rotationAngle);
     isJumping = false;
 }
 
@@ -121,12 +121,13 @@ double Player::calculateFallingSide(double angle) {
     return side*90;
 }
 
-void Player::fellFromBlock(const bool& jumpState){
-    if(jumpState==false) {
-        rotationAngle=calculateFallingSide(rotationAngle);
+void Player::fellFromBlock(const bool &jumpState) {
+    if (jumpState == false) {
+        rotationAngle = calculateFallingSide(rotationAngle);
     }
-        isJumping=jumpState;
+    isJumping = jumpState;
 }
+
 std::array<sf::Vector2f, 4> Player::getOrientedBoundingBox() {
     sf::Transform transform;
     transform.translate(body.getPosition());
@@ -150,7 +151,8 @@ std::array<sf::Vector2f, 4> Player::getOrientedBoundingBox() {
     return worldPoints;
 }
 
-void Player::projectOntoAxis(const std::array<sf::Vector2f, 4>& points, const sf::Vector2f& axis, float& min, float& max) {
+void Player::projectOntoAxis(const std::array<sf::Vector2f, 4> &points, const sf::Vector2f &axis, float &min,
+                             float &max) {
     min = max = points[0].x * axis.x + points[0].y * axis.y;
     for (size_t i = 1; i < points.size(); ++i) {
         float projection = points[i].x * axis.x + points[i].y * axis.y;
@@ -158,7 +160,9 @@ void Player::projectOntoAxis(const std::array<sf::Vector2f, 4>& points, const sf
         if (projection > max) max = projection;
     }
 }
-bool Player::boundingBoxTest(const sf::Vector2f& obstaclePosition, const sf::Vector2f& obstacleSize, float obstacleRotation) {
+
+bool Player::boundingBoxTest(const sf::Vector2f &obstaclePosition, const sf::Vector2f &obstacleSize,
+                             float obstacleRotation) {
     auto playerPoints = getOrientedBoundingBox();
 
     sf::Transform obstacleTransform;
@@ -188,7 +192,7 @@ bool Player::boundingBoxTest(const sf::Vector2f& obstaclePosition, const sf::Vec
     };
 
     // Proiectează punctele pe fiecare axă
-    for (const auto& axis : axes) {
+    for (const auto &axis: axes) {
         float playerMin, playerMax, obstacleMin, obstacleMax;
         projectOntoAxis(playerPoints, axis, playerMin, playerMax);
         projectOntoAxis(obstacleWorldPoints, axis, obstacleMin, obstacleMax);
