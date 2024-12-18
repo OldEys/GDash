@@ -1,7 +1,7 @@
 
 #ifndef FONTMANAGER_H
 #define FONTMANAGER_H
-#include "SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
 
 
 class GameFont {

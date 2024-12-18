@@ -3,8 +3,7 @@
 #include <memory>
 #include "Player.h"
 #include "TextureManager.h"
-#include "SFML/Graphics/RectangleShape.hpp"
-#include "SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
 
 class Obstacle {
 protected:
