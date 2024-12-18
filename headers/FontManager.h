@@ -23,6 +23,5 @@ public:
 
     void resetPosition(sf::Vector2f newPosition);
 
-    sf::Text getAttempts_text();
 };
 #endif //FONTMANAGER_H
