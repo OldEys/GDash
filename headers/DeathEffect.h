@@ -8,9 +8,7 @@ class DeathEffect {
         sf::CircleShape particle;
         sf::Vector2f velocity;
     };
-
     std::vector<Particle> particles;
-    int particleCount = 0;
     sf::Color color;
     float radiusMin = 5.0f, radiusMax = 10.0f;
     float speedMin = 0.0f, speedMax = 300.0f;
@@ -24,6 +22,6 @@ public:
 
     bool update(double deltaTime);
 
-    void trigger(sf::Vector2f position, int numParticles, sf::Color color);
+    void trigger(sf::Vector2f position, int numParticles, sf::Color particleColor);
 };
 #endif

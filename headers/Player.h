@@ -44,9 +44,9 @@ public:
 
     void triggerDeath();
 
-    bool getState()const;
+    bool getState() const;
 
-    void handleDeath(double deltaTime,sf::RenderWindow &window);
+    void handleDeath(double deltaTime, sf::RenderWindow &window);
 
     void updatePlayer(double deltaTime);
 
@@ -72,7 +72,8 @@ public:
 
     bool boundingBoxTest(const sf::Vector2f &obstaclePosition, const sf::Vector2f &obstacleSize,
                          float obstacleRotation);
-    void moveTowardsEnd(float velocity,double deltaTime);
+
+    void moveTowardsEnd(float velocity, double deltaTime);
 
 };
 #endif //PLAYER_H

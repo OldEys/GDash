@@ -13,14 +13,14 @@ Player::Player(float position)
     this->body.setTexture(&texture);
     body.setPosition(sf::Vector2f(350.0f, position - body.getSize().y / 2.0f));
     body.setOrigin(body.getSize().x / 2.0f, body.getSize().y / 2.0f);
-    if(!this->death_buffer.loadFromFile("sound/death_sound.ogg")) {
-        std::cerr<< "Failed to load death buffer" << std::endl;
+    if (!this->death_buffer.loadFromFile("sound/death_sound.ogg")) {
+        std::cerr << "Failed to load death buffer" << std::endl;
     }
     this->death_sound.setBuffer(this->death_buffer);
     this->death_sound.setVolume(100);
 }
-Player::Player(): isJumping(false),isDead(false), jumpSpeed(0.0f) , jumpHeight(250.0f)
-{
+
+Player::Player(): isJumping(false), isDead(false), jumpSpeed(0.0f), jumpHeight(250.0f) {
     std::cout<<"constructor fara parametri\n";
 }
 
@@ -39,10 +39,10 @@ Player::Player(const Player &other)
   isJumping(other.isJumping),
   isDead(other.isDead),
   jumpSpeed(other.jumpSpeed),
-  jumpHeight(other.jumpHeight){
-    body.setTexture(&texture);
-    death_sound.setBuffer(death_buffer);
-    std::cout<<"copy constructor"<<std::endl;
+  jumpHeight(other.jumpHeight) {
+body.setTexture(&texture);
+death_sound.setBuffer(death_buffer);
+std::cout<<"copy constructor"<<std::endl;
 }
 
 Player & Player::operator=(const Player &other)
@@ -69,8 +69,8 @@ sf::Vector2f Player::getPosition() const {
 
 void Player::triggerDeath() {
     this->death_sound.play();
-    isDead=true;
-    deathEffect.trigger(this->body.getPosition(),150,sf::Color(220, 220, 71));
+    isDead = true;
+    deathEffect.trigger(this->body.getPosition(), 150, sf::Color(220, 220, 71));
 }
 
 bool Player::getState() const {
@@ -78,11 +78,11 @@ bool Player::getState() const {
 }
 
 void Player::handleDeath(double deltaTime, sf::RenderWindow &window) {
-    if(isDead) {
+    if (isDead) {
         deathEffect.render(window);
-        bool effectActive=deathEffect.update(deltaTime);
-        if(!effectActive) {
-            isDead=false;
+        bool effectActive = deathEffect.update(deltaTime);
+        if (!effectActive) {
+            isDead = false;
         }
     }
 }
@@ -112,11 +112,10 @@ void Player::updatePlayer(const double deltaTime) {
     body.setRotation(static_cast<float>(rotationAngle));
 }
 void Player::renderPlayer(sf::RenderWindow &window) {
-    if(!isDead) {
+    if (!isDead) {
         window.draw(body);
-    }
-    else {
-        std::cout<<"nu randez player\n";
+    } else {
+        std::cout << "nu randez player\n";
     }
 }
 
@@ -236,6 +235,6 @@ bool Player::boundingBoxTest(const sf::Vector2f &obstaclePosition, const sf::Vec
 
     return true;
 }
-void Player::moveTowardsEnd(float velocity,double deltaTime) {
-        this->body.move(static_cast<float>(velocity*deltaTime), 0.0f);
+void Player::moveTowardsEnd(float velocity, double deltaTime) {
+    this->body.move(static_cast<float>(velocity * deltaTime), 0.0f);
 }

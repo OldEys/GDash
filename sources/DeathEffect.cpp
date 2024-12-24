@@ -17,18 +17,17 @@ DeathEffect::DeathEffect() {
     centerParticle.setRadius(centerParticleRadius);
 }
 
-void DeathEffect::trigger(sf::Vector2f position, int numParticles, sf::Color color) {
+void DeathEffect::trigger(sf::Vector2f position, int numParticles, sf::Color particleColor) {
     particles.resize(numParticles);
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_real_distribution<double> degDistrib(0, 360.0f);
     std::uniform_real_distribution<double> spDistrib(speedMin, speedMax);
 
-    // centerParticleRadius=10.0f;
     centerParticle.setOrigin(centerParticleRadius / 2.0f, centerParticleRadius / 2.0f);
     // centerParticle.setRadius(centerParticleRadius);
     centerParticle.setPosition(position);
-    centerParticle.setFillColor(color);
+    centerParticle.setFillColor(particleColor);
     centerParticle.setScale(1.0f, 1.0f);
 
     for (auto &p: particles) {
@@ -36,7 +35,7 @@ void DeathEffect::trigger(sf::Vector2f position, int numParticles, sf::Color col
         double angle = degDistrib(mt) * 3.1416 / 180.0f;
         double speed = spDistrib(mt);
         p.velocity = sf::Vector2f(static_cast<float>(speed * cos(angle)), static_cast<float>(speed * sin(angle)));
-        p.particle.setFillColor(color);
+        p.particle.setFillColor(particleColor);
     }
 }
 
@@ -52,13 +51,13 @@ bool DeathEffect::update(double deltaTime) {
     std::cout << "update particles\n";
     bool anyParticleActive = false;
     for (auto &p: particles) {
-        p.velocity.x *= 0.95;
-        p.velocity.y *= 0.95;
+        p.velocity.x *= 0.95f;
+        p.velocity.y *= 0.95f;
         p.particle.move(static_cast<float>(p.velocity.x * deltaTime), static_cast<float>(p.velocity.y * deltaTime));
-        sf::Color color = p.particle.getFillColor();
-        if (color.a > 5) {
-            color.a -= 5;
-            p.particle.setFillColor(color);
+        sf::Color c = p.particle.getFillColor();
+        if (c.a > 5) {
+            c.a -= 5;
+            p.particle.setFillColor(c);
             anyParticleActive = true;
         }
     }
@@ -66,10 +65,10 @@ bool DeathEffect::update(double deltaTime) {
     centerParticle.setScale(centerParticle.getScale().x * scaleFactor, centerParticle.getScale().y * scaleFactor);
     // centerParticle.setOrigin(centerParticleRadius/2.0f,centerParticleRadius/2.0f);
     centerParticle.setOrigin(centerParticleRadius, centerParticleRadius);
-    sf::Color color = centerParticle.getFillColor();
-    if (color.a > 5) {
-        color.a -= 5;
-        centerParticle.setFillColor(color);
+    sf::Color c_cent = centerParticle.getFillColor();
+    if (c_cent.a > 5) {
+        c_cent.a -= 5;
+        centerParticle.setFillColor(c_cent);
     }
     return anyParticleActive;
 }
