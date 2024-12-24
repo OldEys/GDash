@@ -42,7 +42,7 @@ Player::Player(const Player &other)
   jumpHeight(other.jumpHeight) {
 body.setTexture(&texture);
 death_sound.setBuffer(death_buffer);
-std::cout<<"copy constructor"<<std::endl;
+std::cout << "copy constructor" << std::endl;
 }
 
 Player & Player::operator=(const Player &other)
@@ -235,6 +235,7 @@ bool Player::boundingBoxTest(const sf::Vector2f &obstaclePosition, const sf::Vec
 
     return true;
 }
+
 void Player::moveTowardsEnd(float velocity, double deltaTime) {
     this->body.move(static_cast<float>(velocity * deltaTime), 0.0f);
 }

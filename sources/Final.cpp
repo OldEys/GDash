@@ -43,10 +43,9 @@ void Final::finalProximity(Player &player,float& velocity,double deltaTime) {
         }
         player.moveTowardsEnd(storedVel,deltaTime);
         velocity=0.0f;
-    }
-    else {
-        positioned=false;
-        storedVel=0.0f;
+    } else {
+        positioned = false;
+        storedVel = 0.0f;
     }
 }
 void Final::onCollision(Player &player, bool &endGame, float &) const {

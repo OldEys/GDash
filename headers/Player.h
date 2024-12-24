@@ -74,6 +74,5 @@ public:
                          float obstacleRotation);
 
     void moveTowardsEnd(float velocity, double deltaTime);
-
 };
 #endif //PLAYER_H
