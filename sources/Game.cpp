@@ -5,7 +5,6 @@
 #include <thread>
 
 #include "../env_fixes.h"
-#include "../headers/Obstacle.h"
 #include "../headers/Block.h"
 #include "../headers/Platform.h"
 #include "../headers/Short_Spike.h"
@@ -34,8 +33,6 @@ Game::Game() : window(nullptr),
     this->music.setBuffer(this->buffer);
     music.play();
 
-    this->death_buffer.loadFromFile("sound/death_sound.ogg");
-    this->death_sound.setBuffer(this->death_buffer);
     this->view.setCenter(player.getPosition().x + 620.0f, player.getPosition().y - 250.0f);
     this->view.setSize(1920.0f, 1080.0f);
     this->window->setView(this->view);
@@ -73,40 +70,44 @@ void Game::pollEvents() {
     }
 }
 bool isPaused = false;
-
 void Game::update() {
-    //functie de update,apelata in main in loopul principal al jocului
     this->pollEvents();
-    this->deltaTime = std::min(getDeltaTime(), 1. / MIN_DELTA_TIME_FPS);
-    // this->deltaTime=std::min(getDeltaTime(),1./144.f);
-    this->player.updatePlayer(this->deltaTime);
-    this->player.handleCollisionGround(this->ground);
-    this->totalDistanceTravelled += this->velocity * this->deltaTime;
-    //distanta totala parcursa de player,folosita pentru a spawna la momentul potrivit
-    //chunkurile jocului
-    this->ground.updateGround(-this->velocity, this->deltaTime);
-    this->updateObstacles();
-    this->attempts.update_position(-this->velocity, this->deltaTime);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
-        if (isPaused) {
-            isPaused = false;
-            velocity = 850.0f;
-        } else {
-            isPaused = true;
-            velocity = 0.0f;
-    }
-    }
-    for (const auto &obstacle: this->obstacles) {
-        obstacle->nviOnCollision(player, endGame, this->velocity);
-        // this->player.handleCollisionObstacle(endGame,velocity,obstacle);
-    }
-    this->updateView();
     if (endGame) {
-        death_sound.play();
-        sf::sleep(sf::microseconds(100));
-        // window->close();
+        music.stop();
+        if (player.getState()) {
+            return;
+        }
         this->resetLevel();
         updateObstacles();
+    } else {
+        this->deltaTime = std::min(getDeltaTime(), 1. / MIN_DELTA_TIME_FPS);
+        this->player.updatePlayer(this->deltaTime);
+        this->player.handleCollisionGround(this->ground);
+        this->totalDistanceTravelled += this->velocity * this->deltaTime;
+        this->ground.updateGround(-this->velocity, this->deltaTime);
+        this->updateObstacles();
+        this->attempts.update_position(-this->velocity, this->deltaTime);
+        this->levelProgression.updatePercent(totalDistanceTravelled,
+                                             levelLength + 1920.0f - player.getPosition().x - player.getBounds().width);
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
+            if (isPaused) {
+                isPaused = false;
+                velocity = 850.0f;
+            } else {
+                isPaused = true;
+                velocity = 0.0f;
+            }
+        }
+
+        for (const auto &obstacle: this->obstacles) {
+            obstacle->nviOnCollision(player, endGame, this->velocity);
+
+            if (auto obs = std::dynamic_pointer_cast<Final>(obstacle)) {
+                obs->finalProximity(player, velocity, deltaTime);
+            }
+        }
+        this->updateView();
     }
 }
 
@@ -143,6 +144,9 @@ void Game::loadChunks() {
     float x, y;
 
     while (fin >> objType >> x >> y) {
+        if (objType == "final") {
+            levelLength=x;
+        }
         sf::Vector2f pos(x, y);
         if (x >= currentChunk.getStartX() && x < currentChunk.getEndX()) {
             if (obstacleFactory.find(objType) != obstacleFactory.end()) {
@@ -176,7 +180,6 @@ void Game::updateView() {
     //centrul vechi si cel nou
     float newCenterY = currentCenter.y + lerpFactor * (targetY - currentCenter.y);
     view.setCenter(currentCenter.x, newCenterY);
-    window->setView(view);
 }
 
 void Game::resetLevel() {
@@ -192,9 +195,9 @@ void Game::resetLevel() {
 
     this->obstacles.clear();
     currentChunkIndex = 0;
-    music.stop();
-    sf::sleep(sf::milliseconds(1000));
-        music.play();
+    // music.stop();
+    // sf::sleep(sf::milliseconds(1000));
+    music.play();
 }
 
 //problema : obstacolele se misca doar
@@ -249,16 +252,22 @@ Game::~Game() {
 }
 
 void Game::render() {
+    window->setView(view);
     this->window->clear();
     this->window->draw(this->backgroundSprite);
-    // this->window->draw(this->groundBody);
     this->ground.renderGround(*this->window);
+    this->player.renderPlayer(*this->window);
+    player.handleDeath(deltaTime,*window);
     for (auto &obstacle: obstacles) {
         obstacle->renderObstacle(*this->window);
     }
-    this->player.renderPlayer(*this->window);
     this->attempts.render(*this->window);
+    window->setView(window->getDefaultView());
+    this->levelProgression.render(*this->window);
+    window->setView(view);
     this->window->display();
+
+
 }
 
 std::ostream &operator<<(std::ostream &os, const Game &game) {

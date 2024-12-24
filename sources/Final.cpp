@@ -16,7 +16,35 @@ Final::Final(const sf::Vector2f &pos, const std::string &texturePath) {
                              + this->body.getGlobalBounds().width / 2.0f,
                              this->body.getPosition().y + this->body.getGlobalBounds().height / 2.0f);
 }
-
+// void Final::finalProximity(Player &player, float &velocity, double deltaTime) {
+//     static bool positioned = false;
+//     static float storedVel = 0.0f;
+//
+//     if (this->getPosition().x > 1760 && this->getPosition().x < 1800) {
+//         if (!positioned) {
+//             if (storedVel == 0.0f) {
+//                 storedVel = velocity;
+//             }
+//             this->body.setPosition(1780.0f, this->getPosition().y);
+//             positioned = true;
+//         }
+//         player.moveTowardsEnd(storedVel, deltaTime);
+//         velocity = 0.0f;
+//     }
+// }
+void Final::finalProximity(Player &player,float& velocity,double deltaTime) {
+    static bool positioned=false;
+    static float storedVel=0.0f;
+    if(this->getPosition().x>1780 && this->getPosition().x<1820) {
+        if (!positioned) {
+            storedVel = velocity;
+            this->body.setPosition(1800.0f, this->getPosition().y);
+            positioned = true;
+        }
+        player.moveTowardsEnd(storedVel,deltaTime);
+        velocity=0.0f;
+    }
+}
 void Final::onCollision(Player &player, bool &endGame, float &) const {
     if (this->hitbox.getGlobalBounds().intersects(player.getBounds())) {
         endGame = true;

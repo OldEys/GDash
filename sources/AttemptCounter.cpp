@@ -1,8 +1,7 @@
-#include"../headers/FontManager.h"
-
+#include"../headers/AttemptCounter.h"
 #include <iostream>
 
-GameFont::GameFont() {
+AttemptCounter::AttemptCounter() {
     if (!font.loadFromFile("font/game_font.otf")) {
         std::cerr << "Failed to load font." << std::endl;
     }
@@ -14,22 +13,22 @@ GameFont::GameFont() {
     attempts_text.setPosition(sf::Vector2f(500, 300));
 }
 
-void GameFont::update_attempts_number() {
+void AttemptCounter::update_attempts_number() {
     this->attempts_number++;
     attempts_text.setString("Attempt " + std::to_string(attempts_number));
 }
 
-void GameFont::update_position(float velocity, double deltaTime) {
+void AttemptCounter::update_position(float velocity, double deltaTime) {
     if (attempts_text.getPosition().x > -600.0f) {
         attempts_text.move(static_cast<float>(velocity * deltaTime), 0);
     }
 }
 
-void GameFont::render(sf::RenderWindow &window) {
+void AttemptCounter::render(sf::RenderWindow &window) {
     window.draw(attempts_text);
 }
 
-void GameFont::resetPosition(sf::Vector2f newPosition) {
+void AttemptCounter::resetPosition(sf::Vector2f newPosition) {
     this->attempts_text.setPosition(newPosition);
 }
 

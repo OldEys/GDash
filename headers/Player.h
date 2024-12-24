@@ -8,12 +8,16 @@
 #include <SFML/Graphics.hpp>
 
 #include <SFML/Audio.hpp>
-
+#include "DeathEffect.h"
 
 class Player {
     sf::RectangleShape body;
     sf::Texture texture;
+    DeathEffect deathEffect;
+    sf::SoundBuffer death_buffer;
+    sf::Sound death_sound;
     bool isJumping;
+    bool isDead;
     double jumpSpeed;
     float jumpHeight;
     double rotationAngle=0.0f;
@@ -37,6 +41,12 @@ public:
         os<<" position x: " << obj.getPosition().x<<"position y: " <<obj.getPosition().y << "\n";
         return os;
     }
+
+    void triggerDeath();
+
+    bool getState()const;
+
+    void handleDeath(double deltaTime,sf::RenderWindow &window);
 
     void updatePlayer(double deltaTime);
 
@@ -62,5 +72,7 @@ public:
 
     bool boundingBoxTest(const sf::Vector2f &obstaclePosition, const sf::Vector2f &obstacleSize,
                          float obstacleRotation);
+    void moveTowardsEnd(float velocity,double deltaTime);
+
 };
 #endif //PLAYER_H

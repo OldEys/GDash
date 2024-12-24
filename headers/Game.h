@@ -5,9 +5,10 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <fstream>
+#include "AttemptCounter.h"
 #include "Chunk.h"
-#include "FontManager.h"
 #include "Ground.h"
+#include "LevelProgression.h"
 #include "Obstacle.h"
 #include "Player.h"
 
@@ -19,11 +20,10 @@ class Game {
     sf::View view;
     sf::SoundBuffer buffer;
     sf::Sound music;
-    sf::SoundBuffer death_buffer;
-    sf::Sound death_sound;
     sf::Clock clock;
     Ground ground;
-    GameFont attempts;
+    AttemptCounter attempts;
+    LevelProgression levelProgression;
     std::vector<Chunk> chunks;
     std::deque<std::shared_ptr<Obstacle> > obstacles; //lista obstacolelor active
     float chunkSize=2000.0f;
@@ -31,6 +31,7 @@ class Game {
     bool endGame;
     float velocity=850.0f;
 
+    double levelLength = 0;
     double totalDistanceTravelled = 0;
     double deltaTime=0.0f;
 

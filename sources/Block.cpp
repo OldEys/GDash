@@ -30,9 +30,10 @@ void Block::onCollision(Player &player, bool &endGame, float &velocity) const  {
                         this->hitbox.getGlobalBounds().height/2.0f);
                 } else {
                     //se afla in stanga lui
+                    player.triggerDeath();
                     player.handleLeftCollision(endGame, velocity);
                 }
-        }
+            }
     }
     else {
         if (fallingFromBlock(player)) {

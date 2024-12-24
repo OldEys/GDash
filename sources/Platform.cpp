@@ -27,6 +27,7 @@ void Platform::onCollision(Player &player, bool &endGame, float &velocity) const
 
             } else {
                 //se afla in stanga lui
+                player.triggerDeath();
                 player.handleLeftCollision(endGame, velocity);
             }
         }

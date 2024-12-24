@@ -10,6 +10,7 @@ un platformer de tip side-scrolling bazat pe sincronizarea cu muzica,
 Verificarea coliziunilor obiectelor care se rotesc și funcția boundingBoxTest din Player.h
 a fost preluată din implementarea SFML a unei funcții îmbunătățite de verificare a coliziunilor ,
 [aici](https://github.com/SFML/SFML/wiki/Source%3A-Simple-Collision-Detection-for-SFML-2) .
+
 ### Important!
 Aveți voie cu cod generat de modele de limbaj la care nu ați contribuit semnificativ doar în folder-ul `generated`.
 Codul generat pus "ca să fie"/pe care nu îl înțelegeți se punctează doar pentru puncte bonus, doar în contextul

@@ -76,8 +76,12 @@ add_executable(${PROJECT_NAME}
         headers/Short_Spike.h
         sources/Final.cpp
         headers/Final.h
-        headers/FontManager.h
-        sources/FontManager.cpp
+        sources/LevelProgression.cpp
+        headers/LevelProgression.h
+        sources/AttemptCounter.cpp
+        headers/AttemptCounter.h
+        sources/DeathEffect.cpp
+        headers/DeathEffect.h
 )
 
 include(cmake/CompilerFlags.cmake)

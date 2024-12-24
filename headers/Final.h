@@ -12,7 +12,7 @@ public:
     std::shared_ptr<Obstacle> clone() const override {
         return std::make_shared<Final>(*this);
     }
-
+    void finalProximity(Player &player, float &velocity, double deltaTime);
 private:
     void onCollision(Player &player, bool &endGame, float &velocity) const override;
 };

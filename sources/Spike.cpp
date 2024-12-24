@@ -19,6 +19,7 @@ Spike::Spike(const sf::Vector2f &pos, const std::string &texturePath) {
 void Spike::onCollision(Player &player, bool &endGame, float &velocity) const {
     if(player.boundingBoxTest(this->hitbox.getPosition(),this->hitbox.getSize(),this->hitbox.getRotation()))
     {
+        player.triggerDeath();
         endGame = true;
         velocity = 0.0f;
     }

@@ -1,16 +1,14 @@
-
-#ifndef FONTMANAGER_H
-#define FONTMANAGER_H
+#ifndef ATTEMPTCOUNTER_H
+#define ATTEMPTCOUNTER_H
 #include <SFML/Graphics.hpp>
 
-
-class GameFont {
+class AttemptCounter {
     sf::Font font;
     sf::Text attempts_text;
     int attempts_number = 1;
 
 public:
-    GameFont();
+    AttemptCounter();
 
     // explicit GameFont(sf::Vector2f pos);
 
@@ -24,4 +22,4 @@ public:
     void resetPosition(sf::Vector2f newPosition);
 
 };
-#endif //FONTMANAGER_H
+#endif //ATTEMPTCOUNTER_H
