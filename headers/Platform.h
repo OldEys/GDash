@@ -6,7 +6,7 @@ class Platform : public Obstacle{
 
 public:
     Platform()=default;
-    explicit Platform(const sf::Vector2f& pos,const std::string& texturePath);
+    explicit Platform(const sf::Vector2f& pos);
     std::shared_ptr<Obstacle> clone()const override {
         return std::make_shared<Platform>(*this);
     }

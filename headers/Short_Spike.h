@@ -8,7 +8,7 @@ class Short_Spike : public Obstacle{
 
 public:
     Short_Spike()=default;
-    explicit Short_Spike(const sf::Vector2f& pos,const std::string& texturePath);
+    explicit Short_Spike(const sf::Vector2f& pos);
     std::shared_ptr<Obstacle> clone()const override {
         return std::make_shared<Short_Spike>(*this);
     }

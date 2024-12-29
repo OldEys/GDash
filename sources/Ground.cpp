@@ -1,9 +1,11 @@
 #include "../headers/Ground.h"
 #include <iostream>
 
+#include "../headers/Exceptions.h"
+
 Ground::Ground(const sf::RenderWindow &window) : groundTexture() {
     if (!groundTexture.loadFromFile("images/ground-long.png")) {
-        std::cerr << "Failed to load ground texture!" << std::endl;
+        throw Texture_error("Failed to load ground texture\n");
     }
     
     groundBody1.setTexture(&groundTexture);

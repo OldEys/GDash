@@ -12,7 +12,6 @@ AttemptCounter::AttemptCounter() {
     attempts_text.setString("Attempt " + std::to_string(attempts_number));
     attempts_text.setPosition(sf::Vector2f(500, 300));
 }
-
 void AttemptCounter::update_attempts_number() {
     this->attempts_number++;
     attempts_text.setString("Attempt " + std::to_string(attempts_number));
@@ -31,4 +30,3 @@ void AttemptCounter::render(sf::RenderWindow &window) {
 void AttemptCounter::resetPosition(sf::Vector2f newPosition) {
     this->attempts_text.setPosition(newPosition);
 }
-

@@ -1,21 +1,32 @@
 #include"../headers/Platform.h"
+
+#include <iostream>
 #define ON_GROUND 785.0f
-Platform::Platform(const sf::Vector2f &pos, const std::string &texturePath) {
-    this->texture=texture_manager.getTexture(texturePath);
-    this->body.setSize(sf::Vector2f(100.0f,40.0f));
+
+Platform::Platform(const sf::Vector2f& pos) : Obstacle("images/ground_block.png",sf::Vector2f(100.0f,40.0f),
+    sf::Color(0,0,50),sf::Color::White,5.0f,sf::Vector2f(100.0f,40.0f)) {
     this->body.setPosition(pos);
-    this->body.setFillColor(sf::Color(0,0,50));
-    // this->hitbox.setFillColor(sf::Color(255,0,0,50));
-    this->body.setTexture(&this->texture);
-    this->body.setOutlineColor(sf::Color::White);
-    this->body.setOutlineThickness(5.0f);
-    this->hitbox.setSize(sf::Vector2f(100.0f,40.0f));
-    this->hitbox.setOrigin(this->hitbox.getSize().x / 2.0f, this->hitbox.getSize().y / 2.0f);
     this->hitbox.setPosition(this->body.getPosition().x
-                             + this->body.getGlobalBounds().width / 2.0f,
-                             this->body.getPosition().y + this->body.getGlobalBounds().height / 2.0f);
-    // this->hitbox.setPosition(this->body.getPosition());
+                         + this->body.getGlobalBounds().width / 2.0f,
+                         this->body.getPosition().y + this->body.getGlobalBounds().height / 2.0f);
+    std::cout<<"Platform created\n";
 }
+
+// Platform::Platform(const sf::Vector2f &pos, const std::string &texturePath) {
+//     this->texture=texture_manager.getTexture(texturePath);
+//     this->body.setSize(sf::Vector2f(100.0f,40.0f));
+//     this->body.setPosition(pos);
+//     this->body.setFillColor(sf::Color(0,0,50));
+//     // this->hitbox.setFillColor(sf::Color(255,0,0,50));
+//     this->body.setTexture(&this->texture);
+//     this->body.setOutlineColor(sf::Color::White);
+//     this->body.setOutlineThickness(5.0f);
+//     this->hitbox.setSize(sf::Vector2f(100.0f,40.0f));
+//     this->hitbox.setOrigin(this->hitbox.getSize().x / 2.0f, this->hitbox.getSize().y / 2.0f);
+//     this->hitbox.setPosition(this->body.getPosition().x
+//                              + this->body.getGlobalBounds().width / 2.0f,
+//                              this->body.getPosition().y + this->body.getGlobalBounds().height / 2.0f);
+// }
 void Platform::onCollision(Player &player, bool &endGame, float &velocity) const  {
     if(this->hitbox.getGlobalBounds().intersects(player.getBounds())) {
         //daca jucatorul intersecteaza obiectul de sus

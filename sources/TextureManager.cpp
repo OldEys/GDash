@@ -2,11 +2,13 @@
 
 #include <iostream>
 
+#include "../headers/Exceptions.h"
+
 sf::Texture &TextureManager::getTexture(const std::string &name) {
     if (!textures.contains(name)) {
         sf::Texture texture;
         if (!texture.loadFromFile(name)) {
-            std::cerr << "Texture loading error from:" << name << "\n";
+            throw Texture_error("Error loading texture: " + name);
         } else {
             std::cout << "Texture loaded succesfully: " << name << "\n";
         }

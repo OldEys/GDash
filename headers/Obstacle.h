@@ -10,12 +10,14 @@ protected:
     sf::RectangleShape body;
     sf::RectangleShape hitbox;
     sf::Texture texture;
-    sf::Vector2f position;
     static TextureManager texture_manager;
 public:
+    Obstacle()=default;
+    Obstacle(const std::string &texturePath, sf::Vector2f bodySize, sf::Color obsColor, sf::Color outColor,
+             float outThick,
+             sf::Vector2f hitboxSize);
     void adjustPositionX(float offset);
     sf::Vector2f getPosition()const;
-    Obstacle()=default;
     virtual ~Obstacle()=default;
     Obstacle(const Obstacle&);
     Obstacle& operator=(const Obstacle&);
@@ -25,6 +27,8 @@ public:
 
     void updateObstacle(float velocity,double deltaTime);
     void renderObstacle(sf::RenderWindow& window);
+
+
     void nviOnCollision(Player& player,bool &endGame,float& velocity){
         onCollision(player,endGame,velocity);
     }

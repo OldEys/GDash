@@ -13,6 +13,18 @@ void Obstacle::renderObstacle(sf::RenderWindow &window) {
     // window.draw(this->hitbox);
 }
 
+Obstacle::Obstacle(const std::string &texturePath, sf::Vector2f bodySize, sf::Color obsColor,
+                   sf::Color outColor, float outThick, sf::Vector2f hitboxSize) {
+    this->texture = texture_manager.getTexture(texturePath);
+    this->body.setSize(sf::Vector2f(bodySize));
+    this->body.setFillColor(sf::Color(obsColor));
+    this->body.setTexture(&this->texture);
+    this->body.setOutlineColor(outColor);
+    this->body.setOutlineThickness(outThick);
+    this->hitbox.setSize(sf::Vector2f(hitboxSize));
+    this->hitbox.setOrigin(this->hitbox.getSize().x / 2.0f, this->hitbox.getSize().y / 2.0f);
+}
+
 void Obstacle::adjustPositionX(float offset) {
     sf::Vector2f currentPosition = this->body.getPosition();
     currentPosition.x += offset;

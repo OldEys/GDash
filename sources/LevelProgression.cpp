@@ -5,6 +5,8 @@
 #include <cmath>
 #include <SFML/Graphics.hpp>
 
+#include "../headers/Exceptions.h"
+
 LevelProgression::LevelProgression() {
     progress_bar=this->RoundedRectangle(1920.0f/2-(border_width+4*border_radius)/2,20.0f,border_width,border_height,border_radius,
         sf::Color::Transparent,5.0f,sf::Color::White);
@@ -12,7 +14,7 @@ LevelProgression::LevelProgression() {
     progress_bar_fill.setPosition(1920.0f/2-(border_width+4*border_radius)/2 -border_radius*2.0f,20.0f);
     progress_bar_fill.setSize(sf::Vector2f(0.0f,border_height));
     if(!font.loadFromFile("font/game_font.otf")) {
-        std::cerr<<"Error loading font"<<std::endl;
+        throw Font_error("Font could not be loaded");
     }
     level_percent.setFont(font);
     level_percent.setCharacterSize(50);

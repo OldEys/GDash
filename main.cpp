@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "headers/Exceptions.h"
 #include "headers/Game.h"
 int main() {
     Game game;
@@ -8,7 +9,6 @@ int main() {
     game.update();
     game.render();
     }
-    // operator<<(std::cout,game);
-    // std::cout << game;
+    operator<<(std::cout,game);
     return 0;
 }

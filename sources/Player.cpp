@@ -1,21 +1,23 @@
 #include "../headers/Player.h"
 #include <iostream>
 #include <cmath>
+
+#include "../headers/Exceptions.h"
 #include "../headers/Ground.h"
 #define GRAVITY 7500.0f
 
 Player::Player(float position)
 : isJumping(false), isDead(false), jumpSpeed(0.0f), jumpHeight(250.0f) {
-    this->body.setSize(sf::Vector2f(100.0f, 100.0f));
-    if (!this->texture.loadFromFile("images/Player.png")) {
-        std::cerr << "Failed to load texture" << std::endl;
-    }
+if (!this->texture.loadFromFile("images/Player.png")) {
+    throw Texture_error("Failed to load player texture\n");
+}
+if (!this->death_buffer.loadFromFile("sound/death_sound.ogg")) {
+    throw Sound_error("Failed to load death sound \n");
+}
+this->body.setSize(sf::Vector2f(100.0f, 100.0f));
     this->body.setTexture(&texture);
     body.setPosition(sf::Vector2f(350.0f, position - body.getSize().y / 2.0f));
     body.setOrigin(body.getSize().x / 2.0f, body.getSize().y / 2.0f);
-    if (!this->death_buffer.loadFromFile("sound/death_sound.ogg")) {
-        std::cerr << "Failed to load death buffer" << std::endl;
-    }
     this->death_sound.setBuffer(this->death_buffer);
     this->death_sound.setVolume(100);
 }

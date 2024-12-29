@@ -8,7 +8,7 @@ class Block : public Obstacle{
 
 public:
     Block()=default;
-    explicit Block(const sf::Vector2f& pos,const std::string& texturePath);
+    explicit Block(const sf::Vector2f& pos);
     std::shared_ptr<Obstacle> clone()const override {
         return std::make_shared<Block>(*this);
     }

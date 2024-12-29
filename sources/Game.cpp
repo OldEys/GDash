@@ -6,6 +6,7 @@
 
 #include "../env_fixes.h"
 #include "../headers/Block.h"
+#include "../headers/Exceptions.h"
 #include "../headers/Platform.h"
 #include "../headers/Short_Spike.h"
 #include "../headers/Spike.h"
@@ -15,12 +16,29 @@
 Game::Game() : window(nullptr),
                endGame(false) {
     this->initWindow();
-    this->loadChunks();
-    ground = Ground(*this->window);
-    player = Player(ground.getGroundPos());
-    // attempts = GameFont(sf::Vector2f(player.getPosition().x+400.0f,player.getPosition().y-200.0f));
-    // attempts = GameFont(sf::Vector2f(400.0f,400.0f));
-    this->background.loadFromFile("images/background1-3.png");
+    try {
+        if (!this->background.loadFromFile("images/background1-3.png")) {
+            throw Texture_error("Failed to load background image");
+        }
+        if (!this->buffer.loadFromFile("sound/Level_soundtrack.ogg")) {
+            throw Texture_error("Failed to load sound buffer");
+        }
+        this->loadChunks();
+        ground = Ground(*this->window);
+        player = Player(ground.getGroundPos());
+    } catch (Texture_error &e) {
+        std::cout << e.what() << std::endl;
+        window->close();
+    }catch (Sound_error &e) {
+        std::cout << e.what() << std::endl;
+        window->close();
+    }catch (Font_error &e) {
+        std::cout << e.what() << std::endl;
+        window->close();
+    }catch (InputFile_error &e) {
+        std::cout << e.what() << std::endl;
+        window->close();
+    }
     this->backgroundSprite.setTexture(this->background);
     this->backgroundSprite.setPosition(0.0f, 0.0f);
     //setam scala pentru spriteul backgroundului pentru a acoperi intreg windowul
@@ -29,14 +47,12 @@ Game::Game() : window(nullptr),
         static_cast<float>(this->window->getSize().y) / static_cast<float>(this->background.getSize().y)
     );
     this->backgroundSprite.setColor(sf::Color::Blue);
-    this->buffer.loadFromFile("sound/Level_soundtrack.ogg");
+
     this->music.setBuffer(this->buffer);
     music.play();
-
     this->view.setCenter(player.getPosition().x + 620.0f, player.getPosition().y - 250.0f);
     this->view.setSize(1920.0f, 1080.0f);
     this->window->setView(this->view);
-    std::cout << "Game constructor\n";
 }
 bool Game::isRunning() const {
     return this->window->isOpen();
@@ -122,15 +138,15 @@ void Game::loadChunks() {
     //este gestionat vectorul de obiecte active
     std::ifstream fin("obstacole.in");
     if (!fin.is_open()) {
-        std::cout << "File can't open\n";
+        throw InputFile_error("Error opening obstacle input file");
     }
     std::map<std::string, std::function<std::shared_ptr<Obstacle>(sf::Vector2f)> > obstacleFactory =
     {
-        {std::string("block"), [](sf::Vector2f pos) { return Block(pos, "images/ground_block.png").clone(); }},
-        {std::string("spike"), [](sf::Vector2f pos) { return Spike(pos, "images/spike.png").clone(); }},
-        {std::string("platform"), [](sf::Vector2f pos) { return Platform(pos, "images/ground_block.png").clone(); }},
-        {std::string("short"), [](sf::Vector2f pos) { return Short_Spike(pos, "images/spike.png").clone(); }},
-        {std::string("final"), [](sf::Vector2f pos) { return Final(pos, "images/final.png").clone(); }}
+        {std::string("block"), [](sf::Vector2f pos) { return Block(pos).clone(); }},
+        {std::string("spike"), [](sf::Vector2f pos) { return Spike(pos).clone(); }},
+        {std::string("platform"), [](sf::Vector2f pos) { return Platform(pos).clone(); }},
+        {std::string("short"), [](sf::Vector2f pos) { return Short_Spike(pos).clone(); }},
+        {std::string("final"), [](sf::Vector2f pos) { return Final(pos).clone(); }}
     };
     // std::map<std::string, std::function<std::shared_ptr<Obstacle>(sf::Vector2f)>> obstacleFactory = {
     //     {std::string("block"), [](sf::Vector2f pos) { return std::make_shared<Block>(pos, "images/ground_block.png"); }},

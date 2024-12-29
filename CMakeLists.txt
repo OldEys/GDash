@@ -82,6 +82,8 @@ add_executable(${PROJECT_NAME}
         headers/AttemptCounter.h
         sources/DeathEffect.cpp
         headers/DeathEffect.h
+        sources/Exceptions.cpp
+        headers/Exceptions.h
 )
 
 include(cmake/CompilerFlags.cmake)
