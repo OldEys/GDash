@@ -5,7 +5,7 @@
 
 Ground::Ground(const sf::RenderWindow &window) : groundTexture() {
     if (!groundTexture.loadFromFile("images/ground-long.png")) {
-        throw Texture_error("Failed to load ground texture\n");
+        throw Texture_error("images/ground-long.png");
     }
     
     groundBody1.setTexture(&groundTexture);

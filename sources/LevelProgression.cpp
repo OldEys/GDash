@@ -14,7 +14,7 @@ LevelProgression::LevelProgression() {
     progress_bar_fill.setPosition(1920.0f/2-(border_width+4*border_radius)/2 -border_radius*2.0f,20.0f);
     progress_bar_fill.setSize(sf::Vector2f(0.0f,border_height));
     if(!font.loadFromFile("font/game_font.otf")) {
-        throw Font_error("Font could not be loaded");
+        throw Font_error("font/game_font.otf");
     }
     level_percent.setFont(font);
     level_percent.setCharacterSize(50);

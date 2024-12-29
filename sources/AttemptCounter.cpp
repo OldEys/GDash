@@ -1,9 +1,11 @@
 #include"../headers/AttemptCounter.h"
 #include <iostream>
 
+#include "../headers/Exceptions.h"
+
 AttemptCounter::AttemptCounter() {
     if (!font.loadFromFile("font/game_font.otf")) {
-        std::cerr << "Failed to load font." << std::endl;
+        throw Font_error("font/game_font.otf");
     }
     attempts_text.setFont(font);
     attempts_text.setCharacterSize(100);

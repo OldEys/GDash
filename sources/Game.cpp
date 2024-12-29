@@ -18,10 +18,10 @@ Game::Game() : window(nullptr),
     this->initWindow();
     try {
         if (!this->background.loadFromFile("images/background1-3.png")) {
-            throw Texture_error("Failed to load background image");
+            throw Texture_error("images/background1-3.png");
         }
         if (!this->buffer.loadFromFile("sound/Level_soundtrack.ogg")) {
-            throw Texture_error("Failed to load sound buffer");
+            throw Texture_error("sound/Level_soundtrack.ogg");
         }
         this->loadChunks();
         ground = Ground(*this->window);

@@ -8,7 +8,7 @@ sf::Texture &TextureManager::getTexture(const std::string &name) {
     if (!textures.contains(name)) {
         sf::Texture texture;
         if (!texture.loadFromFile(name)) {
-            throw Texture_error("Error loading texture: " + name);
+            throw Texture_error(name);
         } else {
             std::cout << "Texture loaded succesfully: " << name << "\n";
         }

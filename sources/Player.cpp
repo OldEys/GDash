@@ -9,10 +9,10 @@
 Player::Player(float position)
 : isJumping(false), isDead(false), jumpSpeed(0.0f), jumpHeight(250.0f) {
 if (!this->texture.loadFromFile("images/Player.png")) {
-    throw Texture_error("Failed to load player texture\n");
+    throw Texture_error("images/Player.png");
 }
 if (!this->death_buffer.loadFromFile("sound/death_sound.ogg")) {
-    throw Sound_error("Failed to load death sound \n");
+    throw Sound_error("sound/death_sound.ogg");
 }
 this->body.setSize(sf::Vector2f(100.0f, 100.0f));
     this->body.setTexture(&texture);
