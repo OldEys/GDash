@@ -8,19 +8,19 @@ class Exception :public std::runtime_error{
 };
 class Font_error:public Exception{
 public:
-    explicit Font_error(std::string path);
+    explicit Font_error(const std::string& path);
 };
 class Texture_error:public Exception {
 public:
-    explicit Texture_error(std::string path);
+    explicit Texture_error(const std::string& path);
 };
 class Sound_error:public Exception {
 public:
-    explicit Sound_error(std::string path);
+    explicit Sound_error(const std::string& path);
 };
 class InputFile_error:public Exception {
 public:
-    explicit InputFile_error(std::string path);
+    explicit InputFile_error(const std::string& path);
 };
 
 #endif //EXCEPTIONS_H
