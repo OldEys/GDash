@@ -9,5 +9,6 @@ Texture_error::Texture_error(const std::string &path) : Exception(std::string("C
 Sound_error::Sound_error(const std::string &path) : Exception(std::string("Could not load the sound " + path)) {
 }
 
-InputFile_error::InputFile_error(const std::string &path) : Exception(std::string("Could not load the input file " + path)) {
+InputFile_error::InputFile_error(const std::string &path) : Exception(
+    std::string("Could not load the input file " + path)) {
 }
