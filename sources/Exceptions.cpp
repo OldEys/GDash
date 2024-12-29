@@ -1,4 +1,5 @@
 #include"../headers/Exceptions.h"
+#include<string>
 
 Font_error::Font_error(const std::string &path) : Exception(std::string("Could not load the font ").append(path)) {
 }
