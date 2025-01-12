@@ -155,6 +155,7 @@ void Player::handleJumpOrbCollision() {
         mouseheld = false;
     }
 }
+
 //785, coord y pentru plasarea blocurilor pe podea
 sf::FloatRect Player::getBounds() const {
     return body.getGlobalBounds();
