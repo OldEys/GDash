@@ -25,14 +25,14 @@ Final::Final(const sf::Vector2f& pos) : Obstacle("images/final.png",sf::Vector2f
 //                              + this->body.getGlobalBounds().width / 2.0f,
 //                              this->body.getPosition().y + this->body.getGlobalBounds().height / 2.0f);
 // }
-void Final::finalProximity(Player &player,float& velocity,double deltaTime) {
-    static bool positioned=false;
+void Final::finalProximity(Player &player, float &velocity, double deltaTime) {
+    static bool positioned = false;
     //daca playerul se apropie de final atunci tot ce se misca spre stanga se opreste iar playerul
     //care de obicei statea pe loc incepe sa se miste inspre dreapta pentru a crea efectul
     //de intrat in portal
 
-    static float storedVel=0.0f;
-    if(this->getPosition().x>1700 && this->getPosition().x<1740) {
+    static float storedVel = 0.0f;
+    if (this->getPosition().x > 1700 && this->getPosition().x < 1740) {
         if (!positioned) {
             //daca nu e pozitionat portalul final il pozitionam
             //astfel incat sa fie exact in dreapta ecranului
@@ -40,8 +40,8 @@ void Final::finalProximity(Player &player,float& velocity,double deltaTime) {
             this->body.setPosition(1720.0f, this->getPosition().y);
             positioned = true;
         }
-        player.moveTowardsEnd(storedVel,deltaTime);
-        velocity=0.0f;
+        player.moveTowardsEnd(storedVel, deltaTime);
+        velocity = 0.0f;
     } else {
         positioned = false;
         storedVel = 0.0f;

@@ -35,8 +35,10 @@ public:
     }
     virtual std::shared_ptr<Obstacle> clone()const=0;
 private:
-    virtual void onCollision(Player& player,bool &endGame,float& velocity)=0;
-    virtual void afis(std::ostream& os) const {};
+    virtual void onCollision(Player &player, bool &endGame, float &velocity) =0;
+
+    virtual void afis(std::ostream &os) const {
+    };
 };
 
 #endif

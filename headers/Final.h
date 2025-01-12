@@ -5,6 +5,7 @@
 
 class Final : public Obstacle {
     bool endGame;
+
 public:
     Final() = default;
 
@@ -14,11 +15,13 @@ public:
         return std::make_shared<Final>(*this);
     }
     void finalProximity(Player &player, float &velocity, double deltaTime);
+
     void closeGame(sf::RenderWindow &window);
 
 private:
     void onCollision(Player &player, bool &restartGame, float &velocity) override;
-    void afis(std::ostream &os)const override;
+
+    void afis(std::ostream &os) const override;
 
 };
 #endif //FINAL_H

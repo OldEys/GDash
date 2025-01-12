@@ -21,5 +21,5 @@ void Short_Spike::onCollision(Player &player, bool &restartGame, float &velocity
 }
 
 void Short_Spike::afis(std::ostream &os) const {
-    os<<"This is a short spike\n";
+    os << "This is a short spike\n";
 }

@@ -13,9 +13,9 @@ public:
         return std::make_shared<Short_Spike>(*this);
     }
 private:
-    void onCollision(Player& player,bool &restartGame,float& velocity) override;
-    void afis(std::ostream &os) const override;
+    void onCollision(Player &player, bool &restartGame, float &velocity) override;
 
+    void afis(std::ostream &os) const override;
 };
 
 #endif //SHORT_SPIKE_H
