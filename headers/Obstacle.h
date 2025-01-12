@@ -25,6 +25,7 @@ public:
     Obstacle& operator=(Obstacle&&) noexcept;
     friend std::ostream& operator<<(std::ostream& os, const Obstacle& obstacle);
 
+
     void updateObstacle(float velocity,double deltaTime);
     void renderObstacle(sf::RenderWindow& window);
 
@@ -34,7 +35,8 @@ public:
     }
     virtual std::shared_ptr<Obstacle> clone()const=0;
 private:
-    virtual void onCollision(Player& player,bool &endGame,float& velocity)const=0;
+    virtual void onCollision(Player& player,bool &endGame,float& velocity)=0;
+    virtual void afis(std::ostream& os) const {};
 };
 
 #endif

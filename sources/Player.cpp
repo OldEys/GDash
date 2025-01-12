@@ -141,8 +141,8 @@ void Player::handleLandingOnObstacle(float positionY) {
     isJumping = false;
 }
 
-void Player::handleLeftCollision(bool &endGame, float &velocity) {
-    endGame = true;
+void Player::handleLeftCollision(bool &restartGame, float &velocity) {
+    restartGame = true;
     velocity = 0.0f;
 }
 

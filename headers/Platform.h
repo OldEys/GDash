@@ -11,11 +11,13 @@ public:
         return std::make_shared<Platform>(*this);
     }
 private:
-    void onCollision(Player& player,bool &endGame,float& velocity) const override;
+    void onCollision(Player& player,bool &restartGame,float& velocity) override;
 
     bool isOnTopOfBlock(const Player &player) const;
 
     bool fallingFromBlock(const Player &player) const;
+
+    void afis(std::ostream& os)const override;
 };
 
 #endif //PLATFORM_H

@@ -14,31 +14,16 @@
 #define MIN_DELTA_TIME_FPS 60.0f
 #define ALIGN_VIEW_Y 520.0f
 Game::Game() : window(nullptr),
-               endGame(false) {
+               restartGame(false) {
     this->initWindow();
-    try {
-        if (!this->background.loadFromFile("images/background1-3.png")) {
-            throw Texture_error("images/background1-3.png");
-        }
-        if (!this->buffer.loadFromFile("sound/Level_soundtrack.ogg")) {
-            throw Texture_error("sound/Level_soundtrack.ogg");
-        }
-        this->loadChunks();
-        ground = Ground(*this->window);
-        player = Player(ground.getGroundPos());
-    } catch (Texture_error &e) {
-        std::cout << e.what() << std::endl;
-        window->close();
-    }catch (Sound_error &e) {
-        std::cout << e.what() << std::endl;
-        window->close();
-    }catch (Font_error &e) {
-        std::cout << e.what() << std::endl;
-        window->close();
-    }catch (InputFile_error &e) {
-        std::cout << e.what() << std::endl;
-        window->close();
+    if (!this->background.loadFromFile("images/background1-3.png")) {
+        throw Texture_error("images/background1-3.png");
     }
+    if (!this->buffer.loadFromFile("sound/Level_soundtrack.ogg")) {
+        throw Texture_error("sound/Level_soundtrack.ogg");
+    }
+    ground = Ground(*this->window);
+    player = Player(ground.getGroundPos());
     this->backgroundSprite.setTexture(this->background);
     this->backgroundSprite.setPosition(0.0f, 0.0f);
     //setam scala pentru spriteul backgroundului pentru a acoperi intreg windowul
@@ -49,10 +34,11 @@ Game::Game() : window(nullptr),
     this->backgroundSprite.setColor(sf::Color::Blue);
 
     this->music.setBuffer(this->buffer);
-    music.play();
     this->view.setCenter(player.getPosition().x + 620.0f, player.getPosition().y - 250.0f);
     this->view.setSize(1920.0f, 1080.0f);
     this->window->setView(this->view);
+    this->loadChunks();
+    music.play();
 }
 bool Game::isRunning() const {
     return this->window->isOpen();
@@ -88,7 +74,7 @@ void Game::pollEvents() {
 bool isPaused = false;
 void Game::update() {
     this->pollEvents();
-    if (endGame) {
+    if (restartGame) {
         music.stop();
         if (player.getState()) {
             return;
@@ -117,10 +103,11 @@ void Game::update() {
         }
 
         for (const auto &obstacle: this->obstacles) {
-            obstacle->nviOnCollision(player, endGame, this->velocity);
+            obstacle->nviOnCollision(player, restartGame, this->velocity);
 
             if (auto obs = std::dynamic_pointer_cast<Final>(obstacle)) {
                 obs->finalProximity(player, velocity, deltaTime);
+                obs->closeGame(*window);
             }
         }
         this->updateView();
@@ -148,13 +135,6 @@ void Game::loadChunks() {
         {std::string("short"), [](sf::Vector2f pos) { return Short_Spike(pos).clone(); }},
         {std::string("final"), [](sf::Vector2f pos) { return Final(pos).clone(); }}
     };
-    // std::map<std::string, std::function<std::shared_ptr<Obstacle>(sf::Vector2f)>> obstacleFactory = {
-    //     {std::string("block"), [](sf::Vector2f pos) { return std::make_shared<Block>(pos, "images/ground_block.png"); }},
-    //     {std::string("spike"), [](sf::Vector2f pos) { return std::make_shared<Spike>(pos, "images/spike.png"); }},
-    //     {std::string("platform"), [](sf::Vector2f pos) { return std::make_shared<Platform>(pos, "images/ground_block.png"); }},
-    //     {std::string("short"), [](sf::Vector2f pos) { return std::make_shared<Short_Spike>(pos, "images/spike.png"); }},
-    //     {std::string("final"), [](sf::Vector2f pos) { return std::make_shared<Final>(pos, "images/final.png"); }}
-    // };
     Chunk currentChunk(0.0f, chunkSize);
     std::string objType;
     float x, y;
@@ -204,15 +184,13 @@ void Game::resetLevel() {
     this->chunks.clear();
     this->loadChunks();
     player.fellFromBlock(true);
-    this->endGame = false;
+    this->restartGame = false;
 
     attempts.update_attempts_number();
     attempts.resetPosition(sf::Vector2f(500.0f, 300.0f));
 
     this->obstacles.clear();
     currentChunkIndex = 0;
-    // music.stop();
-    // sf::sleep(sf::milliseconds(1000));
     music.play();
 }
 

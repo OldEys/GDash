@@ -58,7 +58,7 @@ public:
 
     void handleLandingOnObstacle(float positionY);
 
-    void handleLeftCollision(bool &endGame, float &velocity);
+    void handleLeftCollision(bool &restartGame, float &velocity);
 
     sf::FloatRect getBounds() const;
 

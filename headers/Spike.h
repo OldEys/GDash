@@ -13,7 +13,8 @@ public:
         return std::make_shared<Spike>(*this);
     }
 private:
-    void onCollision(Player& player,bool &endGame,float& velocity) const override;
+    void afis(std::ostream &os) const override;
+    void onCollision(Player& player,bool &restartGame,float& velocity) override;
 };
 
 #endif //SPIKE_H

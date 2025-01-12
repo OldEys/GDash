@@ -3,6 +3,8 @@
 #include <iostream>
 
 TextureManager Obstacle::texture_manager;
+//
+
 
 void Obstacle::updateObstacle(float velocity,double deltaTime) {
     body.move(static_cast<float>(velocity*deltaTime),0.0f);
@@ -83,5 +85,6 @@ std::ostream & operator<<(std::ostream &os, const Obstacle &obstacle) {
     os<<"position x: "<<obstacle.getPosition().x<<" y : "<<obstacle.getPosition().y<<"\n";
     os<<"size x: "<<obstacle.body.getSize().x<<" y: "<<obstacle.body.getSize().y<<"\n";
     os<<"hitbox size x: "<<obstacle.hitbox.getSize().x<<" y: "<<obstacle.hitbox.getSize().y<<"\n";
+    obstacle.afis(os);
     return os;
 }

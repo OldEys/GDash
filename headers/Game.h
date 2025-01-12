@@ -28,7 +28,7 @@ class Game {
     std::deque<std::shared_ptr<Obstacle> > obstacles; //lista obstacolelor active
     float chunkSize=2000.0f;
     long long unsigned int currentChunkIndex=0;
-    bool endGame;
+    bool restartGame;
     float velocity=850.0f;
 
     double levelLength = 0;

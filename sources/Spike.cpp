@@ -10,11 +10,16 @@ Spike::Spike(const sf::Vector2f &pos) : Obstacle("images/spike.png", sf::Vector2
                              this->body.getPosition().y + this->body.getGlobalBounds().height / 2.0f);
     std::cout << "Spike created\n";
 }
-void Spike::onCollision(Player &player, bool &endGame, float &velocity) const {
+
+void Spike::afis(std::ostream &os) const {
+    os<< "This is a spike \n";
+}
+
+void Spike::onCollision(Player &player, bool &restartGame, float &velocity) {
     if(player.boundingBoxTest(this->hitbox.getPosition(),this->hitbox.getSize(),this->hitbox.getRotation()))
     {
         player.triggerDeath();
-        endGame = true;
+        restartGame = true;
         velocity = 0.0f;
     }
 }

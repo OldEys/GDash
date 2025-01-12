@@ -12,7 +12,7 @@ Block::Block(const sf::Vector2f& pos) : Obstacle("images/ground_block.png",sf::V
     std::cout<<"Block created\n";
 }
 
-void Block::onCollision(Player &player, bool &endGame, float &velocity) const  {
+void Block::onCollision(Player &player, bool &restartGame, float &velocity) {
     if(this->hitbox.getGlobalBounds().intersects(player.getBounds())) {
             //daca jucatorul intersecteaza obiectul de sus
             if (isOnTopOfBlock(player)) {
@@ -24,7 +24,7 @@ void Block::onCollision(Player &player, bool &endGame, float &velocity) const  {
                 } else {
                     //se afla in stanga lui
                     player.triggerDeath();
-                    player.handleLeftCollision(endGame, velocity);
+                    player.handleLeftCollision(restartGame, velocity);
                 }
             }
     }
@@ -47,4 +47,8 @@ bool Block::fallingFromBlock(const Player& player)const {
     return ( player.getBounds().left > this->hitbox.getGlobalBounds().left +
             this->hitbox.getGlobalBounds().width && player.getBounds().top + player.getBounds().height
             > this->hitbox.getGlobalBounds().top);
+}
+
+void Block::afis(std::ostream &os) const {
+    os << "This is a block\n";
 }

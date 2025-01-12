@@ -2,7 +2,8 @@
 #include <iostream>
 
 Final::Final(const sf::Vector2f& pos) : Obstacle("images/final.png",sf::Vector2f(400.0f,890.0f),
-    sf::Color::White,sf::Color::White,0.0f,sf::Vector2f(200.0f,890.0f)) {
+                                                 sf::Color::White, sf::Color::White, 0.0f,
+                                                 sf::Vector2f(200.0f, 890.0f)), endGame(false) {
     this->body.setPosition(pos);
     this->hitbox.setPosition(this->body.getPosition().x
                          + this->body.getGlobalBounds().width / 2.0f,
@@ -26,9 +27,15 @@ Final::Final(const sf::Vector2f& pos) : Obstacle("images/final.png",sf::Vector2f
 // }
 void Final::finalProximity(Player &player,float& velocity,double deltaTime) {
     static bool positioned=false;
+    //daca playerul se apropie de final atunci tot ce se misca spre stanga se opreste iar playerul
+    //care de obicei statea pe loc incepe sa se miste inspre dreapta pentru a crea efectul
+    //de intrat in portal
+
     static float storedVel=0.0f;
     if(this->getPosition().x>1700 && this->getPosition().x<1740) {
         if (!positioned) {
+            //daca nu e pozitionat portalul final il pozitionam
+            //astfel incat sa fie exact in dreapta ecranului
             storedVel = velocity;
             this->body.setPosition(1720.0f, this->getPosition().y);
             positioned = true;
@@ -40,9 +47,20 @@ void Final::finalProximity(Player &player,float& velocity,double deltaTime) {
         storedVel = 0.0f;
     }
 }
-void Final::onCollision(Player &player, bool &endGame, float &) const {
+
+void Final::closeGame(sf::RenderWindow &window) {
+    if(endGame)
+        window.close();
+}
+
+void Final::onCollision(Player &player, bool &, float &) {
     if (this->hitbox.getGlobalBounds().intersects(player.getBounds())) {
         endGame = true;
         std::cout << "Level completed , well done!\n";
     }
+}
+
+
+void Final::afis(std::ostream &os) const {
+    os<<"This is an end portal\n";
 }
