@@ -22,6 +22,5 @@ private:
     void onCollision(Player &player, bool &restartGame, float &velocity) override;
 
     void afis(std::ostream &os) const override;
-
 };
 #endif //FINAL_H
