@@ -38,7 +38,7 @@ public:
         os << "is it jumping ?: " << obj.isJumping << "\n";
         os<< "jumpHeight: " << obj.jumpHeight << "\n";
         os<< "jumpSpeed: " << obj.jumpSpeed << "\n";
-        os<<" position x: " << obj.getPosition().x<<" position y: " <<obj.getPosition().y << "\n";
+        os << " position x: " << obj.getPosition().x << " position y: " << obj.getPosition().y << "\n";
         return os;
     }
 

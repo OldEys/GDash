@@ -11,8 +11,10 @@ class Ground {
 public:
     explicit Ground(const sf::RenderWindow &window);
     friend std::ostream & operator<<(std::ostream &os, const Ground &obj) {
-               os<< " groundBody1 position x : " << obj.groundBody1.getPosition().x<<" y: "<<obj.groundBody1.getPosition().y;
-               os<< " groundBody2 position x : " << obj.groundBody2.getPosition().x<<" y: "<<obj.groundBody2.getPosition().y;
+        os << " groundBody1 position x : " << obj.groundBody1.getPosition().x << " y: " << obj.groundBody1.getPosition()
+                .y;
+        os << " groundBody2 position x : " << obj.groundBody2.getPosition().x << " y: " << obj.groundBody2.getPosition()
+                .y;
         return os;
     }
 
