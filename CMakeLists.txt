@@ -84,6 +84,8 @@ add_executable(${PROJECT_NAME}
         headers/DeathEffect.h
         sources/Exceptions.cpp
         headers/Exceptions.h
+        headers/JumpOrb.h
+        sources/JumpOrb.cpp
 )
 
 include(cmake/CompilerFlags.cmake)

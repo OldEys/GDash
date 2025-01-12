@@ -60,6 +60,8 @@ public:
 
     void handleLeftCollision(bool &restartGame, float &velocity);
 
+    void handleJumpOrbCollision();
+
     sf::FloatRect getBounds() const;
 
     double calculateFallingSide(double angle);

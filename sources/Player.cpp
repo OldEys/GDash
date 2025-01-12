@@ -144,6 +144,17 @@ void Player::handleLeftCollision(bool &restartGame, float &velocity) {
     velocity = 0.0f;
 }
 
+void Player::handleJumpOrbCollision() {
+    static bool mouseheld = false;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        if (!mouseheld) {
+            isJumping = false;
+            mouseheld = true;
+        }
+    } else {
+        mouseheld = false;
+    }
+}
 //785, coord y pentru plasarea blocurilor pe podea
 sf::FloatRect Player::getBounds() const {
     return body.getGlobalBounds();

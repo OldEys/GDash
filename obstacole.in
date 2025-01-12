@@ -1,8 +1,13 @@
-short 100 790
-block 1000 785
-spike 1100 790
-spike 1900 790
-spike 2000 790
+spike 100 790
+block 800 785
+spike 900 790
+short 1600 790
+short 1700 790
+jumporb 1750 690
+short 1800 790
+short 1900 790
+spike 2500 790
+spike 2600 790
 spike 3600 790
 spike 3700 790
 block 3800 785
@@ -116,8 +121,19 @@ block 15900 785
 block 15900 485
 spike 15900 390
 
+spike 16300 790
 spike 16400 790
-spike 16500 790
-block 16600 785
+block 16500 785
 
-final 18400 0
+spike 17000 790
+spike 17100 790
+jumporb 17150 690
+spike 17200 790
+spike 17300 790
+spike 17400 790
+jumporb 17450 590
+spike 17500 790
+spike 17600 790
+spike 17700 790
+
+final 19400 0

@@ -11,6 +11,7 @@
 #include "../headers/Short_Spike.h"
 #include "../headers/Spike.h"
 #include "../headers/Final.h"
+#include "../headers/JumpOrb.h"
 #define MIN_DELTA_TIME_FPS 60.0f
 #define ALIGN_VIEW_Y 520.0f
 Game::Game() : window(nullptr),
@@ -133,6 +134,7 @@ void Game::loadChunks() {
         {std::string("spike"), [](sf::Vector2f pos) { return Spike(pos).clone(); }},
         {std::string("platform"), [](sf::Vector2f pos) { return Platform(pos).clone(); }},
         {std::string("short"), [](sf::Vector2f pos) { return Short_Spike(pos).clone(); }},
+        {std::string("jumporb"), [](sf::Vector2f pos) { return JumpOrb(pos).clone(); }},
         {std::string("final"), [](sf::Vector2f pos) { return Final(pos).clone(); }}
     };
     Chunk currentChunk(0.0f, chunkSize);
