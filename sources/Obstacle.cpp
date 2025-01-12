@@ -3,7 +3,6 @@
 #include <iostream>
 
 TextureManager Obstacle::texture_manager;
-//
 
 
 void Obstacle::updateObstacle(float velocity,double deltaTime) {

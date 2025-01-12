@@ -38,6 +38,7 @@ private:
     virtual void onCollision(Player &player, bool &endGame, float &velocity) =0;
 
     virtual void afis(std::ostream &os) const {
+        os<<"This is an unknown obstacle \n";
     };
 };
 

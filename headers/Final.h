@@ -7,7 +7,6 @@ class Final : public Obstacle {
     bool endGame;
 
 public:
-    Final() = default;
 
     explicit Final(const sf::Vector2f &pos);
 

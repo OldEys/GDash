@@ -116,8 +116,6 @@ void Player::updatePlayer(const double deltaTime) {
 void Player::renderPlayer(sf::RenderWindow &window) {
     if (!isDead) {
         window.draw(body);
-    } else {
-        std::cout << "nu randez player\n";
     }
 }
 

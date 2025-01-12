@@ -267,7 +267,7 @@ void Game::render() {
 std::ostream &operator<<(std::ostream &os, const Game &game) {
     os << "Game Objects number: " << game.obstacles.size() << "\n";
     for (const auto &obstacle: game.obstacles) {
-        os << "obstacle : " << obstacle << "\n";
+        os << "obstacle : " << *obstacle << "\n";
     }
     os << "velocity: " << game.velocity << "\n";
     os << "deltaTime: " << game.deltaTime << "\n";
