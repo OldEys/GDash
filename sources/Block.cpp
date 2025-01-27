@@ -12,37 +12,55 @@ Block::Block(const sf::Vector2f& pos) : Obstacle("images/ground_block.png",sf::V
     std::cout<<"Block created\n";
 }
 
-void Block::onCollision(Player &player, bool &restartGame, float &velocity) {
-    if(this->hitbox.getGlobalBounds().intersects(player.getBounds())) {
-            //daca jucatorul intersecteaza obiectul de sus
-            if (isOnTopOfBlock(player)) {
+PlayerStatChanges Block::onCollisionImplem(Player &player) {
+    PlayerStatChanges changes;
+    if (this->hitbox.getGlobalBounds().intersects(player.getBounds())) {
+        if (isOnTopOfBlock(player)) {
+            std::cout<<"Cade pe block\n";
+            if (player.getBounds().left + player.getBounds().width/1.15 > this->hitbox.getGlobalBounds().left ) {
+                //pentru evitarea cazului in care playerul atinge coltul de sus si incepe sa pluteasca
                 if (player.getPosition().y < this->hitbox.getGlobalBounds().top) {
-                    //daca se afla pe obiect
-                    // handleLandingOnObstacle(obstacle);
-                    player.handleLandingOnObstacle(this->hitbox.getGlobalBounds().top -
-                        this->hitbox.getGlobalBounds().height/2.0f);
-                } else {
-                    //se afla in stanga lui
+                    std::cout<<"Se aseaza pe block\n";
+                    changes["isJumping"] = false;
+                    changes["positionY"] = this->hitbox.getGlobalBounds().top - player.getBounds().height/2.0f;
+                    changes["rotationAngle"] = player.calculateFallingSide(player.getRotationAngle());
+                    return changes;
+                }
+                if (player.getPosition().x < this->hitbox.getGlobalBounds().left) {
+                    std::cout<<"Il intersecteaza din stanga\n";
                     player.triggerDeath();
-                    player.handleLeftCollision(restartGame, velocity);
+                    changes["restartGame"] = true;
+                    return changes;
                 }
             }
-    }
-    else {
+            else {
+                player.triggerDeath();
+                changes["restartGame"] = true;
+                return changes;
+            }
+        }
+    } else {
         if (fallingFromBlock(player)) {
-            player.fellFromBlock(true);
+            std::cout<<"Cade de pe block\n";
+            changes["isJumping"] = true;
+            std::cout<<"\n";
             if (player.getPosition().y >= ON_GROUND) {
-                //daca dupa caderea de pe bloc a ajuns eventual pe sol resetam jump
-                player.fellFromBlock(false);
+                std::cout<<"A atins din nou solul\n";
+                changes["isJumping"] = false;
+                changes["rotationAngle"] = player.calculateFallingSide(player.getRotationAngle());
             }
         }
     }
+
+    return changes;
 }
 bool Block::isOnTopOfBlock(const Player &player) const {
     return (player.getBounds().top<this->hitbox.getGlobalBounds().top+
         this->hitbox.getGlobalBounds().height&&player.getBounds().top+player.getBounds().height>
-    this->hitbox.getGlobalBounds().top);
+    this->hitbox.getGlobalBounds().top );
 }
+
+
 bool Block::fallingFromBlock(const Player& player)const {
     return ( player.getBounds().left > this->hitbox.getGlobalBounds().left +
             this->hitbox.getGlobalBounds().width && player.getBounds().top + player.getBounds().height

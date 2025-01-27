@@ -5,13 +5,8 @@
 #include <thread>
 
 #include "../env_fixes.h"
-#include "../headers/Block.h"
 #include "../headers/Exceptions.h"
-#include "../headers/Platform.h"
-#include "../headers/Short_Spike.h"
-#include "../headers/Spike.h"
-#include "../headers/Final.h"
-#include "../headers/JumpOrb.h"
+#include "../headers/ObstacleFactory.h"
 #define MIN_DELTA_TIME_FPS 60.0f
 #define ALIGN_VIEW_Y 520.0f
 Game::Game() : window(nullptr),
@@ -104,7 +99,7 @@ void Game::update() {
         }
 
         for (const auto &obstacle: this->obstacles) {
-            obstacle->nviOnCollision(player, restartGame, this->velocity);
+            obstacle->onCollision(player, restartGame, velocity);
 
             if (auto obs = std::dynamic_pointer_cast<Final>(obstacle)) {
                 obs->finalProximity(player, velocity, deltaTime);
@@ -128,15 +123,7 @@ void Game::loadChunks() {
     if (!fin.is_open()) {
         throw InputFile_error("Error opening obstacle input file");
     }
-    std::map<std::string, std::function<std::shared_ptr<Obstacle>(sf::Vector2f)> > obstacleFactory =
-    {
-        {std::string("block"), [](sf::Vector2f pos) { return Block(pos).clone(); }},
-        {std::string("spike"), [](sf::Vector2f pos) { return Spike(pos).clone(); }},
-        {std::string("platform"), [](sf::Vector2f pos) { return Platform(pos).clone(); }},
-        {std::string("short"), [](sf::Vector2f pos) { return Short_Spike(pos).clone(); }},
-        {std::string("jumporb"), [](sf::Vector2f pos) { return JumpOrb(pos).clone(); }},
-        {std::string("final"), [](sf::Vector2f pos) { return Final(pos).clone(); }}
-    };
+    ObstacleFactory obstacleFactory;
     Chunk currentChunk(0.0f, chunkSize);
     std::string objType;
     float x, y;
@@ -147,21 +134,18 @@ void Game::loadChunks() {
         }
         sf::Vector2f pos(x, y);
         if (x >= currentChunk.getStartX() && x < currentChunk.getEndX()) {
-            if (obstacleFactory.find(objType) != obstacleFactory.end()) {
-                std::cout << "se add obst in current chunk\n";
-                currentChunk.addObstacle(obstacleFactory[objType](pos));
-            } else {
-                std::cerr << "Cant recognize object!\n";
+            auto obstacle = obstacleFactory.createObstacle(objType, pos);
+            if (obstacle) {
+                currentChunk.addObstacle(obstacle);
             }
         } else if (x >= currentChunk.getEndX()) {
             chunks.emplace_back(std::move(currentChunk));
             Chunk nChunk(currentChunk.getEndX(), chunkSize);
             currentChunk = nChunk;
-            if (obstacleFactory.find(objType) != obstacleFactory.end()) {
-                std::cout << "se add obst in chunkul nou\n";
-                currentChunk.addObstacle(obstacleFactory[objType](pos));
-            } else {
-                std::cerr << "Cant recognize object!\n";
+            auto obstacle = obstacleFactory.createObstacle(objType, pos);
+            if (obstacle) {
+                std::cout << "se adauga obstacol in chunkul nou\n";
+                currentChunk.addObstacle(obstacle);
             }
         }
     }
@@ -185,7 +169,7 @@ void Game::resetLevel() {
     velocity = 850.0f;
     this->chunks.clear();
     this->loadChunks();
-    player.fellFromBlock(true);
+    // player.fellFromBlock(true);
     this->restartGame = false;
 
     attempts.update_attempts_number();
@@ -252,18 +236,16 @@ void Game::render() {
     this->window->clear();
     this->window->draw(this->backgroundSprite);
     this->ground.renderGround(*this->window);
-    this->player.renderPlayer(*this->window);
-    player.handleDeath(deltaTime,*window);
     for (auto &obstacle: obstacles) {
         obstacle->renderObstacle(*this->window);
     }
+    this->player.renderPlayer(*this->window);
+    player.handleDeath(deltaTime, *window);
     this->attempts.render(*this->window);
     window->setView(window->getDefaultView());
     this->levelProgression.render(*this->window);
     window->setView(view);
     this->window->display();
-
-
 }
 
 std::ostream &operator<<(std::ostream &os, const Game &game) {

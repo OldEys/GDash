@@ -13,7 +13,7 @@ public:
         return std::make_shared<Short_Spike>(*this);
     }
 private:
-    void onCollision(Player &player, bool &restartGame, float &velocity) override;
+    PlayerStatChanges onCollisionImplem(Player &player) override;
 
     void afis(std::ostream &os) const override;
 };

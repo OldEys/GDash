@@ -10,12 +10,15 @@ project(GDash)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
 include(cmake/Options.cmake)
 
 ###############################################################################
 
 # external dependencies with FetchContent
+if (NOT DEFINED ENV{GITHUB_ACTIONS} OR NOT $ENV{GITHUB_ACTIONS})
+    # AddressSanitizer settings
+    set(USE_ASAN ON)
+endif ()
 
 include(FetchContent)
 
@@ -86,6 +89,8 @@ add_executable(${PROJECT_NAME}
         headers/Exceptions.h
         headers/JumpOrb.h
         sources/JumpOrb.cpp
+        sources/ObstacleFactory.cpp
+        headers/ObstacleFactory.h
 )
 
 include(cmake/CompilerFlags.cmake)
@@ -94,6 +99,8 @@ include(cmake/CompilerFlags.cmake)
 
 # use SYSTEM so cppcheck and clang-tidy do not report warnings from these directories
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE generated/include)
+set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
+
 # target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ext/<SomeHppLib>/include)
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${SFML_SOURCE_DIR}/include)
 target_link_directories(${PROJECT_NAME} PRIVATE ${SFML_BINARY_DIR}/lib)
@@ -112,6 +119,7 @@ install(TARGETS ${PROJECT_NAME} DESTINATION ${DESTINATION_DIR})
 if(APPLE)
     install(FILES launcher.command DESTINATION ${DESTINATION_DIR})
 endif()
+
 
 # copy dependent DLLs to build dir
 # see https://en.sfml-dev.org/forums/index.php?topic=28580.0

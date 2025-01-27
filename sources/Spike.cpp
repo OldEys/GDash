@@ -15,11 +15,13 @@ void Spike::afis(std::ostream &os) const {
     os<< "This is a spike \n";
 }
 
-void Spike::onCollision(Player &player, bool &restartGame, float &velocity) {
+PlayerStatChanges Spike::onCollisionImplem(Player &player) {
     if(player.boundingBoxTest(this->hitbox.getPosition(),this->hitbox.getSize(),this->hitbox.getRotation()))
     {
         player.triggerDeath();
-        restartGame = true;
-        velocity = 0.0f;
+        return {{"restartGame",true},
+                    };
     }
+    return {};
 }
+

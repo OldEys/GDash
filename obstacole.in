@@ -1,6 +1,7 @@
-spike 100 790
-block 800 785
-spike 900 790
+block 100 785
+spike 200 790
+short 1100 790
+spike 1200 790
 short 1600 790
 short 1700 790
 jumporb 1750 690
@@ -78,7 +79,6 @@ block 10600 785
 block 10700 385
 block 10800 385
 block 10900 385
-spike 10900 285
 block 11000 385
 spike 11000 285
 block 11100 385

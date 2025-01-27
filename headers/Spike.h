@@ -14,7 +14,7 @@ public:
     }
 private:
     void afis(std::ostream &os) const override;
-    void onCollision(Player& player,bool &restartGame,float& velocity) override;
+    PlayerStatChanges onCollisionImplem(Player& player) override;
 };
 
 #endif //SPIKE_H

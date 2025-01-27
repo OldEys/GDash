@@ -7,7 +7,7 @@
 #define GRAVITY 7500.0f
 
 Player::Player(float position)
-: isJumping(false), isDead(false), jumpSpeed(0.0f), jumpHeight(250.0f) {
+: stats{0.0, false, 0.0f, 0.0f}, isDead(false), jumpHeight(250.0f) {
 if (!this->texture.loadFromFile("images/Player.png")) {
     throw Texture_error("images/Player.png");
 }
@@ -22,7 +22,7 @@ this->body.setSize(sf::Vector2f(100.0f, 100.0f));
     this->death_sound.setVolume(100);
 }
 
-Player::Player(): isJumping(false), isDead(false), jumpSpeed(0.0f), jumpHeight(250.0f) {
+Player::Player(): stats{0.0, false, 0.0f, 0.0f}, isDead(false), jumpHeight(250.0f) {
     std::cout<<"constructor fara parametri\n";
 }
 
@@ -38,9 +38,8 @@ void Player::setPosition(float x, float y) {
 Player::Player(const Player &other)
 : body(other.body),
   texture(other.texture),
-  isJumping(other.isJumping),
+  stats{other.stats},
   isDead(other.isDead),
-  jumpSpeed(other.jumpSpeed),
   jumpHeight(other.jumpHeight) {
 body.setTexture(&texture);
 death_sound.setBuffer(death_buffer);
@@ -54,9 +53,8 @@ Player & Player::operator=(const Player &other)
     body = other.body;
     texture = other.texture;
     death_buffer = other.death_buffer;
-    isJumping = other.isJumping;
+    stats = other.stats;
     isDead = other.isDead;
-    jumpSpeed = other.jumpSpeed;
     jumpHeight = other.jumpHeight;
     body.setTexture(&texture);
     death_sound.setBuffer(death_buffer);
@@ -94,24 +92,24 @@ void Player::updatePlayer(const double deltaTime) {
     //a playerului la apasarea tastei space
     //intrucat playerul nu se misca ,ci tot ce este in jurul sau se misca de la dreapta
     //la stanga , ne vom ocupa doar de miscarea playerului pe axa Oy
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)&& !isJumping) {
-        isJumping=true;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !stats.isJumping) {
+        stats.isJumping = true;
         //7500-constanta a gravitatii ,mai mare pentru un gameplay mai apropiat de jocul
         //original
-        jumpSpeed = -sqrtf(2.0f * GRAVITY * jumpHeight);
+        stats.jumpSpeed = -sqrtf(2.0f * GRAVITY * jumpHeight);
     }
     //daca sare atunci se va aplica o gravitatie care este de 2 ori mai mica decat
     //saritura playerului
-    if (isJumping) {
-        jumpSpeed += GRAVITY * deltaTime;
-        rotationAngle += 350.0f * deltaTime;
+    if (stats.isJumping) {
+        stats.jumpSpeed += GRAVITY * deltaTime;
+        stats.rotationAngle += 350.0f * deltaTime;
         // rotationAngle=400.0f;
     }
-    body.move(0.0f,static_cast<float>(jumpSpeed*deltaTime));
-    if (rotationAngle >= 360.0f) rotationAngle -= 360.0f;
+    body.move(0.0f, static_cast<float>(stats.jumpSpeed * deltaTime));
+    if (stats.rotationAngle >= 360.0f) stats.rotationAngle -= 360.0f;
 
 
-    body.setRotation(static_cast<float>(rotationAngle));
+    body.setRotation(static_cast<float>(stats.rotationAngle));
 }
 void Player::renderPlayer(sf::RenderWindow &window) {
     if (!isDead) {
@@ -122,38 +120,16 @@ void Player::renderPlayer(sf::RenderWindow &window) {
 void Player::handleCollisionGround(const Ground &ground) {
     if (checkCollisionGround(ground)) {
         // this->body.setPosition(this->body.getPosition().x,ground.getBounds1().top-this->getBounds().height/2.0f);
-        rotationAngle = calculateFallingSide(rotationAngle);
+        stats.rotationAngle = calculateFallingSide(stats.rotationAngle);
         this->body.setPosition(this->body.getPosition().x, ground.getBounds1().top - 50.0f);
-        isJumping = false;
-        jumpSpeed = 0.0f;
+        stats.isJumping = false;
+        stats.jumpSpeed = 0.0f;
     }
 }
 
 bool Player::checkCollisionGround(const Ground &ground) const {
     return (this->body.getGlobalBounds().intersects(ground.getBounds1())
             || this->body.getGlobalBounds().intersects(ground.getBounds2()));
-}
-void Player::handleLandingOnObstacle(float positionY) {
-    this->body.setPosition(this->body.getPosition().x, positionY);
-    rotationAngle = calculateFallingSide(rotationAngle);
-    isJumping = false;
-}
-
-void Player::handleLeftCollision(bool &restartGame, float &velocity) {
-    restartGame = true;
-    velocity = 0.0f;
-}
-
-void Player::handleJumpOrbCollision() {
-    static bool mouseheld = false;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-        if (!mouseheld) {
-            isJumping = false;
-            mouseheld = true;
-        }
-    } else {
-        mouseheld = false;
-    }
 }
 
 //785, coord y pentru plasarea blocurilor pe podea
@@ -162,15 +138,16 @@ sf::FloatRect Player::getBounds() const {
 }
 double Player::calculateFallingSide(double angle) {
     int side = static_cast<int>((angle + 45.0f) / 90) % 4;
-    return side*90;
+    return side * 90;
 }
 
-void Player::fellFromBlock(const bool &jumpState) {
-    if (jumpState == false) {
-        rotationAngle = calculateFallingSide(rotationAngle);
-    }
-    isJumping = jumpState;
-}
+//
+// void Player::fellFromBlock(const bool &jumpState) {
+//     if (jumpState == false) {
+//         stats.rotationAngle = calculateFallingSide(stats.rotationAngle);
+//     }
+//     stats.isJumping = jumpState;
+// }
 
 std::array<sf::Vector2f, 4> Player::getOrientedBoundingBox() {
     sf::Transform transform;
@@ -250,4 +227,24 @@ bool Player::boundingBoxTest(const sf::Vector2f &obstaclePosition, const sf::Vec
 
 void Player::moveTowardsEnd(float velocity, double deltaTime) {
     this->body.move(static_cast<float>(velocity * deltaTime), 0.0f);
+}
+
+void Player::applyChanges(const PlayerStatChanges &changes,bool& restartGame,float& velocity) {
+    for(const auto & [key,value] : changes) {
+        if (key == "rotationAngle") stats.rotationAngle = std::get<double>(value);
+        else if (key == "isJumping") stats.isJumping = std::get<bool>(value);
+        else if (key == "jumpSpeed") stats.jumpSpeed = std::get<float>(value);
+        else if(key == "positionY") {
+            stats.positionY = std::get<float>(value);
+            this->body.setPosition(this->body.getPosition().x, stats.positionY);
+        }
+        else if (key == "restartGame") {
+            restartGame = std::get<bool>(value);
+            velocity = 0.0f;
+        }
+    }
+}
+
+double Player::getRotationAngle() {
+    return stats.rotationAngle;
 }

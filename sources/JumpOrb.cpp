@@ -15,9 +15,21 @@ void JumpOrb::afis(std::ostream &os) const {
     os << "This is a jumporb";
 }
 
-void JumpOrb::onCollision(Player &player, bool &, float &) {
+PlayerStatChanges JumpOrb::onCollisionImplem(Player &player) {
     if (this->hitbox.getGlobalBounds().intersects(player.getBounds())) {
-        player.handleJumpOrbCollision();
-        // player.fellFromBlock(false);
+        static bool mouseheld = false;
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+            if (!mouseheld) {
+                mouseheld = true;
+                return {
+                        {"isJumping", false},
+                };
+            }
+        } else {
+            mouseheld = false;
+        }
     }
+
+    return {};
 }

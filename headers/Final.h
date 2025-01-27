@@ -18,7 +18,7 @@ public:
     void closeGame(sf::RenderWindow &window);
 
 private:
-    void onCollision(Player &player, bool &restartGame, float &velocity) override;
+    PlayerStatChanges onCollisionImplem(Player &player) override;
 
     void afis(std::ostream &os) const override;
 };

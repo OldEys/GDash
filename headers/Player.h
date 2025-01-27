@@ -3,12 +3,21 @@
 
 #include <array>
 #include <ostream>
+#include <unordered_map>
+#include <variant>
 
 #include "Ground.h"
 #include <SFML/Graphics.hpp>
 
 #include <SFML/Audio.hpp>
 #include "DeathEffect.h"
+struct PlayerStats {
+    double rotationAngle;
+    bool isJumping;
+    float jumpSpeed;
+    float positionY;
+};
+using PlayerStatChanges = std::unordered_map<std::string, std::variant<float, bool, int,double>>;
 
 class Player {
     sf::RectangleShape body;
@@ -16,11 +25,14 @@ class Player {
     DeathEffect deathEffect;
     sf::SoundBuffer death_buffer;
     sf::Sound death_sound;
-    bool isJumping;
+    PlayerStats stats;
     bool isDead;
-    double jumpSpeed;
     float jumpHeight;
-    double rotationAngle=0.0f;
+
+    std::array<sf::Vector2f, 4> getOrientedBoundingBox();
+
+    void projectOntoAxis(const std::array<sf::Vector2f, 4> &points, const sf::Vector2f &axis, float &min, float &max);
+    bool checkCollisionGround(const Ground &ground) const;
 
 public:
     explicit Player(float position);
@@ -35,9 +47,9 @@ public:
     sf::Vector2f getPosition() const ;
 
     friend std::ostream & operator<<(std::ostream &os, const Player &obj) {
-        os << "is it jumping ?: " << obj.isJumping << "\n";
+        os << "is it jumping ?: " << obj.stats.isJumping << "\n";
         os<< "jumpHeight: " << obj.jumpHeight << "\n";
-        os<< "jumpSpeed: " << obj.jumpSpeed << "\n";
+        os<< "jumpSpeed: " << obj.stats.jumpSpeed << "\n";
         os << " position x: " << obj.getPosition().x << " position y: " << obj.getPosition().y << "\n";
         return os;
     }
@@ -54,27 +66,16 @@ public:
 
     void handleCollisionGround(const Ground &ground);
 
-    bool checkCollisionGround(const Ground &ground) const;
-
-    void handleLandingOnObstacle(float positionY);
-
-    void handleLeftCollision(bool &restartGame, float &velocity);
-
-    void handleJumpOrbCollision();
-
     sf::FloatRect getBounds() const;
 
     double calculateFallingSide(double angle);
 
-    void fellFromBlock(const bool &jumpState);
-
-    std::array<sf::Vector2f, 4> getOrientedBoundingBox();
-
-    void projectOntoAxis(const std::array<sf::Vector2f, 4> &points, const sf::Vector2f &axis, float &min, float &max);
+    void moveTowardsEnd(float velocity, double deltaTime);
 
     bool boundingBoxTest(const sf::Vector2f &obstaclePosition, const sf::Vector2f &obstacleSize,
                          float obstacleRotation);
+    void applyChanges(const PlayerStatChanges &changes,bool& restartGame,float& velocity);
 
-    void moveTowardsEnd(float velocity, double deltaTime);
+    double getRotationAngle();
 };
 #endif //PLAYER_H

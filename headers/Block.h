@@ -13,11 +13,12 @@ public:
         return std::make_shared<Block>(*this);
     }
 private:
-    void onCollision(Player &player, bool &restartGame, float &velocity) override;
+    PlayerStatChanges onCollisionImplem(Player &player) override;
 
     bool isOnTopOfBlock(const Player& player)const;
     bool fallingFromBlock(const Player& player)const;
 
     void afis(std::ostream &os) const override;
+    bool isTouchingCorer(const Player& player)const;
 };
 #endif //BLOCK_H

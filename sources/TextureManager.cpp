@@ -9,9 +9,9 @@ sf::Texture &TextureManager::getTexture(const std::string &name) {
         sf::Texture texture;
         if (!texture.loadFromFile(name)) {
             throw Texture_error(name);
-        } else {
-            std::cout << "Texture loaded succesfully: " << name << "\n";
         }
+            std::cout << "Texture loaded succesfully: " << name << "\n";
+
         textures[name] = texture;
     }
     return textures.at(name);

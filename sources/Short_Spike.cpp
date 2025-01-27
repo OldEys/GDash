@@ -11,15 +11,15 @@ Short_Spike::Short_Spike(const sf::Vector2f &pos) :Obstacle("images/spike.png",s
                               this->body.getPosition().y + this->body.getGlobalBounds().height / 2.0f);
     std::cout<<"Short spike created\n";
 }
-void Short_Spike::onCollision(Player &player, bool &restartGame, float &velocity) {
+PlayerStatChanges Short_Spike::onCollisionImplem(Player &player) {
     if(player.boundingBoxTest(this->hitbox.getPosition(),this->hitbox.getSize(),this->hitbox.getRotation()))
     {
         player.triggerDeath();
-        restartGame = true;
-        velocity = 0.0f;
+        return {{"restartGame",true},
+        };
     }
+    return {};
 }
-
 void Short_Spike::afis(std::ostream &os) const {
     os << "This is a short spike\n";
 }

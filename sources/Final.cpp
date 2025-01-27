@@ -53,11 +53,12 @@ void Final::closeGame(sf::RenderWindow &window) {
         window.close();
 }
 
-void Final::onCollision(Player &player, bool &, float &) {
+PlayerStatChanges Final::onCollisionImplem(Player &player) {
     if (this->hitbox.getGlobalBounds().intersects(player.getBounds())) {
         endGame = true;
         std::cout << "Level completed , well done!\n";
     }
+    return {};
 }
 
 

@@ -30,12 +30,14 @@ public:
     void renderObstacle(sf::RenderWindow& window);
 
 
-    void nviOnCollision(Player& player,bool &endGame,float& velocity){
-        onCollision(player,endGame,velocity);
+    void onCollision(Player &player, bool &restartGame, float &velocity) {
+        auto changes = onCollisionImplem(player);
+        player.applyChanges(changes, restartGame, velocity);
     }
+
     virtual std::shared_ptr<Obstacle> clone()const=0;
 private:
-    virtual void onCollision(Player &player, bool &endGame, float &velocity) =0;
+    virtual PlayerStatChanges onCollisionImplem(Player &player) =0;
 
     virtual void afis(std::ostream &os) const {
         os << "This is an unknown obstacle \n";

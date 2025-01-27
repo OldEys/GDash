@@ -11,7 +11,7 @@ public:
         return std::make_shared<Platform>(*this);
     }
 private:
-    void onCollision(Player& player,bool &restartGame,float& velocity) override;
+    PlayerStatChanges onCollisionImplem(Player& player) override;
 
     bool isOnTopOfBlock(const Player &player) const;
 
