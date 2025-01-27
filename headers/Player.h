@@ -17,7 +17,8 @@ struct PlayerStats {
     float jumpSpeed;
     float positionY;
 };
-using PlayerStatChanges = std::unordered_map<std::string, std::variant<float, bool, int,double>>;
+
+using PlayerStatChanges = std::unordered_map<std::string, std::variant<float, bool, int, double> >;
 
 class Player {
     sf::RectangleShape body;
@@ -32,6 +33,7 @@ class Player {
     std::array<sf::Vector2f, 4> getOrientedBoundingBox();
 
     void projectOntoAxis(const std::array<sf::Vector2f, 4> &points, const sf::Vector2f &axis, float &min, float &max);
+
     bool checkCollisionGround(const Ground &ground) const;
 
 public:
@@ -49,7 +51,7 @@ public:
     friend std::ostream & operator<<(std::ostream &os, const Player &obj) {
         os << "is it jumping ?: " << obj.stats.isJumping << "\n";
         os<< "jumpHeight: " << obj.jumpHeight << "\n";
-        os<< "jumpSpeed: " << obj.stats.jumpSpeed << "\n";
+        os << "jumpSpeed: " << obj.stats.jumpSpeed << "\n";
         os << " position x: " << obj.getPosition().x << " position y: " << obj.getPosition().y << "\n";
         return os;
     }
@@ -74,7 +76,8 @@ public:
 
     bool boundingBoxTest(const sf::Vector2f &obstaclePosition, const sf::Vector2f &obstacleSize,
                          float obstacleRotation);
-    void applyChanges(const PlayerStatChanges &changes,bool& restartGame,float& velocity);
+
+    void applyChanges(const PlayerStatChanges &changes, bool &restartGame, float &velocity);
 
     double getRotationAngle();
 };

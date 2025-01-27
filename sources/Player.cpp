@@ -229,16 +229,15 @@ void Player::moveTowardsEnd(float velocity, double deltaTime) {
     this->body.move(static_cast<float>(velocity * deltaTime), 0.0f);
 }
 
-void Player::applyChanges(const PlayerStatChanges &changes,bool& restartGame,float& velocity) {
-    for(const auto & [key,value] : changes) {
+void Player::applyChanges(const PlayerStatChanges &changes, bool &restartGame, float &velocity) {
+    for (const auto &[key,value]: changes) {
         if (key == "rotationAngle") stats.rotationAngle = std::get<double>(value);
         else if (key == "isJumping") stats.isJumping = std::get<bool>(value);
         else if (key == "jumpSpeed") stats.jumpSpeed = std::get<float>(value);
-        else if(key == "positionY") {
+        else if (key == "positionY") {
             stats.positionY = std::get<float>(value);
             this->body.setPosition(this->body.getPosition().x, stats.positionY);
-        }
-        else if (key == "restartGame") {
+        } else if (key == "restartGame") {
             restartGame = std::get<bool>(value);
             velocity = 0.0f;
         }

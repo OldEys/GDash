@@ -35,23 +35,22 @@ class Game {
     double totalDistanceTravelled = 0;
     double deltaTime=0.0f;
 
+    void initWindow();
+    void pollEvents();
+    double getDeltaTime();
+    void updateObstacles();
+    void loadChunks();
+    void updateView();
+    void resetLevel();
+
 public:
 
     Game();
     ~Game();
     friend std::ostream &operator<<(std::ostream &os, const Game &game);
     bool isRunning() const;
-    void initWindow();
-    void pollEvents();
     void render();
     void update();
-    double getDeltaTime();
-    void updateObstacles();
-    void loadChunks();
-
-    void updateView();
-
-    void resetLevel();
 };
 
 #endif //GAME_H

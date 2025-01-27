@@ -19,7 +19,7 @@ int main() {
         std::cout << e.what() << std::endl;
     }catch (InputFile_error &e) {
         std::cout << e.what() << std::endl;
-    }catch (Exception &e) {
+    }catch (ApplicationException &e) {
         std::cerr << "Unexpected error: " << e.what() << std::endl;
     }
     return 0;
