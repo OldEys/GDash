@@ -12,7 +12,7 @@ public:
     explicit Font_error(const std::string &path);
 };
 
-class Texture_error : public ApplicationException{
+class Texture_error : public ApplicationException {
 public:
     explicit Texture_error(const std::string &path);
 };
