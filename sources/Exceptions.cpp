@@ -9,7 +9,8 @@ Texture_error::Texture_error(const std::string &path) : ApplicationException(
     std::string("Could not load the texture ").append(path)) {
 }
 
-Sound_error::Sound_error(const std::string &path) : ApplicationException(std::string("Could not load the sound ").append(path)) {
+Sound_error::Sound_error(const std::string &path) : ApplicationException(
+    std::string("Could not load the sound ").append(path)) {
 }
 
 InputFile_error::InputFile_error(const std::string &path) : ApplicationException(

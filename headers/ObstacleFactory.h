@@ -17,10 +17,11 @@
 class ObstacleFactory {
 public:
     ObstacleFactory();
-    std::shared_ptr<Obstacle> createObstacle(const std::string& type, const sf::Vector2f& position) const;
+
+    std::shared_ptr<Obstacle> createObstacle(const std::string &type, const sf::Vector2f &position) const;
 
 private:
-    std::map<std::string, std::function<std::shared_ptr<Obstacle>(sf::Vector2f)>> factoryMap;
+    std::map<std::string, std::function<std::shared_ptr<Obstacle>(sf::Vector2f)> > factoryMap;
 };
 
 #endif //OBSTACLEFACTORY_H

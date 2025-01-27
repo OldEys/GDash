@@ -36,11 +36,17 @@ class Game {
     double deltaTime=0.0f;
 
     void initWindow();
+
     void pollEvents();
+
     double getDeltaTime();
+
     void updateObstacles();
+
     void loadChunks();
+
     void updateView();
+
     void resetLevel();
 
 public:
