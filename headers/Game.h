@@ -12,7 +12,6 @@ class Game {
     sf::Font font;
     sf::Text menuTitle;
 
-    int selectedOption;
     bool isRunningGame;
     bool isInMenu;
 

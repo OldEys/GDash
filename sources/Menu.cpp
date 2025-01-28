@@ -90,7 +90,7 @@ void Menu::render(sf::RenderWindow &window) {
     }
 }
 
-void Menu::update(sf::RenderWindow &window) {
+void Menu::update(const sf::RenderWindow &window) {
     for (auto &button : buttons) {
         if (button->isMouseOver(window)) {
             button->setColor(sf::Color::Red);

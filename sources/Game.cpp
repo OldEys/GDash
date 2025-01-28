@@ -2,7 +2,7 @@
 #include <iostream>
 
 Game::Game()
-    : window(nullptr), selectedOption(-1), isRunningGame(true), isInMenu(true), currentLevel(nullptr) {
+    : window(nullptr), isRunningGame(true), isInMenu(true), currentLevel(nullptr) {
     this->initWindow();
     std::vector<std::string> menuOptions = {"Play Level 1", "Play Level 2", "Play Level 3", "Exit"};
     //in functie de cate nivele dorim adaugam elemente noi pentru a crea butoane noi
@@ -58,14 +58,14 @@ void Game::handleEvents() {
             menu.handleEvent(event, *window);
             window->setView(window->getDefaultView());
             if (menu.isOptionSelected()) {
-                long long unsigned int selectedOption = menu.getSelectedOption();
-                if (static_cast<int>(selectedOption) == menu.getOptionCount() - 1) {
+                long long unsigned int selectedMenuOption = menu.getSelectedOption();
+                if (static_cast<int>(selectedMenuOption) == menu.getOptionCount() - 1) {
                     isRunningGame = false;
                     //exit
                 } else {
                     isInMenu = false;
                     menu.controlMenuSong(false);
-                    startLevel(static_cast<int>(selectedOption));
+                    startLevel(static_cast<int>(selectedMenuOption));
                 }
             }
 
