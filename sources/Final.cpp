@@ -8,23 +8,7 @@ Final::Final(const sf::Vector2f& pos) : Obstacle("images/final.png",sf::Vector2f
     this->hitbox.setPosition(this->body.getPosition().x
                          + this->body.getGlobalBounds().width / 2.0f,
                          this->body.getPosition().y + this->body.getGlobalBounds().height / 2.0f);
-    std::cout<<"Final created\n";
 }
-
-// Final::Final(const sf::Vector2f &pos, const std::string &texturePath) {
-//     this->texture = texture_manager.getTexture(texturePath);
-//     this->body.setSize(sf::Vector2f(400.0f, 890.0f));
-//     this->body.setPosition(pos);
-//     this->body.setFillColor(sf::Color::White);
-//     this->body.setTexture(&this->texture);
-//     this->body.setOutlineColor(sf::Color::White);
-//     this->body.setOutlineThickness(0.0f);
-//     this->hitbox.setSize(sf::Vector2f(200.0f, 890.0f));
-//     this->hitbox.setOrigin(this->hitbox.getSize().x / 2.0f, this->hitbox.getSize().y / 2.0f);
-//     this->hitbox.setPosition(this->body.getPosition().x
-//                              + this->body.getGlobalBounds().width / 2.0f,
-//                              this->body.getPosition().y + this->body.getGlobalBounds().height / 2.0f);
-// }
 void Final::finalProximity(Player &player, float &velocity, double deltaTime) {
     static bool positioned = false;
     //daca playerul se apropie de final atunci tot ce se misca spre stanga se opreste iar playerul
@@ -56,7 +40,9 @@ void Final::closeGame(sf::RenderWindow &window) {
 PlayerStatChanges Final::onCollisionImplem(Player &player) {
     if (this->hitbox.getGlobalBounds().intersects(player.getBounds())) {
         endGame = true;
-        std::cout << "Level completed , well done!\n";
+        std::cout << "------------------------------\n";
+        std::cout << "|Level completed , well done!|\n";
+        std::cout << "------------------------------\n";
     }
     return {};
 }

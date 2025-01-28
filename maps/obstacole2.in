@@ -1,0 +1,204 @@
+spike 100 790
+spike 200 790
+jumporb 250 690
+spike 300 790
+spike 400 790
+
+spike 900 790
+spike 1000 790
+
+
+block 1500 380
+short 1500 790
+spike 1600 790
+block 1600 380
+jumporb 1650 640
+spike 1700 790
+block 1700 380
+block 1800 380
+
+spike 2500 790
+block 2800 680
+spike 2800 590
+
+spike 3400 790
+block 3500 680
+block 3500 780
+block 3600 680
+block 3600 780
+block 3700 680
+block 3700 780
+spike 3700 580
+block 3800 680
+block 3800 780
+block 3900 680
+block 3900 780
+
+block 4100 790
+block 4100 690
+block 4100 590
+spike 4100 490
+
+block 4200 790
+block 4200 690
+spike 4200 590
+
+
+spike 4800 790
+spike 4900 790
+block 5000 780
+spike 5100 790
+spike 5200 790
+spike 5300 790
+
+block 5600 680
+spike 5600 580
+
+
+block 6300 790
+platform 6400 790
+platform 6500 790
+platform 6600 790
+platform 6700 790
+spike 6800 690
+platform 6800 790
+platform 6900 790
+platform 7000 790
+platform 7100 790
+block 7200 790
+
+spike 7300 790
+spike 7400 790
+
+block 7500 790
+block 7500 690
+platform 7600 690
+platform 7700 690
+platform 7800 690
+platform 7900 690
+spike 8000 590
+block 8000 690
+block 8000 790
+
+spike 8100 790
+spike 8200 790
+
+block 8300 780
+platform 8400 780
+platform 8500 780
+platform 8600 780
+platform 8700 780
+platform 8800 780
+block 8900 780
+
+jumporb 9300 590
+spike 9400 790
+spike 9500 790
+spike 9600 790
+platform 9600 500
+spike 9700 790
+spike 9800 790
+spike 9900 790
+spike 10000 790
+
+
+platform 10000 350
+spike 10100 790
+spike 10200 790
+spike 10300 790
+spike 10400 790
+platform 10400 200
+spike 10500 790
+spike 10600 790
+spike 10700 790
+spike 10800 790
+platform 10800 50
+spike 10900 790
+spike 11000 790
+spike 11100 790
+spike 11200 790
+platform 11200 50
+spike 11300 790
+platform 11300 50
+platform 11400 50
+spike 11400 790
+platform 11500 50
+spike 11500 790
+platform 11600 50
+spike 11600 790
+spike 11700 790
+platform 11750 150
+spike 11800 790
+spike 11900 790
+platform 11900 250
+spike 12000 790
+platform 12050 350
+spike 12100 790
+spike 12200 790
+platform 12200 450
+spike 12300 790
+platform 12350 550
+spike 12350 450
+spike 12400 790
+spike 12500 790
+
+
+block 12600 780
+block 12600 680
+block 12700 680
+block 12800 680
+block 12900 680
+block 13000 680
+block 13000 780
+
+spike 13100 790
+spike 13200 790
+platform 13300 600
+spike 13300 790
+spike 13400 790
+spike 13500 790
+spike 13600 790
+spike 13700 790
+platform 13700 450
+spike 13800 790
+spike 13900 790
+block 14000 780
+block 14100 780
+block 14200 780
+block 14200 450
+spike 14200 350
+spike 14700 790
+
+
+
+block 14800 780
+spike 14900 790
+spike 15000 790
+spike 15100 790
+block 15200 780
+block 15200 680
+spike 15300 790
+spike 15400 790
+spike 15500 790
+block 15600 780
+block 15600 680
+block 15600 580
+spike 15700 790
+spike 15800 790
+spike 15900 790
+spike 16000 790
+jumporb 16000 580
+spike 16100 790
+spike 16100 790
+spike 16200 790
+spike 16300 790
+block 16400 780
+block 16400 680
+block 16400 580
+block 16500 680
+block 16500 780
+block 16600 780
+platform 16800 580
+spike 16800 480
+
+final 18000 0

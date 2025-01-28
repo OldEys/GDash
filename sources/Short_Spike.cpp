@@ -9,7 +9,6 @@ Short_Spike::Short_Spike(const sf::Vector2f &pos) :Obstacle("images/spike.png",s
     this->hitbox.setPosition(this->body.getPosition().x
                               + this->body.getGlobalBounds().width / 2.0f,
                               this->body.getPosition().y + this->body.getGlobalBounds().height / 2.0f);
-    std::cout<<"Short spike created\n";
 }
 PlayerStatChanges Short_Spike::onCollisionImplem(Player &player) {
     if(player.boundingBoxTest(this->hitbox.getPosition(),this->hitbox.getSize(),this->hitbox.getRotation()))

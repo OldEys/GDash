@@ -136,8 +136,13 @@ Vezi și [`scripts/cmake.sh`](scripts/cmake.sh).
 
 ## Resurse
 
+- [logo](https://commons.wikimedia.org/wiki/File:Geometry_Dash.png)
 - [death sound](https://www.youtube.com/watch?v=XuPeF_YCsfE)
-- [font](https://www.fontsquirrel.com/fonts/pusab)-pusab
+- Soundtrack
+  - [level 1](https://www.youtube.com/watch?v=1WpR8F2pcxg)
+  - [level 2](https://www.youtube.com/watch?v=r8n2xa4A6KI)
+  - [level 3](https://www.youtube.com/watch?v=FzCPTTw8F2k)
+- [font](https://www.fontsquirrel.com/fonts/pusab) - pusab
 - [SFML](https://github.com/SFML/SFML/tree/2.6.1) (Zlib)
   - [OpenAL](https://openal-soft.org/) (LGPL): din cauza licenței, trebuie distribuită ca shared library
 - adăugați trimiteri către resursele externe care v-au ajutat sau pe care le-ați folosit

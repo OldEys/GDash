@@ -8,7 +8,6 @@ JumpOrb::JumpOrb(const sf::Vector2f &pos) : Obstacle("images/JumpOrb.png", sf::V
     this->hitbox.setPosition(this->body.getPosition().x
                              + this->body.getGlobalBounds().width / 2.0f,
                              this->body.getPosition().y + this->body.getGlobalBounds().height / 2.0f);
-    std::cout << "JumpOrb created" << std::endl;
 }
 
 void JumpOrb::afis(std::ostream &os) const {

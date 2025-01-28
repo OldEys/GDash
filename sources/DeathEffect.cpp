@@ -40,7 +40,6 @@ void DeathEffect::trigger(sf::Vector2f position, int numParticles, sf::Color par
 }
 
 void DeathEffect::render(sf::RenderWindow &window) {
-    std::cout << "randez particule\n";
     window.draw(centerParticle);
     for (const auto &p: particles) {
         window.draw(p.particle);
@@ -48,7 +47,6 @@ void DeathEffect::render(sf::RenderWindow &window) {
 }
 
 bool DeathEffect::update(double deltaTime) {
-    std::cout << "update particles\n";
     bool anyParticleActive = false;
     for (auto &p: particles) {
         p.velocity.x *= 0.95f;

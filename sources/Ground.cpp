@@ -1,9 +1,8 @@
 #include "../headers/Ground.h"
-#include <iostream>
 
 #include "../headers/Exceptions.h"
 
-Ground::Ground(const sf::RenderWindow &window) : groundTexture() {
+Ground::Ground(const sf::RenderWindow &window,sf::Color groundColor) {
     if (!groundTexture.loadFromFile("images/ground-long.png")) {
         throw Texture_error("images/ground-long.png");
     }
@@ -18,11 +17,10 @@ Ground::Ground(const sf::RenderWindow &window) : groundTexture() {
 
     groundBody2 = groundBody1;
     groundBody2.setPosition(groundBody1.getPosition().x + groundBody1.getGlobalBounds().width, groundBody1.getPosition().y);
+    groundBody1.setFillColor(groundColor);
+    groundBody2.setFillColor(groundColor);
 }
 
-Ground::Ground(const Ground &other) : groundTexture(other.groundTexture), groundBody1(other.groundBody1), groundBody2(other.groundBody2) {
-    std::cout<<"Constructor de copiere"<<std::endl;
-}
 
 
 Ground & Ground::operator=(const Ground &other) {
@@ -32,16 +30,10 @@ Ground & Ground::operator=(const Ground &other) {
         groundBody2 = other.groundBody2;
         groundBody1.setTexture(&groundTexture);
         groundBody2.setTexture(&groundTexture);
-        groundBody1.setFillColor(sf::Color(100, 100, 255));
-        groundBody2.setFillColor(sf::Color(100, 100, 255));
-        std::                                                                         cout << "Operator= de atribuire ground" << std::endl;
     }
     return *this;
 }
 
-Ground::~Ground() {
-    std::cout <<"Destroyed ground\n";
-}
 
 void Ground::updateGround(float velocity, double deltaTime) {
     //pentru ground avem 2 texturi de ground de lungime window.size().x

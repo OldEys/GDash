@@ -8,7 +8,6 @@ Spike::Spike(const sf::Vector2f &pos) : Obstacle("images/spike.png", sf::Vector2
     this->hitbox.setPosition(this->body.getPosition().x
                              + this->body.getGlobalBounds().width / 2.0f,
                              this->body.getPosition().y + this->body.getGlobalBounds().height / 2.0f);
-    std::cout << "Spike created\n";
 }
 
 void Spike::afis(std::ostream &os) const {

@@ -91,6 +91,12 @@ add_executable(${PROJECT_NAME}
         sources/JumpOrb.cpp
         sources/ObstacleFactory.cpp
         headers/ObstacleFactory.h
+        headers/Level.h
+        sources/Level.cpp
+        headers/Menu.h
+        sources/Menu.cpp
+        headers/Button.h
+        sources/Button.cpp
 )
 
 include(cmake/CompilerFlags.cmake)
@@ -134,6 +140,6 @@ endif()
 
 
 include(cmake/CopyHelper.cmake)
-copy_files(FILES tastatura.txt obstacole.in DIRECTORY font sound images)
+copy_files(FILES tastatura.txt DIRECTORY font sound images maps)
 # copy_files(FILES tastatura.txt config.json DIRECTORY images sounds)
 # copy_files(DIRECTORY images sounds)

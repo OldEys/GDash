@@ -4,9 +4,6 @@
 // int Chunk::id_max = 0;
 
 Chunk::Chunk(float startX, float chunkSize) : /*id(id_max),*/ startX(startX), endX(startX + chunkSize)  {
-    // std::cout<<"Created chunk"<<id<<"\n";
-    std::cout<<"Created chunk"<<"\n";
-    // ++id_max;
 }
 
 Chunk::Chunk(const Chunk &other) : startX(other.startX), endX(other.endX) {
@@ -25,7 +22,6 @@ Chunk & Chunk::operator=(Chunk other) {
 //     return *this;
 // }
 void Chunk::addObstacle(std::shared_ptr<Obstacle> obstacle) {
-    // obstacles.push_back(obstacle);
     obstacles.emplace_back(std::move(obstacle));
 }
 [[nodiscard]] float Chunk::getStartX() const {
@@ -54,5 +50,4 @@ void swap(Chunk &a, Chunk &b) noexcept{
     std::swap(a.startX, b.startX);
     std::swap(a.endX, b.endX);
     std::swap(a.obstacles, b.obstacles);
-
 }

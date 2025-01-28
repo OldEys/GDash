@@ -9,7 +9,7 @@ class Ground {
     sf::RectangleShape groundBody2;
 
 public:
-    explicit Ground(const sf::RenderWindow &window);
+    explicit Ground(const sf::RenderWindow &window,sf::Color groundColor);
     friend std::ostream & operator<<(std::ostream &os, const Ground &obj) {
         os << " groundBody1 position x : " << obj.groundBody1.getPosition().x << " y: " << obj.groundBody1.getPosition()
                 .y;
@@ -19,9 +19,9 @@ public:
     }
 
     Ground()=default;
-    Ground(const Ground &other) ;
+    Ground(const Ground &other)=default ;
     Ground& operator=(const Ground &other);
-    ~Ground();
+    ~Ground()=default;
     void updateGround(float velocity, double deltaTime);
     void renderGround(sf::RenderWindow &window);
     float getGroundPos();
