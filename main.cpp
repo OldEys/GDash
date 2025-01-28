@@ -4,7 +4,7 @@
 
 int main() {
     try {
-        Game game;
+        Game& game=Game::getInstanceGame();
         while (game.isRunning()) {
             game.handleEvents();
             game.update();
@@ -17,6 +17,8 @@ int main() {
         std::cerr << "Sound error: " << e.what() << std::endl;
     } catch (Font_error &e) {
         std::cerr << "Font error: " << e.what() << std::endl;
+    }catch (InvalidLevelIndex_error &e) {
+            std::cerr << "Index error: " << e.what() << std::endl;
     } catch (InputFile_error &e) {
         std::cerr << "File error: " << e.what() << std::endl;
     } catch (ApplicationException &e) {

@@ -10,11 +10,8 @@ class AttemptCounter {
 public:
     AttemptCounter();
 
-    // explicit GameFont(sf::Vector2f pos);
-
     void update_attempts_number();
 
-    // sf::Font getFont();
     void update_position(float velocity, double deltaTime);
 
     void render(sf::RenderWindow &window);

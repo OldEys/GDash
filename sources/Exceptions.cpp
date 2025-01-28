@@ -16,3 +16,6 @@ Sound_error::Sound_error(const std::string &path) : ApplicationException(
 InputFile_error::InputFile_error(const std::string &path) : ApplicationException(
     std::string("Could not load the input file ").append(path)) {
 }
+InvalidLevelIndex_error::InvalidLevelIndex_error(const std::string &index) : ApplicationException(
+    std::string("Could not find the level index").append(index)) {
+}

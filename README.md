@@ -7,6 +7,10 @@ un platformer de tip side-scrolling bazat pe sincronizarea cu muzica,
 în care ești un pătrat care încearcă să se ferească de țepi . Ai nevoie doar de tasta space și reflexe ascuțite
 în încercarea ta de a finaliza nivelul și a nu da rage.
 
+Folositi unul din butoanele din meniu corespunzătoare fiecărui nivel pentru a începe aventura ,apăsați Q pentru
+revenirea în meniul principal .Odată ce ați reușit să finalizați un nivel veți fi felicitat de un mesaj aferent
+după care puteți încerca să treceți de următorul nivel!
+
 Verificarea coliziunilor obiectelor care se rotesc și funcția boundingBoxTest din Player.h
 a fost preluată din implementarea SFML a unei funcții îmbunătățite de verificare a coliziunilor ,
 [aici](https://github.com/SFML/SFML/wiki/Source%3A-Simple-Collision-Detection-for-SFML-2) .
@@ -138,11 +142,18 @@ Vezi și [`scripts/cmake.sh`](scripts/cmake.sh).
 
 - [logo](https://commons.wikimedia.org/wiki/File:Geometry_Dash.png)
 - [death sound](https://www.youtube.com/watch?v=XuPeF_YCsfE)
+- [background](https://www.deviantart.com/greaterhtrae/art/Geometry-Dash-Background-Free-to-use-995590814)
+- [ground](https://www.spriters-resource.com/fullview/136043/)
+- Obstacole
+  - [spike](https://www.reddit.com/r/ObjectShows/comments/1dk71pt/geometry_dash_spike_hehim/)
+  - [jumporb](https://geometry-dash-fan-ideas.fandom.com/wiki/List_of_Every_Fanmade_Orb_-_Hard_Icon)
+  - [block](https://www.spriters-resource.com/fullview/136043/)
 - Soundtrack
   - [level 1](https://www.youtube.com/watch?v=1WpR8F2pcxg)
   - [level 2](https://www.youtube.com/watch?v=r8n2xa4A6KI)
   - [level 3](https://www.youtube.com/watch?v=FzCPTTw8F2k)
 - [font](https://www.fontsquirrel.com/fonts/pusab) - pusab
+- Restul texturilor sunt realizate manual pentru a simula texturile din jocul original.
 - [SFML](https://github.com/SFML/SFML/tree/2.6.1) (Zlib)
   - [OpenAL](https://openal-soft.org/) (LGPL): din cauza licenței, trebuie distribuită ca shared library
 - adăugați trimiteri către resursele externe care v-au ajutat sau pe care le-ați folosit

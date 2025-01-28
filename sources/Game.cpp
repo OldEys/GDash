@@ -1,6 +1,8 @@
 #include "../headers/Game.h"
 #include <iostream>
 
+#include "../headers/Exceptions.h"
+
 Game::Game()
     : window(nullptr), isRunningGame(true), isInMenu(true), currentLevel(nullptr) {
     this->initWindow();
@@ -8,6 +10,11 @@ Game::Game()
     //in functie de cate nivele dorim adaugam elemente noi pentru a crea butoane noi
     menu = Menu(menuOptions, *window);
     menu.controlMenuSong(true);
+}
+
+Game & Game::getInstanceGame() {
+    static Game instance;
+    return instance;
 }
 
 Game::~Game() {
@@ -34,6 +41,8 @@ void Game::startLevel(int levelIndex) {
     } else if (levelIndex == 2) {
         currentLevel = std::make_unique<Level>("sound/Level3_soundtrack.ogg", "maps/obstacole3.in", *window,
                                                sf::Color(51, 161, 55));
+    } else {
+        throw InvalidLevelIndex_error(std::to_string(levelIndex))
     }
     //pentru a extinde gameplayul nu avem decat sa adaugam in continuare nivele
     //cu alt soundtrack ,mapa si culoare a nivelului

@@ -19,8 +19,11 @@ class Game {
 
     void initWindow();
     void startLevel(int levelIndex);
-public:
     Game();
+public:
+    Game(const Game &game)=delete;
+    Game& operator=(const Game &game)=delete;
+    static Game &getInstanceGame();
     ~Game();
     bool isRunning() const;
     void handleEvents();

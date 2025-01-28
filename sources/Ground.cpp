@@ -1,5 +1,4 @@
 #include "../headers/Ground.h"
-
 #include "../headers/Exceptions.h"
 
 Ground::Ground(const sf::RenderWindow &window,sf::Color groundColor) {

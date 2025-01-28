@@ -26,5 +26,8 @@ class InputFile_error : public ApplicationException{
 public:
     explicit InputFile_error(const std::string &path);
 };
-
+class InvalidLevelIndex_error : public ApplicationException {
+public:
+    explicit InvalidLevelIndex_error(const std::string &path);
+};
 #endif //EXCEPTIONS_H
