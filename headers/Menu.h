@@ -26,7 +26,9 @@ public:
     void handleEvent(const sf::Event &event, const sf::RenderWindow &window);
 
     void render(sf::RenderWindow &window);
+
     void update(const sf::RenderWindow &window);
+
     int getSelectedOption() const;
 
     bool isOptionSelected() const;
