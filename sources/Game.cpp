@@ -42,7 +42,7 @@ void Game::startLevel(int levelIndex) {
         currentLevel = std::make_unique<Level>("sound/Level3_soundtrack.ogg", "maps/obstacole3.in", *window,
                                                sf::Color(51, 161, 55));
     } else {
-        throw InvalidLevelIndex_error(std::to_string(levelIndex))
+        throw InvalidLevelIndex_error(std::to_string(levelIndex));
     }
     //pentru a extinde gameplayul nu avem decat sa adaugam in continuare nivele
     //cu alt soundtrack ,mapa si culoare a nivelului
