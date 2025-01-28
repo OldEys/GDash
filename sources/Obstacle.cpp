@@ -46,7 +46,6 @@ Obstacle::Obstacle(Obstacle &&other) noexcept:
    hitbox(std::move(other.hitbox)),
    texture(other.texture) {
     body.setTexture(&texture);
-    std::cout << "move constructor obstacle\n";
 }
 
 Obstacle &Obstacle::operator=(Obstacle &&other) noexcept {
@@ -56,7 +55,6 @@ Obstacle &Obstacle::operator=(Obstacle &&other) noexcept {
         texture = other.texture;
         body.setTexture(&texture);
 
-        std::cout << "Move assignment operator obstacle\n";
     }
     return *this;
 }

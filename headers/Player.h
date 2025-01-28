@@ -39,7 +39,7 @@ class Player {
 public:
     explicit Player(float position);
     Player();
-    ~Player();
+    ~Player()=default;
 
     void setPosition(float x, float x1);
 

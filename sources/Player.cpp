@@ -23,13 +23,9 @@ this->body.setSize(sf::Vector2f(100.0f, 100.0f));
 }
 
 Player::Player(): stats{0.0, false, 0.0f, 0.0f}, isDead(false), jumpHeight(250.0f) {
-    std::cout<<"constructor fara parametri\n";
 }
 
 
-Player::~Player() {
-    std::cout << "Player destroyed" << std::endl;
-}
 
 void Player::setPosition(float x, float y) {
     this->body.setPosition(x, y);
@@ -43,7 +39,6 @@ Player::Player(const Player &other)
   jumpHeight(other.jumpHeight) {
 body.setTexture(&texture);
 death_sound.setBuffer(death_buffer);
-std::cout << "copy constructor" << std::endl;
 }
 
 Player & Player::operator=(const Player &other)
@@ -58,7 +53,6 @@ Player & Player::operator=(const Player &other)
     jumpHeight = other.jumpHeight;
     body.setTexture(&texture);
     death_sound.setBuffer(death_buffer);
-    std::cout<<"operator= de atribuire Player\n";
     return *this;
 }
 
