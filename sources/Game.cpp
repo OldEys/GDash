@@ -12,7 +12,7 @@ Game::Game()
     menu.controlMenuSong(true);
 }
 
-Game & Game::getInstanceGame() {
+Game &Game::getInstanceGame() {
     static Game instance;
     return instance;
 }
